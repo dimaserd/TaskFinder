@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoStuWeb", "TwoStuWeb\TwoStuWeb.csproj", "{59589BB5-500D-4413-9BAF-E658B914F1F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoStuWeb.Tests", "TwoStuWeb.Tests\TwoStuWeb.Tests.csproj", "{46DAC6D5-F5D7-49C7-9D8E-2D1990899951}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoStu.Logic", "TwoStu.Logic\TwoStu.Logic.csproj", "{CB40542C-4E6A-4F30-BDC5-08369EBC518E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{3432F797-A62E-4CEA-804C-7C508AA05A49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlExtensions", "HtmlExtensions\HtmlExtensions.csproj", "{23785329-37DE-4E70-858F-7C9FABF913AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59589BB5-500D-4413-9BAF-E658B914F1F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59589BB5-500D-4413-9BAF-E658B914F1F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59589BB5-500D-4413-9BAF-E658B914F1F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59589BB5-500D-4413-9BAF-E658B914F1F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46DAC6D5-F5D7-49C7-9D8E-2D1990899951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46DAC6D5-F5D7-49C7-9D8E-2D1990899951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46DAC6D5-F5D7-49C7-9D8E-2D1990899951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46DAC6D5-F5D7-49C7-9D8E-2D1990899951}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB40542C-4E6A-4F30-BDC5-08369EBC518E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB40542C-4E6A-4F30-BDC5-08369EBC518E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB40542C-4E6A-4F30-BDC5-08369EBC518E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB40542C-4E6A-4F30-BDC5-08369EBC518E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3432F797-A62E-4CEA-804C-7C508AA05A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3432F797-A62E-4CEA-804C-7C508AA05A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3432F797-A62E-4CEA-804C-7C508AA05A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3432F797-A62E-4CEA-804C-7C508AA05A49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23785329-37DE-4E70-858F-7C9FABF913AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23785329-37DE-4E70-858F-7C9FABF913AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23785329-37DE-4E70-858F-7C9FABF913AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23785329-37DE-4E70-858F-7C9FABF913AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://runtasker.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = TwoStu.Logic\\TwoStu.Logic.csproj
+		SccProjectName1 = TwoStu.Logic
+		SccLocalPath1 = TwoStu.Logic
+		SccProjectUniqueName2 = TwoStuWeb.Tests\\TwoStuWeb.Tests.csproj
+		SccProjectName2 = TwoStuWeb.Tests
+		SccLocalPath2 = TwoStuWeb.Tests
+		SccProjectUniqueName3 = TwoStuWeb\\TwoStuWeb.csproj
+		SccProjectName3 = TwoStuWeb
+		SccLocalPath3 = TwoStuWeb
+		SccProjectUniqueName4 = Extensions\\Extensions.csproj
+		SccProjectName4 = Extensions
+		SccLocalPath4 = Extensions
+		SccProjectUniqueName5 = HtmlExtensions\\HtmlExtensions.csproj
+		SccProjectName5 = HtmlExtensions
+		SccLocalPath5 = HtmlExtensions
+	EndGlobalSection
+EndGlobal

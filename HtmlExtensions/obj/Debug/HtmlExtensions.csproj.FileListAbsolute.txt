@@ -1,0 +1,4 @@
+C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\bin\Debug\HtmlExtensions.dll
+C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\bin\Debug\HtmlExtensions.pdb
+C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Debug\HtmlExtensions.dll
+C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Debug\HtmlExtensions.pdb

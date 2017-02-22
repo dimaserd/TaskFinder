@@ -1,0 +1,317 @@
+﻿@using TwoStu.Logic.Models.Search
+@using Extensions.String
+@model IEnumerable<TaskSearchResult>
+@{
+    ViewBag.Title = "SearchTask";
+}
+
+<h2>Поиск готового решения</h2>
+
+
+<div class="inputContainer">
+    <div class="input-group input-group-sm">
+        <span class="input-group-addon" id="logoModifier">Поиск задач</span>
+        <input type="text" class="form-control" placeholder="Введите условие..." id="searchField">
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" id="searchButton" data-loading-text="Searching..">Найти</button>
+        </span>
+    </div>
+</div>
+<div class="progressContainer">
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered" id="deviceTable">
+            <thead>
+                <tr>
+                    <th>Найдено</th>
+                    <th>Условие</th>
+                    <th>Скачать</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(Model != null && Model.Count() > 0)
+                {
+                    foreach(TaskSearchResult result in Model)
+                    {
+                        <tr>
+                            @{ 
+                                string d = $"{(int)(result.DescPercentage * 100)}%";
+                            }
+                   
+                            <th>@d</th>
+                            <th>@result.TaskDesc.ToHtml()</th>
+                            <th><a href="/File/DownloadByKey?key=@result.SolutionId">[Скачать]</a></th>
+                        </tr>
+                                    }
+                                }
+
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<div id="resultarea">
+
+</div>
+
+
+@section scripts{
+<script>
+    $(document).ready(function () {
+
+        initEvents();
+
+    });
+
+    function initEvents() {
+
+        $("#searchButton").on("click", function () {
+
+            //var $btn = $(this).button("loading");
+            //$("#searchField").attr("disabled", true);
+            var desc = $("#searchField").val();
+            console.log(desc);
+            //searchByDesc(desc);
+            reloadPagebyDesc(desc);
+        });
+
+        $(".inputContainer").hover(function () {
+
+            $(this).stop().animate({ borderBottomWidth: "4px" }, { duration: 170, complete: function () { } });
+
+        }, function () {
+
+            $(this).stop().animate({ borderBottomWidth: "2px" }, { duration: 170, complete: function () { } });
+
+        });
+
+    }
+
+
+    function enableInput() {
+
+        $("#searchButton").button("loading");
+        $("#searchField").attr("disabled", false);
+
+    }
+</script>
+
+<script>
+    function reloadPagebyDesc(desc)
+    {
+        window.location.href = "/Home/SearchTask?desc=" + desc;
+    }
+
+    function searchByDesc(desc)
+    {
+        $.ajax({
+            type: "GET",
+            url: "/api/Solutions?desc=" + desc + "&markText=true",
+            data: null,
+            cache: false,
+            success: function (data) {
+                $("#resultarea").text(JSON.stringify(data));
+                ClearTable();
+                AppendResultsToTable(data);
+            }
+        });
+    }
+
+    function AppendResultsToTable(data)
+    {
+        for(i = 0; i < data.length; i++)
+        {
+            var tr = CreateTr(data[i]);
+            $('#deviceTable').append(tr);
+        }
+        
+    }
+
+    function CreateTr(dataBit)
+    {
+        var tr = document.createElement("tr");
+        
+        var td1 = document.createElement("td");
+
+        var td1Text = document.createTextNode(parseInt(dataBit.DescPercentage * 100) + "%");
+        td1.appendChild(td1Text);
+
+        var td2 = document.createElement("td");
+
+        var td2Text = document.createTextNode(dataBit.TaskDesc);
+        td2.appendChild(td2Text);
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+
+        var td3 = document.createElement("td");
+        var a = document.createElement("a");
+        a.href = GetLink(dataBit);
+
+        td3.appendChild(a);
+
+        tr.appendChild(td3);
+
+        return tr;
+    }
+
+    function ClearTable()
+    {
+        $("#deviceTable tbody").empty();
+    }
+    function GetLink(dataBit)
+    {
+        return "/File/DownloadByKey?key=" + dataBit.SolutionId;
+    }
+    
+</script>
+}
+
+<style>
+    .container {
+    
+    /*width: 100%; */   
+    
+}
+
+.widthContraint {
+    
+    margin: 0 auto;
+    /*width: 600px;*/
+    
+}
+
+.inputContainer {
+
+    width: 100%;
+    border-bottom: 2px solid #428bca;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    
+}
+
+.progressContainer {
+
+    width: 100%;
+    
+}
+
+.resultsContainer {
+
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+    margin-top: 8px;
+    
+}
+
+#searchPanel {
+    
+    font-size: 12px;
+    border-radius: 3px;
+    
+}
+
+#resultsTable {
+    
+    
+        
+}
+
+#addressTable {
+ 
+    margin: 0;
+    
+}
+
+#addressTable td {
+ 
+    border: 0;
+    padding: 4px;
+    
+}
+
+.panel-body {
+ 
+    padding: 8px;
+    
+}
+
+#addressTable td:nth-child(1) {
+ 
+    font-weight: bold;
+    
+}
+
+#addressTable td:nth-child(3) {
+ 
+    font-weight: bold;
+    
+}
+
+#addressTable td:nth-child(5) {
+ 
+    font-weight: bold;
+    
+}
+
+#deviceCheckbox {
+    
+    background-color: #fff;
+    border: 0;
+    
+}
+
+#deviceCheckboxes {
+    
+    background-color: #fff;
+    border: 0;
+    margin: 0;
+    font-size: 8pt;
+    
+}
+
+.table td {
+    
+    white-space: nowrap;
+    
+}
+
+#searchPanelHeading {
+    
+    height: 30px;
+    padding: 5px 10px;
+    line-height: 1.5;
+    color: #9e9e9e;
+    
+}
+
+#deviceTable {
+    
+    
+    
+}
+
+#logoModifier {
+    
+    border: 0;
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 10pt;
+    min-width: 200px;
+    
+}
+
+#searchField {
+    
+    border-radius: 3px;
+    
+}
+</style>

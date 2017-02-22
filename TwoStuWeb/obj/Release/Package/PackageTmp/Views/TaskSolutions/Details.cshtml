@@ -1,0 +1,59 @@
+﻿@model TwoStu.Logic.Entities.TaskSolution
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TaskSolution</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskSubject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskSubject)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskSubjectSection)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskSubjectSection)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaskDesc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaskDesc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FilePath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FilePath)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FileName)
+        </dt>
+
+        <dd>
+            <a href="/File/DownloadByKey?key=@Model.Id">Скачать файл</a>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
