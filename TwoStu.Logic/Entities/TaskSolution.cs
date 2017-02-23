@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -47,6 +48,11 @@ namespace TwoStu.Logic.Entities
         public int SubjectSectionId { get; set; }
         [JsonIgnore]
         public virtual SubjectSection TaskSubjectSection { get; set; }
+
+        /// <summary>
+        /// Сущности TaskSolution и SubjectDivisionChild связаны многое ко многим
+        /// </summary>
+        public virtual ICollection<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
         #endregion
 
 

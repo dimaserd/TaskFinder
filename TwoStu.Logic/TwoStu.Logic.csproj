@@ -66,6 +66,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\SubjectDivision.cs" />
+    <Compile Include="Entities\SubjectDivisionChild.cs" />
     <Compile Include="Entities\SubjectSection.cs" />
     <Compile Include="Entities\Subject.cs" />
     <Compile Include="Entities\TaskSolution.cs" />
@@ -90,6 +92,10 @@
     <Compile Include="Migrations\201701261128481_date.cs" />
     <Compile Include="Migrations\201701261128481_date.Designer.cs">
       <DependentUpon>201701261128481_date.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702231356570_new.cs" />
+    <Compile Include="Migrations\201702231356570_new.Designer.cs">
+      <DependentUpon>201702231356570_new.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
@@ -130,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201701261128481_date.resx">
       <DependentUpon>201701261128481_date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702231356570_new.resx">
+      <DependentUpon>201702231356570_new.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

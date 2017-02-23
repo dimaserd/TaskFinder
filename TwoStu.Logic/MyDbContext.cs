@@ -12,8 +12,11 @@ namespace TwoStu.Logic
 
         public DbSet<SubjectSection> SubjectSections { get; set; }
 
+        public DbSet<SubjectDivision> SubjectDivisions { get; set; }
 
+        public DbSet<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
 
         public DbSet<WorkType> WorkTypes { get; set; }
+
     }
 }

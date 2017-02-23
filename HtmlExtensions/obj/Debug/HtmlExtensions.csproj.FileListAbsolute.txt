@@ -2,3 +2,8 @@ C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlEx
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\bin\Debug\HtmlExtensions.pdb
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Debug\HtmlExtensions.dll
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Debug\HtmlExtensions.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\bin\Debug\HtmlExtensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\bin\Debug\HtmlExtensions.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\obj\Debug\HtmlExtensions.csprojResolveAssemblyReference.cache
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\obj\Debug\HtmlExtensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\obj\Debug\HtmlExtensions.pdb

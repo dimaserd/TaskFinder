@@ -245,12 +245,15 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\DivisionChildsController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\api\SolutionsController.cs" />
+    <Compile Include="Controllers\SubjectDivisionsController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
     <Compile Include="Controllers\SubjectSectionsController.cs" />
     <Compile Include="Controllers\TaskSolutionsController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WorkTypesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -355,6 +358,21 @@
     <Content Include="Views\WorkTypes\Edit.cshtml" />
     <Content Include="Views\WorkTypes\Index.cshtml" />
     <Content Include="Views\Home\SearchTask.cshtml" />
+    <Content Include="Views\SubjectDivisions\Create.cshtml" />
+    <Content Include="Views\SubjectDivisions\Delete.cshtml" />
+    <Content Include="Views\SubjectDivisions\Details.cshtml" />
+    <Content Include="Views\SubjectDivisions\Edit.cshtml" />
+    <Content Include="Views\SubjectDivisions\Index.cshtml" />
+    <Content Include="Views\DivisionChilds\Create.cshtml" />
+    <Content Include="Views\DivisionChilds\Delete.cshtml" />
+    <Content Include="Views\DivisionChilds\Details.cshtml" />
+    <Content Include="Views\DivisionChilds\Edit.cshtml" />
+    <Content Include="Views\DivisionChilds\Index.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
