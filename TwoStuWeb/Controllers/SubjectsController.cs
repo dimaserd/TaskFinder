@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SubjectsController : Controller
     {
         private MyDbContext db = new MyDbContext();
@@ -30,7 +26,10 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Subject subject = await db.Subjects.FindAsync(id);
+            Subject subject = await db.Subjects
+                .Include(x => x.SubjectSections)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (subject == null)
             {
                 return HttpNotFound();

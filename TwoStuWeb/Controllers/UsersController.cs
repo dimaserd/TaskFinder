@@ -7,7 +7,7 @@ using TwoStu.Logic.Models;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private MyDbContext db = new MyDbContext();

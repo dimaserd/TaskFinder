@@ -1,6 +1,7 @@
 ﻿
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,5 +20,7 @@ namespace TwoStu.Logic.Entities
         public int SubjectId { get; set; }
         [JsonIgnore]
         public virtual Subject FromSubject { get; set; }
+
+        public virtual ICollection<SubjectDivision> SubjectDivisions { get; set; }
     }
 }

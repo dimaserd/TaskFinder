@@ -7,6 +7,7 @@ using TwoStu.Logic.Entities;
 
 namespace TwoStuWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DivisionChildsController : Controller
     {
         private MyDbContext db = new MyDbContext();

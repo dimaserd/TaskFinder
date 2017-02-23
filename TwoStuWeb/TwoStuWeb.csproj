@@ -245,6 +245,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Controllers\DevController.cs" />
     <Compile Include="Controllers\DivisionChildsController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -377,6 +378,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Configuration\" />
+    <Folder Include="Views\Dev\" />
     <Folder Include="Views\File\" />
   </ItemGroup>
   <ItemGroup>

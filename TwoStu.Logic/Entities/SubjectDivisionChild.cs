@@ -5,6 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TwoStu.Logic.Entities
 {
+    /// <summary>
+    /// Конкретный пример уточнения по предмету связан со многими решениями
+    /// и с одним родительским уточнением
+    /// Интеграл->Двойной,Тройной
+    /// где Двойной,Тройной - экземпляры класса SubjectDivisionChild
+    /// а Интеграл SubjectDivisionParent
+    /// </summary>
     public class SubjectDivisionChild
     {
         [Key]

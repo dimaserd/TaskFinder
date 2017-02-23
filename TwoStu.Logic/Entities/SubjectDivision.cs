@@ -5,6 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TwoStu.Logic.Entities
 {
+    /// <summary>
+    /// Уточнение по предмету это раздел предмета
+    /// Например Интеграл->Двойной,Тройной
+    /// Где интеграл, это SubjectDivision
+    /// а Двойной,Тройной - SubjectDivisionChilds
+    /// </summary>
     public class SubjectDivision
     {
         #region Constructor

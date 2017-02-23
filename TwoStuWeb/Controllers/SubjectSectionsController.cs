@@ -12,6 +12,7 @@ using TwoStu.Logic.Entities;
 
 namespace TwoStuWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SubjectSectionsController : Controller
     {
         private MyDbContext db = new MyDbContext();

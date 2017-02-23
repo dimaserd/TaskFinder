@@ -8,6 +8,8 @@ using Microsoft.Owin.Security;
 using TwoStuWeb.Models;
 using TwoStuWeb;
 using TwoStu.Logic.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using TwoStu.Logic;
 
 namespace WebApplication1.Controllers
 {
@@ -16,6 +18,8 @@ namespace WebApplication1.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new MyDbContext()));
+
 
         public AccountController()
         {
@@ -50,6 +54,48 @@ namespace WebApplication1.Controllers
                 _userManager = value;
             }
         }
+
+        [AllowAnonymous]
+        public async Task<string> Dev()
+        {
+            #region Добавление ролей в систему
+            string[] roles = new string[]
+            {
+                "Admin", "User"
+            };
+            foreach (string role in roles)
+            {
+                if (!_roleManager.RoleExists(role))
+                {
+                    _roleManager.Create(new IdentityRole(role) { Name = role });
+                }
+            }
+            #endregion
+
+            string adminEmail = "dimaserd84@gmail.com";
+            ApplicationUser maybeAdmin = UserManager.FindByEmail(adminEmail);
+
+            if(maybeAdmin == null)
+            {
+                ApplicationUser admin = new ApplicationUser
+                {
+                    Password = "testpass",
+                    Email = adminEmail,
+                    EmailConfirmed = true,
+                    UserName = adminEmail,
+
+                };
+                IdentityResult result = await UserManager.CreateAsync(admin, admin.Password);
+                if(result.Succeeded)
+                {
+                    UserManager.AddToRole(admin.Id, "Admin");
+                }
+            }
+            
+            return "готово";
+        }
+
+
         #region Login methods
         //
         // GET: /Account/Login
@@ -71,6 +117,8 @@ namespace WebApplication1.Controllers
             {
                 return View(model);
             }
+
+            ApplicationUser maybeAdmin = UserManager.FindByEmail(model.Email);
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true

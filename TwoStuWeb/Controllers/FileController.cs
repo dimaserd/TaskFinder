@@ -6,7 +6,7 @@ using TwoStu.Logic.Entities;
 
 namespace TwoStuWeb.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class FileController : Controller
     {
         [HttpGet]
