@@ -1,0 +1,132 @@
+﻿@using TwoStu.Logic.Entities
+@model IEnumerable<Subject>
+@{
+    ViewBag.Title = "Create";
+    List<SelectListItem> subjectsList = Model.Select(x =>
+    {
+        return new SelectListItem
+        {
+            Text = x.Name,
+            Value = x.Id.ToString()
+        };
+    }).ToList();
+}
+
+<h2>Создать решение по предмету <span id="subjectNameSpan"></span></h2>
+
+@using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SubjectId", subjectsList,
+                                    htmlAttributes: new {
+                                        @class = "form-control",
+                                        id = "SubjectIdList"
+                                    })
+        </div>
+    </div>
+
+    
+
+    <div class="form-group">
+        @Html.Label("Уточнение предмета", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div id="placeForSubjectSectionsList" class="col-md-10">
+            
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-success" value="Создать" />
+}
+
+@section scripts{
+    <!--Data arrays-->
+    <script>
+        var ServerResponse = null;
+
+        var Subjects = null;
+        var SubjectDivisionChilds = null;
+        var SubjectDivisions = null;
+        var SubjectSections = null;
+
+        $.ajax({
+            type: "GET",
+            url: '/Default/GetSubjects',
+            success: function (response) {
+                ServerResponse = response;
+                Subjects = response["Subjects"];
+                SubjectDivisionChilds = response["SubjectDivisionChilds"];
+                SubjectDivisions = response["SubjectDivisions"];
+                SubjectSections = response["SubjectSections"];
+                
+            }
+        });
+        
+    </script>
+
+    <!--Filter Functions-->
+    <script>
+        function filterById()
+        {
+            return true;
+        }
+    </script>
+    <!--/Filter Functions-->
+
+    <!--Creating Drops-->
+    <script>
+        function MakeSubjectSectionDropList(data)
+        {
+
+            console.log("Начинаем строить!");
+            console.log(data);
+
+            var myDiv = document.getElementById("placeForSubjectSectionsList");
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "SubjectSectionsList";
+            selectList.className = "form-control";
+            myDiv.appendChild(selectList);
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+        }
+        
+    </script>
+
+    <script>
+
+    </script>
+    <!---->
+
+    <script>
+        var subjectNameSpan = $("#subjectNameSpan");
+
+        var subjectIdList = $("#SubjectIdList");
+
+        subjectIdList.change(function (e) {
+            e.preventDefault();
+
+            var subjectId = subjectIdList.val();
+
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectSections?subjectId=' + subjectId,
+                success: function (response) {
+                    
+                    SubjectSections = response;
+                    MakeSubjectSectionDropList(response);
+                }
+            });
+        })
+
+
+    </script>
+}
