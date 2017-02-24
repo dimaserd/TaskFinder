@@ -5,10 +5,10 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Подробнее о предмете</h2>
 
 <div>
-    <h4>Subject</h4>
+    
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -21,15 +21,26 @@
 
         <dd>
             <h3>Разделы предмета</h3>
-            @foreach(SubjectSection subjectSection in Model.SubjectSections)
+            @if (Model.SubjectSections.Count > 0)
             {
-                <p>@subjectSection.Name <a href="@Url.Action("Details", "SubjectSections", new { id = subjectSection.Id })">[Подробнее]</a></p>
+                foreach (SubjectSection subjectSection in Model.SubjectSections)
+                {
+                    <p>@subjectSection.Name <a href="@Url.Action("Details", "SubjectSections", new { id = subjectSection.Id })">[Подробнее]</a></p>
+                }
             }
+            else
+            {
+                <p>по данному предмету нет разделов</p>
+            }
+            @Html.ActionLink("Создать раздел", "Create", "SubjectSections")
+
         </dd>
 
     </dl>
 </div>
+
+<hr/>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("К списку предметов", "Index")
 </p>
