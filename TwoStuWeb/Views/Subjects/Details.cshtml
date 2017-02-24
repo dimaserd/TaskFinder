@@ -8,35 +8,46 @@
 <h2>Подробнее о предмете</h2>
 
 <div>
-    
+    <h3>Предмет <strong>@Model.Name</strong></h3>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dd>
-            <h3>Разделы предмета</h3>
-            @if (Model.SubjectSections.Count > 0)
+    <h3>Разделы предмета</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Название раздела</th>
+            <th>Действия</th>
+        </tr>
+        @if (Model.SubjectSections.Count > 0)
+        {
+            foreach (SubjectSection subjectSection in Model.SubjectSections)
             {
-                foreach (SubjectSection subjectSection in Model.SubjectSections)
-                {
-                    <p>@subjectSection.Name <a href="@Url.Action("Details", "SubjectSections", new { id = subjectSection.Id })">[Подробнее]</a></p>
-                }
+                <tr>
+                    <th>
+                        @subjectSection.Name
+                    </th>
+                    <th>
+                        <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                    </th>
+                </tr>
             }
-            else
-            {
-                <p>по данному предмету нет разделов</p>
-            }
-            @Html.ActionLink("Создать раздел", "Create", "SubjectSections")
-
-        </dd>
-
-    </dl>
+        }
+        else
+        {
+            <tr>
+                <th colspan="2" class="text-center text-danger">
+                    <strong>
+                        Не найдено ни одного раздела по предмету @Model.Name
+                    </strong>
+                </th>
+            </tr>
+        }
+        <tr>
+            <th colspan="2" class="text-center text-danger">
+                <strong>
+                    <a href="/SubjectSections/Create">[Создать новый раздел для предмета @Model.Name]</a>
+                </strong>
+            </th>
+        </tr>
+    </table>
 </div>
 
 <hr/>
@@ -44,3 +55,4 @@
     @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("К списку предметов", "Index")
 </p>
+

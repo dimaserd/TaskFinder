@@ -9,24 +9,26 @@
 <p>
     @Html.ActionLink("Создать новый раздел", "Create")
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FromSubject.Name)
-        </th>
+        
         <th>
             @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FromSubject.Name)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.FromSubject.Name)
-        </td>
+        
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromSubject.Name)
         </td>
         <td>
             @Html.ActionLink("Редактировать", "Edit", new { id=item.Id }) |
@@ -37,3 +39,6 @@
 }
 
 </table>
+
+<hr />
+@Html.ActionLink("К списку предметов", "Index", "Subjects")

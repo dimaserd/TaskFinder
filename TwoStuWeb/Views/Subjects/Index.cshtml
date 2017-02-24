@@ -9,7 +9,7 @@
 <p>
     @Html.ActionLink("Создать новый", "Create")
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
@@ -31,3 +31,7 @@
 }
 
 </table>
+
+<hr />
+
+@Html.ActionLink("К списку разделов по предметам", "Index", "SubjectSections") 

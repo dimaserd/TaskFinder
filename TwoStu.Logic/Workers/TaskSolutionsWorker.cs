@@ -1,10 +1,7 @@
-﻿using Extensions.Int;
-using Extensions.String;
+﻿using Extensions.String;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models;
@@ -15,8 +12,14 @@ namespace TwoStu.Logic.Workers
 {
     public class TaskSolutionsWorker : IDisposable
     {
-        #region Fields
-        public MyDbContext db = new MyDbContext();
+        #region Constructors
+        public TaskSolutionsWorker(MyDbContext db)
+        {
+            Db = db;
+        }
+        #endregion
+        #region Properties
+        public MyDbContext Db { get; set; }
         #endregion
 
         #region Public Methods
@@ -103,7 +106,7 @@ namespace TwoStu.Logic.Workers
 
         async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNot(CreatePhysicsSolutionModel model, string filePath, string textFromFile)
         {
-            int physicsId = db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
             string mark = $"{physicsId}|{model.SubjectSectionId}";
 
@@ -126,8 +129,8 @@ namespace TwoStu.Logic.Workers
                 FilePath = filePath,
 
             };
-            db.TaskSolutions.Add(t);
-            await db.SaveChangesAsync();
+            Db.TaskSolutions.Add(t);
+            await Db.SaveChangesAsync();
 
             return new WorkerResult
             {
@@ -144,12 +147,12 @@ namespace TwoStu.Logic.Workers
             {
                 errorText = "Найдено точно такое-же условие!";
                 //если что-то нашлось с тем-же описанием
-                return db.TaskSolutions.Any(x => x.TaskDesc == model.TaskDesc);
+                return Db.TaskSolutions.Any(x => x.TaskDesc == model.TaskDesc);
             }
 
 
-            bool taskDescResult = db.TaskSolutions.Any(x => x.TaskDesc == model.TaskDesc);
-            bool taskDescFromFileResult = db.TaskSolutions.Any(x => x.TaskDescFromFile == textFromFile);
+            bool taskDescResult = Db.TaskSolutions.Any(x => x.TaskDesc == model.TaskDesc);
+            bool taskDescFromFileResult = Db.TaskSolutions.Any(x => x.TaskDescFromFile == textFromFile);
             
             //если текст из файлов идентичен
             if(taskDescFromFileResult)
@@ -180,12 +183,12 @@ namespace TwoStu.Logic.Workers
             {
                 if (disposing)
                 {
-                    db.Dispose();
+                    Db.Dispose();
                 }
 
                 // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
                 // TODO: задать большим полям значение NULL.
-                db = null;
+                Db = null;
                 disposedValue = true;
             }
         }

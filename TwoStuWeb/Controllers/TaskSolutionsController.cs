@@ -8,6 +8,7 @@ using TwoStu.Logic.Workers;
 using System.Linq;
 using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
+using TwoStu.Logic;
 
 namespace TwoStuWeb.Controllers
 {
@@ -15,14 +16,30 @@ namespace TwoStuWeb.Controllers
     public class TaskSolutionsController : Controller
     {
         #region Fields
-        private TaskSolutionsWorker worker = new TaskSolutionsWorker();
+        static MyDbContext _db;
+
+        private TaskSolutionsWorker worker = new TaskSolutionsWorker(Db);
+        #endregion
+
+        #region Properties
+        static MyDbContext Db
+        {
+            get
+            {
+                if(_db == null)
+                {
+                    _db = new MyDbContext();
+                }
+                return _db;
+            }
+        }
         #endregion
 
         #region HttpController methods
         // GET: TaskSolutions
         public async Task<ActionResult> Index()
         {
-            List<TaskSolution> model = await worker.db.TaskSolutions.ToListAsync();
+            List<TaskSolution> model = await worker.Db.TaskSolutions.ToListAsync();
             return View(model.OrderByDescending(x => x.CreationDate));
         }
 
@@ -33,7 +50,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.db.TaskSolutions
+            TaskSolution taskSolution = await worker.Db.TaskSolutions
                 .Include(x => x.TypeOfWork)
                 .Include(x => x.TaskSubject)
                 .Include(x => x.TaskSubjectSection)
@@ -46,14 +63,22 @@ namespace TwoStuWeb.Controllers
         }
 
         #region Create methods
+        public async Task<ActionResult> Create()
+        {
+            List<Subject> model = await Db.Subjects
+                .Include(x => x.SubjectSections.Select(y => y.SubjectDivisions.Select(z => z.SubjectDivisionChilds)))
+                .ToListAsync();
+
+            return View(model);
+        }
 
         // GET: TaskSolutions/Create
-        public ActionResult Create()
+        public ActionResult CreatePhysics()
         {
-            int physicsId = worker.db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = worker.Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
-            ViewBag.SubjectSectionId = new SelectList(worker.db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
-            ViewBag.WorkTypeId = new SelectList(worker.db.WorkTypes, "Id", "Name");
+            ViewBag.SubjectSectionId = new SelectList(worker.Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
             return View();
         }
 
@@ -62,14 +87,14 @@ namespace TwoStuWeb.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreatePhysicsSolutionModel model)
+        public async Task<ActionResult> CreatePhysics(CreatePhysicsSolutionModel model)
         {
             
 
-            int physicsId = worker.db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = worker.Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
-            ViewBag.SubjectSectionId = new SelectList(worker.db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
-            ViewBag.WorkTypeId = new SelectList(worker.db.WorkTypes, "Id", "Name");
+            ViewBag.SubjectSectionId = new SelectList(worker.Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
 
             
 
@@ -103,7 +128,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.db.TaskSolutions.FindAsync(id);
+            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
             if (taskSolution == null)
             {
                 return HttpNotFound();
@@ -120,8 +145,8 @@ namespace TwoStuWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                worker.db.Entry(taskSolution).State = EntityState.Modified;
-                await worker.db.SaveChangesAsync();
+                worker.Db.Entry(taskSolution).State = EntityState.Modified;
+                await worker.Db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(taskSolution);
@@ -137,7 +162,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.db.TaskSolutions.FindAsync(id);
+            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
             if (taskSolution == null)
             {
                 return HttpNotFound();
@@ -151,9 +176,9 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            TaskSolution taskSolution = await worker.db.TaskSolutions.FindAsync(id);
-            worker.db.TaskSolutions.Remove(taskSolution);
-            await worker.db.SaveChangesAsync();
+            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
+            worker.Db.TaskSolutions.Remove(taskSolution);
+            await worker.Db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
         #endregion

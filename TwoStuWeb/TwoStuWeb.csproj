@@ -338,7 +338,7 @@
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\TaskSolutions\Create.cshtml" />
+    <Content Include="Views\TaskSolutions\CreatePhysics.cshtml" />
     <Content Include="Views\TaskSolutions\Delete.cshtml" />
     <Content Include="Views\TaskSolutions\Details.cshtml" />
     <Content Include="Views\TaskSolutions\Edit.cshtml" />
