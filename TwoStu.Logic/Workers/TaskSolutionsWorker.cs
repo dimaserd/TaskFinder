@@ -1,10 +1,12 @@
 ﻿using Extensions.String;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models;
+using TwoStu.Logic.Models.TaskSolutions;
 using TwoStu.Logic.Models.WorkerResults;
 using TwoStu.Logic.Workers.String;
 
@@ -18,11 +20,13 @@ namespace TwoStu.Logic.Workers
             Db = db;
         }
         #endregion
+
         #region Properties
         public MyDbContext Db { get; set; }
         #endregion
 
         #region Public Methods
+
         public async Task<WorkerResult> CreatePhysicsSolution(CreatePhysicsSolutionModel model)
         {
             int wordsCount = model.TaskDesc.GetWordsFromText().Count;
@@ -87,9 +91,71 @@ namespace TwoStu.Logic.Workers
 
             
         }
+        
+        public async Task<WorkerResult> CreateSolution(CreateSolutionModel model)
+        {
+            List<SubjectDivisionChild> solutionDivisionChilds = 
+                await GetSubjectDivisionsFromString(model.DivisionChildsString);
+
+            //сохраняем файл на сервер и получаем путь куда он был сохранен
+            //так же при возможности класс получает текст из файла
+            string textInFile = string.Empty;
+            string filePath = new FileWorker().SaveFileToSolution(model.File, out textInFile);
+
+            TaskSolution solution = new TaskSolution
+            {
+                Id = Guid.NewGuid().ToString(),
+                CreationDate = DateTime.Now,
+                TaskDesc = model.TaskDesc,
+                SubjectId = model.SubjectId,
+                SubjectSectionId = model.SubjectSectionId,
+                WorkTypeId = model.WorkTypeId,
+                FilePath = filePath,
+                FileName = model.File.FileName,
+                SubjectDivisionChilds = solutionDivisionChilds,
+                Mark = null,
+                TaskDescFromFile = textInFile,
+                
+            };
+
+            //добавляем в базу
+            Db.TaskSolutions.Add(solution);
+            await Db.SaveChangesAsync();
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+
         #endregion
 
         #region Help Methods
+
+        public async Task<List<SubjectDivisionChild>> GetSubjectDivisionsFromString(string divisionsString)
+        {
+            List<SubjectDivisionChild> allChilds = await Db.SubjectDivisionChilds.ToListAsync();
+          
+            List<int> divisionIds = divisionsString
+                .Split(separator: new string[] { "," }, options: StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => 
+                {
+                    int temp;
+                    if(int.TryParse(x, out temp))
+                    {
+                        return temp;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }).Where(x => x != 0)
+                .ToList();
+
+            return allChilds.Where(x => divisionIds.Contains(x.Id)).ToList();
+        }
+
+        #region Physics methods
         bool CheckSolutionsTexts(string userSolution, string fileSolution, out decimal percents)
         {
             List<string> userWords = userSolution.GetWordsFromText();
@@ -174,6 +240,8 @@ namespace TwoStu.Logic.Workers
         }
         #endregion
 
+        #endregion
+
         #region IDisposable Support
         private bool disposedValue = false; // Для определения избыточных вызовов
 
@@ -183,12 +251,12 @@ namespace TwoStu.Logic.Workers
             {
                 if (disposing)
                 {
-                    Db.Dispose();
+                    //Db.Dispose();
                 }
 
                 // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
                 // TODO: задать большим полям значение NULL.
-                Db = null;
+                
                 disposedValue = true;
             }
         }

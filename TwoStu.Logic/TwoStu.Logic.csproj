@@ -102,8 +102,10 @@
       <DependentUpon>201702231629543_fix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
-    <Compile Include="Models\TaskSolutionModels.cs" />
+    <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
+    <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
     <Compile Include="Models\WorkerResults\WorkerResult.cs" />
     <Compile Include="MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,6 +125,10 @@
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{3432f797-a62e-4cea-804c-7c508aa05a49}</Project>
       <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TwoStu.Settings\TwoStu.Settings.csproj">
+      <Project>{c6d4cd5c-2599-450e-ac81-04c2d41837a8}</Project>
+      <Name>TwoStu.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

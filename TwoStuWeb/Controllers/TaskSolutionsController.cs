@@ -9,6 +9,7 @@ using System.Linq;
 using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
 using TwoStu.Logic;
+using TwoStu.Logic.Models.TaskSolutions;
 
 namespace TwoStuWeb.Controllers
 {
@@ -63,13 +64,35 @@ namespace TwoStuWeb.Controllers
         }
 
         #region Create methods
+        [HttpGet]
         public async Task<ActionResult> Create()
         {
-            List<Subject> model = await Db.Subjects
-                .Include(x => x.SubjectSections.Select(y => y.SubjectDivisions.Select(z => z.SubjectDivisionChilds)))
-                .ToListAsync();
+            
 
-            return View(model);
+            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+
+            ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(CreateSolutionModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                WorkerResult result = await worker.CreateSolution(model);
+                if(result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+
+            ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
+
+            return View();
         }
 
         // GET: TaskSolutions/Create

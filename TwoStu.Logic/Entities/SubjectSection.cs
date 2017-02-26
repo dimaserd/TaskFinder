@@ -21,6 +21,7 @@ namespace TwoStu.Logic.Entities
         [JsonIgnore]
         public virtual Subject FromSubject { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<SubjectDivision> SubjectDivisions { get; set; }
     }
 }

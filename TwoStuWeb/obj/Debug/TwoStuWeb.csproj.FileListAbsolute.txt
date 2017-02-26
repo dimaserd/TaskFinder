@@ -239,3 +239,5 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\ru\System.Web.Http.Ow
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Debug\TwoStuWeb.csprojResolveAssemblyReference.cache
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Debug\TwoStuWeb.dll
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Debug\TwoStuWeb.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\TwoStu.Settings.pdb

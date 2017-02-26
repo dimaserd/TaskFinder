@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoStuWeb", "TwoStuWeb\TwoStuWeb.csproj", "{59589BB5-500D-4413-9BAF-E658B914F1F7}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{3432F797-A62E-4CEA-804C-7C508AA05A49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlExtensions", "HtmlExtensions\HtmlExtensions.csproj", "{23785329-37DE-4E70-858F-7C9FABF913AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoStu.Settings", "TwoStu.Settings\TwoStu.Settings.csproj", "{C6D4CD5C-2599-450E-AC81-04C2D41837A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,29 +41,12 @@ Global
 		{23785329-37DE-4E70-858F-7C9FABF913AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23785329-37DE-4E70-858F-7C9FABF913AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23785329-37DE-4E70-858F-7C9FABF913AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D4CD5C-2599-450E-AC81-04C2D41837A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D4CD5C-2599-450E-AC81-04C2D41837A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D4CD5C-2599-450E-AC81-04C2D41837A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D4CD5C-2599-450E-AC81-04C2D41837A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://runtasker.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = TwoStu.Logic\\TwoStu.Logic.csproj
-		SccProjectName1 = TwoStu.Logic
-		SccLocalPath1 = TwoStu.Logic
-		SccProjectUniqueName2 = TwoStuWeb.Tests\\TwoStuWeb.Tests.csproj
-		SccProjectName2 = TwoStuWeb.Tests
-		SccLocalPath2 = TwoStuWeb.Tests
-		SccProjectUniqueName3 = TwoStuWeb\\TwoStuWeb.csproj
-		SccProjectName3 = TwoStuWeb
-		SccLocalPath3 = TwoStuWeb
-		SccProjectUniqueName4 = Extensions\\Extensions.csproj
-		SccProjectName4 = Extensions
-		SccLocalPath4 = Extensions
-		SccProjectUniqueName5 = HtmlExtensions\\HtmlExtensions.csproj
-		SccProjectName5 = HtmlExtensions
-		SccLocalPath5 = HtmlExtensions
 	EndGlobalSection
 EndGlobal

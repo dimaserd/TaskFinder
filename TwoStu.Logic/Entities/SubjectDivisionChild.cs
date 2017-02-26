@@ -30,6 +30,7 @@ namespace TwoStu.Logic.Entities
             get; set;
         }
 
+        [JsonIgnore]
         public virtual ICollection<TaskSolution> TaskSolutions { get; set; }
     }
 }

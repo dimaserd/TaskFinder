@@ -4,7 +4,7 @@
     ViewBag.Title = "Добавить решение по физике";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
 
 @using (Html.BeginForm("CreatePhysisc", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }) ) 

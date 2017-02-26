@@ -90,3 +90,5 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.pdb
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations._new.resources
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.fix.resources
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\bin\Debug\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\bin\Debug\TwoStu.Settings.pdb

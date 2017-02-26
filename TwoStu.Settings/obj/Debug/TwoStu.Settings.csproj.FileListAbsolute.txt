@@ -1,0 +1,4 @@
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\bin\Debug\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\bin\Debug\TwoStu.Settings.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\obj\Debug\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\obj\Debug\TwoStu.Settings.pdb

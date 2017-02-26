@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using TwoStu.Settings.Statics;
 
 namespace TwoStu.Logic.Models
 {
@@ -22,7 +23,7 @@ namespace TwoStu.Logic.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base(ConnectionStringStatic.ConnectionString, throwIfV1Schema: false)
         {
         }
         
