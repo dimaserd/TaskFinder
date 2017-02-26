@@ -106,6 +106,7 @@
     <Compile Include="Models\Search\TaskSearchResult.cs" />
     <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
     <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
+    <Compile Include="Models\UserModels\CreateUserModel.cs" />
     <Compile Include="Models\WorkerResults\WorkerResult.cs" />
     <Compile Include="MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,79 +1,358 @@
-﻿@model TwoStu.Logic.Models.CreatePhysicsSolutionModel
-
+﻿@using TwoStu.Logic.Models.TaskSolutions
+@model CreateSolutionModel
 @{
-    ViewBag.Title = "Добавить решение по физике";
+    ViewBag.Title = "Create";
+    List<SelectListItem> subjectsList = ViewData["subjectsSelectList"] as List<SelectListItem>;
+
 }
 
-<h2>Create</h2>
+<h2>
+    Создать решение по предмету <strong><span id="subjectNameSpan"></span></strong> 
+</h2>
 
-
-@using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }) ) 
+@using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }))
 {
-                @Html.AntiForgeryToken()
-
-     <div class="form-horizontal">
-        <h4>Добавить решение задачи по физике</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-       
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TaskDesc, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.TaskDesc, new { htmlAttributes = new { @class = "form-control", rows = 20 } })
-                @Html.ValidationMessageFor(model => model.TaskDesc, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SubjectId", null,
+                                    htmlAttributes: new {
+                                        @class = "form-control",
+                                        id = "SubjectIdList"
+                                    })
         </div>
+    </div>
 
-         <div class="form-group">
-             @Html.LabelFor(model => model.SubjectSectionId, htmlAttributes: new { @class = "control-label col-md-2" })
-             <div class="col-md-10">
-                 @Html.DropDownList("SubjectSectionId", null, htmlAttributes: new { @class = "form-control" })
-                 @Html.ValidationMessageFor(model => model.SubjectSectionId, "", new { @class = "text-danger" })
-             </div>
-         </div>
+    
 
-         <div class="form-group">
-             @Html.LabelFor(model => model.WorkTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
-             <div class="col-md-10">
-                 @Html.DropDownList("WorkTypeId", null, htmlAttributes: new { @class = "form-control" })
-                 @Html.ValidationMessageFor(model => model.WorkTypeId, "", new { @class = "text-danger" })
-             </div>
-         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.File, htmlAttributes: new { id = "fileUpload", type = "file"})
-                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.Label("Раздел предмета", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div id="placeForSubjectSectionsList" class="col-md-10">
+            
         </div>
+    </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input id="btnSubmit" type="submit" value="Добавить решение" class="btn btn-default" />
-            </div>
+    
+
+    
+
+    <div id="testPlace">
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.WorkTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("WorkTypeId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.WorkTypeId, "", new { @class = "text-danger" })
         </div>
+    </div>
+
+    @Html.HiddenFor(x => x.DivisionChildsString, htmlAttributes: new { id = "DivisionChildsString" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.File, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.File, htmlAttributes: new { id = "fileUpload", type = "file" })
+            @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TaskDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.TaskDesc, new { id = "taskDesc", htmlAttributes = new { @class = "form-control", rows = 20 } })
+            @Html.ValidationMessageFor(model => model.TaskDesc, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <input id="hiddenSubmit" type="submit" class="hidden" value="Создать" />
+
+    <div id="fakeBtn" class="btn btn-success" onclick="fakeCreateClicked()">
+        Создать
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 
+@section scripts{
+    
+
+    
+
+    <!--Creating Drops-->
     <script>
-        var btnSubmit = $("#btnSubmit");
+        function GetDropList(data)
+        {
+            var selectList = document.createElement("select");
+            selectList.className = "form-control";
 
-        $(document).ready(function () {
-            $(document).keydown(function (e) {
-                if (e.keyCode == '32') {
-                    btnSubmit.click();
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+
+            return selectList;
+        }
+
+        function GetDropList(data, addedClassName) {
+            var selectList = document.createElement("select");
+            selectList.className = "form-control " + addedClassName;
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+
+            return selectList;
+        }
+
+
+        function MakeDropListBase(data, placeId, toBuildSelectListId)
+        {
+            var myDiv = document.getElementById(placeId);
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = GetDropList(data);
+            selectList.id = toBuildSelectListId;
+            
+            myDiv.appendChild(selectList);
+
+            
+        }
+
+        function MakeSubjectSectionDropList(data)
+        {
+
+            console.log("Начинаем строить!");
+            console.log(data);
+
+            var myDiv = document.getElementById("placeForSubjectSectionsList");
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "SubjectSectionsList";
+            selectList.className = "form-control";
+            selectList.name = "SubjectSectionId";
+            myDiv.appendChild(selectList);
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+        }
+        
+    </script>
+
+    <!--Функции создающие выпадающие списки-->
+    <script>
+        function MakeSubjectDivisionsDropList(data) {
+
+            var placeId = "placeForSubjectDivisionsList";
+            var toBuildSelectList = "SubjectDivisionsList";
+            MakeDropListBase(data, placeId, toBuildSelectList);
+        }
+
+        function MakeSubjectDivisionChildsDropList(data) {
+            var placeId = "placeForSubjectDivisionChildsList";
+            var toBuildSelectList = "SubjectDivisionChildsList";
+            MakeDropListBase(data, placeId, toBuildSelectList);
+        }
+
+    </script>
+    <!--/Функции создающие выпадающие списки-->
+
+    <!--Следилки за измененияи в списке предметов-->
+    <script>
+        var subjectNameSpan = document.getElementById("subjectNameSpan");
+
+        var subjectIdList = $("#SubjectIdList");
+
+        subjectIdList.change(function (e) {
+            e.preventDefault();
+
+            var subjectId = subjectIdList.val();
+
+            //получаем предмет выбранный в списке
+            var e = document.getElementById("SubjectIdList");
+            var subjectName = e.options[e.selectedIndex].text;
+            subjectNameSpan.innerHTML = subjectName;
+
+
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectSections?subjectId=' + subjectId,
+                success: function (response) {
+                    
+                    SubjectSections = response;
+                    MakeSubjectSectionDropList(response);
                 }
             });
-        });
-</script>
+        })
+
+
+    </script>
+    <!--/Следилки за измененияи в списке предметов-->
+
+    <!--Следилки за изменениями в списке разделов предметов-->
+    <script>
+        var SubjectSectionsList = $("#SubjectSectionsList");
+        //здесь нужно построить кучу выпадающих списков
+        $(document).on("change", "#SubjectSectionsList", function (e) {
+
+            //очищаем место
+            var myDiv = document.getElementById("testPlace");
+            myDiv.innerHTML = "";
+
+            var subjectSectionId = $(this).val();
+
+            console.log("Change in sections id=" + subjectSectionId)
+
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectDivisions?subjectSectionId=' + subjectSectionId,
+                success: function (response) {
+
+                    //SubjectSections = response;
+                    //MakeSubjectDivisionsDropList(response);
+                    BuildDropsForSubjectSection(response);
+                }
+            });
+        })
+
+    </script>
+    <!--/Следилки за изменениями в списке разделов предметов-->
+
+    <!--Функции которые строят выпадающие списки по каждому из разделов-->
+    <script>
+        function BuildDropsForSubjectSection(data) {
+            for (i = 0; i < data.length; i++)
+            {
+                AJAXMakeDropList(data[i]);
+            }
+        }
+
+        //функция принимает селект и создает для него разметку
+        //также принимается имя для лейбла
+        function BuildOneDropFromList(selectList, labelName)
+        {
+            var mainDiv = document.createElement("div");
+            mainDiv.className = "form-group subjectDivisionDrop";
+
+            var label = document.createElement("label");
+            label.className = "control-label col-md-2";
+            label.innerHTML = labelName;
+
+            mainDiv.appendChild(label);
+
+            var divForDrop = document.createElement("div");
+            divForDrop.className = "col-md-10";
+
+            divForDrop.appendChild(selectList);
+
+            mainDiv.appendChild(divForDrop);
+
+            //получаем элемент в котором хотим разместить на лист
+            var toPlaceDiv = document.getElementById("testPlace");
+            toPlaceDiv.appendChild(mainDiv);
+        }
+
+        
+        //функция аяксом получает данные для построения
+        //выпадающего списка с вариантом уточнения по разделу предмета
+        function AJAXMakeDropList(dataBit)
+        {
+            var labelName = dataBit.Name;
+            //аякс для получения вариантов уточнения по 
+            //одному уточнению которое пришло параметром в функцию
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectDivisionChilds?subjectDivisionId=' + dataBit.Id,
+                success: function (response) {
+                    var selectList = GetDropList(response, "selectDivision");
+                    BuildOneDropFromList(selectList, labelName);
+                }
+            });
+        }
+
+        
+    </script>
+    <!--/Функции которые строят выпадающие списки по каждому из разделов-->
+
+    <!--Получение строки с уточнениями-->
+    <script>
+        function GetDivisionsChildString()
+        {
+            var selects = document.getElementsByClassName("selectDivision");
+
+            var divisionsString = "";
+            for (i = 0; i < selects.length; i++) {
+                divisionsString += selects[i].value + ","
+            }
+
+            return divisionsString;
+        }
+    </script>
+    <!--/Получение строки с уточнениями-->
+
+    <!--Обработчики клика-->
+    <script>
+        function fakeCreateClicked()
+        {
+            console.log("клик на Создать");
+
+            var divisionsString = GetDivisionsChildString();
+
+            var DivisionChildsString = document.getElementById("DivisionChildsString");
+            DivisionChildsString.value = divisionsString;
+
+            if (CheckForm())
+            {
+                SendToServer();
+            }
+            
+        }
+
+        function CheckForm(){
+            var count = 0;
+
+            CheckFileInput() ? count = count + 1 : count = count;
+            CheckTextInput() ? count = count + 1 : count = count;
+
+            return count == 2;
+        }
+
+        function SendToServer()
+        {
+            var hiddenSubmit = document.getElementById("hiddenSubmit");
+            hiddenSubmit.click();
+        }
+    </script>
+
+
+    <!--Обработчики клика-->
+
+    <!--Обработчики формы-->
+    <script>
+        function CheckFileInput(){
+            return document.getElementById("fileUpload").files.length > 0
+        }
+
+        function CheckTextInput() {
+            return document.getElementById("taskDesc").value.length > 10;
+        }
+    </script>
+    <!--/Обработчики формы-->
+
 }

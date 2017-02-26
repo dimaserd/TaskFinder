@@ -74,6 +74,10 @@ namespace TwoStu.Logic.Workers
 
             countOfMatches = MainStringWorker.GetCountOfMatchingWords(searchWords, solutionWords);
 
+            if(countOfMatches == 0)
+            {
+                return 0;
+            }
             return (decimal)countOfMatches / (decimal)searchWords.Count;
         }
 
@@ -83,6 +87,11 @@ namespace TwoStu.Logic.Workers
             List<string> fileWords = solution.TaskDescFromFile.GetWordsFromText();
 
             countOfMatches = MainStringWorker.GetCountOfMatchingWords(searchWords, fileWords);
+
+            if(countOfMatches == 0)
+            {
+                return 0;
+            }
 
             return (decimal)countOfMatches / (decimal)searchWords.Count;
         }

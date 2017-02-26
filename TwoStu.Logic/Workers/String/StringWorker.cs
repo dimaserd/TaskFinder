@@ -17,6 +17,11 @@ namespace TwoStu.Logic.Workers.String
         {
             int result = 0;
 
+            if(ASetOfWords == null || BSetOfWords == null)
+            {
+                return result;
+            }
+
             for (int i = 0; i < ASetOfWords.Count; i++)
             {
                 for (int j = 0; j < BSetOfWords.Count; j++)

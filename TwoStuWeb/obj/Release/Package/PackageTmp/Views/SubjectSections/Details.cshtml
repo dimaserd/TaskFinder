@@ -4,31 +4,117 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Подробнее о разделе</h2>
 
 <div>
-    <h4>SubjectSection</h4>
+    <h4>Раздел <strong>@Model.Name</strong> предмета <strong>@Model.FromSubject.Name</strong></h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FromSubject.Name)
-        </dt>
+    
+    <h3>Список уточнений по разделу</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.FromSubject.Name)
-        </dd>
+            <th>
+                Название уточнения
+            </th>
+            <th>
+                Варианты уточнения
+            </th>
+            <th>
+                Действия
+            </th>
+        </tr>
+        @if (Model.SubjectDivisions.Count() > 0)
+        {
+            foreach (var item in Model.SubjectDivisions)
+            {
+                <tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+                    <td>
+                        <strong>@item.Name</strong>
+                    </td>
+                    <td>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>
+                                    Название
+                                </th>
+                                <th>
+                                    Действия
+                                </th>
+                            </tr>
+                            @if (item.SubjectDivisionChilds.Count() > 0)
+                            {
+                                foreach (var child in item.SubjectDivisionChilds)
+                                {
+                                    <tr>
+                                        <th>
+                                            @child.Name
+                                        </th>
+                                        <th>
+                                            <a href="@Url.Action("Details", "DivisionChilds", new { id = child.Id })">
+                                                [Подробнее]
+                                            </a>
+                                        </th>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <th colspan="2" class="text-center text-danger">
+                                        <strong>Нет вариантов для уточнений!</strong>
+                                    </th>
+                                </tr>
+                            }
+                            <tr>
+                                <th colspan="2" class="text-center">
+                                    <strong>
+                                        <a href="/DivisionChilds/Create">[Создать вариант уточнения к @item.Name]</a>
+                                    </strong>
+                                </th>
+                            </tr>
+                        </table>
 
-    </dl>
+                    </td>
+                    <td>
+                        <a href="/SubjectDivisions/Details/@item.Id"><strong>[Подробнее]</strong></a>
+                        <a href="/SubjectDivisions/Edit/@item.Id"><strong>[Редактировать]</strong></a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <th colspan="3" class="text-center text-danger">
+                    <strong>Не обнаружено ни одного уточнения по разделу @Model.Name предмета @Model.FromSubject.Name!</strong>
+                </th>
+            </tr>
+        }
+
+        <tr>
+            <th colspan="3" class="text-center">
+                <strong>
+                    @Html.ActionLink($"[Создать новое уточнение для раздела {Model.Name} предмета {Model.FromSubject.Name}]", "Create", "SubjectDivisions")
+                </strong>
+            </th>
+        </tr>
+
+    </table>
+    
+    
 </div>
+
+<hr />
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать раздел", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("К списку разделов", "Index") |
+    @Html.ActionLink("К списку предметов", "Index", "Subjects")
 </p>
+
+
+
+

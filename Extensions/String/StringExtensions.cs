@@ -165,6 +165,10 @@ namespace Extensions.String
         //из слов удаляются слишком короткие слова
         public static List<string> GetWordsFromText(this string text)
         {
+            if(string.IsNullOrEmpty(text))
+            {
+                return null;
+            }
             //var text = "'Oh, you can't help that,' said the Cat: 'we're all mad here. I'm mad. You're mad.'";
             char[] punctuation = text.Where(Char.IsPunctuation).Distinct().ToArray();
 

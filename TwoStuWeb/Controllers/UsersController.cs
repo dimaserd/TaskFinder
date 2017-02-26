@@ -4,6 +4,9 @@ using System.Net;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Models;
+using System.Web;
+using Microsoft.AspNet.Identity.Owin;
+using TwoStu.Logic.Models.UserModels;
 
 namespace TwoStuWeb.Controllers
 {
@@ -11,6 +14,19 @@ namespace TwoStuWeb.Controllers
     public class UsersController : Controller
     {
         private MyDbContext db = new MyDbContext();
+        private ApplicationUserManager _userManager;
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
 
         // GET: Users
         public async Task<ActionResult> Index()
@@ -44,16 +60,30 @@ namespace TwoStuWeb.Controllers
         // сведения см. в статье https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Password,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] ApplicationUser applicationUser)
+        public async Task<ActionResult> Create(CreateUserModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(applicationUser);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ApplicationUser user = new ApplicationUser
+                {
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Password = model.Password
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                
+                
+                if(result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View(model);
+                }
             }
 
-            return View(applicationUser);
+            return View(model);
         }
 
         // GET: Users/Edit/5

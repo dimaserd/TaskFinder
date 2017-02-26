@@ -13,7 +13,7 @@ using TwoStu.Logic.Models.TaskSolutions;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TaskSolutionsController : Controller
     {
         #region Fields
@@ -65,7 +65,7 @@ namespace TwoStuWeb.Controllers
 
         #region Create methods
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             
 

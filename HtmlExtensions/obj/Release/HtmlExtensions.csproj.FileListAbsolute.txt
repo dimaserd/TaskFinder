@@ -2,3 +2,7 @@ C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlEx
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\bin\Release\HtmlExtensions.pdb
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Release\HtmlExtensions.dll
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\HtmlExtensions\obj\Release\HtmlExtensions.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\bin\Release\HtmlExtensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\bin\Release\HtmlExtensions.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\obj\Release\HtmlExtensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\HtmlExtensions\obj\Release\HtmlExtensions.pdb

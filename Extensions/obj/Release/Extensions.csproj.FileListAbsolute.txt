@@ -23,3 +23,28 @@ C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\Extens
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\Extensions\bin\Release\ru\System.Web.WebPages.resources.dll
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\Extensions\bin\Release\ru\System.Web.WebPages.Deployment.resources.dll
 C:\Users\Dmitry Serdyukov\Documents\Visual Studio 2015\Projects\TwoStuWeb\Extensions\bin\Release\ru\System.Web.WebPages.Razor.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\Extensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\Extensions.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\DocX.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\Microsoft.Web.Infrastructure.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Helpers.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Mvc.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Razor.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.Deployment.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.Razor.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Helpers.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Mvc.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.Razor.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.Deployment.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\System.Web.WebPages.Razor.xml
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.Helpers.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.Mvc.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.Razor.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.WebPages.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.WebPages.Deployment.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\bin\Release\ru\System.Web.WebPages.Razor.resources.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\obj\Release\Extensions.csprojResolveAssemblyReference.cache
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\obj\Release\Extensions.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\Extensions\obj\Release\Extensions.pdb

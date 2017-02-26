@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 
 namespace TwoStuWeb.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class WorkTypesController : Controller
     {
         private MyDbContext db = new MyDbContext();

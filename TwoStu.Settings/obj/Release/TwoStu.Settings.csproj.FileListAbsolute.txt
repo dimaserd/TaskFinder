@@ -1,0 +1,5 @@
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\bin\Release\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\bin\Release\TwoStu.Settings.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\obj\Release\TwoStu.Settings.csprojResolveAssemblyReference.cache
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\obj\Release\TwoStu.Settings.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Settings\obj\Release\TwoStu.Settings.pdb
