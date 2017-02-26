@@ -35,9 +35,12 @@ namespace TwoStuWeb.Controllers
         }
 
         // GET: DivisionChilds/Create
-        public ActionResult Create()
+        public ActionResult Create(int? toSubjectDivisionId = null)
         {
             ViewBag.SubjectDivisionId = new SelectList(db.SubjectDivisions, "Id", "Name");
+
+            ViewBag.toSubjectDivisionId = toSubjectDivisionId;
+
             return View();
         }
 

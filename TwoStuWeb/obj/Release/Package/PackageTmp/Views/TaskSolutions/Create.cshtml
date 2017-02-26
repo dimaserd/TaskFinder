@@ -87,6 +87,12 @@
             var selectList = document.createElement("select");
             selectList.className = "form-control";
 
+
+            var nullOption = document.createElement("option");
+            nullOption.value = data[i].Id;
+            nullOption.text = data[i].Name;
+            selectList.appendChild(nullOption);
+
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
                 var option = document.createElement("option");

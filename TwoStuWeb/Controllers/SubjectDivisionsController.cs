@@ -35,8 +35,10 @@ namespace TwoStuWeb.Controllers
         }
 
         // GET: SubjectDivisions/Create
-        public ActionResult Create()
+        public ActionResult Create(int? toSubjectSectionId = null)
         {
+            ViewBag.toSubjectSectionId = toSubjectSectionId;
+
             ViewBag.SubjectSectionId = new SelectList(db.SubjectSections, "Id", "Name");
             return View();
         }

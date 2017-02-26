@@ -87,6 +87,12 @@
             var selectList = document.createElement("select");
             selectList.className = "form-control";
 
+
+            var nullOption = document.createElement("option");
+            nullOption.value = 0;
+            nullOption.text = "Не выбрано";
+            selectList.appendChild(nullOption);
+
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
                 var option = document.createElement("option");
@@ -101,6 +107,11 @@
         function GetDropList(data, addedClassName) {
             var selectList = document.createElement("select");
             selectList.className = "form-control " + addedClassName;
+
+            var nullOption = document.createElement("option");
+            nullOption.value = 0;
+            nullOption.text = "Не выбрано";
+            selectList.appendChild(nullOption);
 
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
