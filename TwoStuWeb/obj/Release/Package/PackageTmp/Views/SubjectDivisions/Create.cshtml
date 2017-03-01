@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Create";
+
+    int? toSubjectSectionId = (ViewBag.toSubjectSectionId as int?);
+    int toSelectId = !(toSubjectSectionId.HasValue) ? -1 : toSubjectSectionId.Value;
 }
 
 <h2>Создать уточнение</h2>
@@ -25,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SubjectSectionId, "SubjectSectionId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("SubjectSectionId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("SubjectSectionId", null, htmlAttributes: new { id = "SubjectSectionsList", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.SubjectSectionId, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -43,3 +46,17 @@
     @Html.ActionLink("К списку разделов", "Index", "SubjectSections") |
     @Html.ActionLink("К списку предметов", "Index", "Subjects")
 </div>
+
+@section scripts{
+    <!--Скрипты автоматической установки данных в выпадающем списке-->
+    <script>
+        var toSelectId = @toSelectId;
+
+        if (toSelectId != -1)
+        {
+            document.getElementById('SubjectSectionsList').value = toSelectId;
+        }
+    </script>
+    <!--/Скрипты автоматической установки данных в выпадающем списке-->
+    <!---->
+}

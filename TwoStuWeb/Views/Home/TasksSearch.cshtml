@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TwoStu.Logic.Entities.TaskSolution>
+
+<div>
+    <h3>Результат поиска</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>
+               Раздел предмета 
+            </th>
+            <th>
+                Описание 
+            </th>
+            <th>
+                Аттрибуты
+            </th>
+            <th>
+                Ссылка
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <strong>
+                        @item.TaskSubjectSection.Name
+                    </strong>
+                    
+                </td>
+                <td>
+                    <strong>
+                        @item.TaskDesc
+                    </strong>  
+                </td>
+                <td>
+                    <table class="table table-bordered">
+                        @foreach (var subItem in item.SubjectDivisionChilds)
+                        {
+                            <tr>
+                                
+                                <td><strong>@subItem.SubjectDivisionParent.Name : @subItem.Name</strong></td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+                <td>
+                    
+                    <a href="/File/DownloadByKey?key=@item.Id">
+                        <strong>
+                            [Скачать]
+                        </strong>
+                    </a>
+                </td>
+                
+            </tr>
+        }
+    </table>
+</div>

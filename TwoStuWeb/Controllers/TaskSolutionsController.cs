@@ -67,8 +67,6 @@ namespace TwoStuWeb.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            
-
             ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
 
             ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");

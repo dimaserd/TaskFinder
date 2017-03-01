@@ -71,7 +71,7 @@
                             <tr>
                                 <th colspan="2" class="text-center">
                                     <strong>
-                                        <a href="/DivisionChilds/Create">[Создать вариант уточнения к @item.Name]</a>
+                                        <a href="/DivisionChilds/Create?toSubjectDivisionId=@item.Id">[Создать вариант уточнения к @item.Name]</a>
                                     </strong>
                                 </th>
                             </tr>
@@ -97,7 +97,9 @@
         <tr>
             <th colspan="3" class="text-center">
                 <strong>
-                    @Html.ActionLink($"[Создать новое уточнение для раздела {Model.Name} предмета {Model.FromSubject.Name}]", "Create", "SubjectDivisions")
+                    <a href="/SubjectDivisions/Create?toSubjectSectionId=@Model.Id">
+                        [Создать новое уточнение для раздела @Model.Name предмета @Model.FromSubject.Name]
+                    </a>
                 </strong>
             </th>
         </tr>

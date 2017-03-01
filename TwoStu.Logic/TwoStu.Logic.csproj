@@ -105,6 +105,7 @@
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
     <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
+    <Compile Include="Models\TaskSolutions\SearchSolutionsModel.cs" />
     <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
     <Compile Include="Models\UserModels\CreateUserModel.cs" />
     <Compile Include="Models\WorkerResults\WorkerResult.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Workers\StringWorker.cs" />
     <Compile Include="Workers\String\StringWorker.cs" />
     <Compile Include="Workers\TaskSolutionsWorker.cs" />
+    <Compile Include="Workers\TaskSolutions\TaskSolutionSearcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

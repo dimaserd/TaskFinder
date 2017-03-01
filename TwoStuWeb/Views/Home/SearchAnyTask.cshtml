@@ -1,0 +1,355 @@
+﻿@using TwoStu.Logic.Models.TaskSolutions
+@model SearchSolutionsModel
+@{
+    ViewBag.Title = "SearchAnyTask";
+}
+
+<h2>Поиск любого задания по уточнениям по предмету <strong><span id="subjectNameSpan"></span></strong></h2>
+
+<div id="searchResult">
+
+</div>
+
+@using (Ajax.BeginForm(actionName: "TasksSearch", controllerName: "Home", ajaxOptions: 
+    new AjaxOptions { UpdateTargetId = "searchResult", InsertionMode = InsertionMode.ReplaceWith},
+    routeValues: null, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+{
+    <div class="form-group">
+        @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("SubjectId", null,
+                                    htmlAttributes: new
+                                    {
+                                        @class = "form-control",
+                                        id = "SubjectIdList"
+                                    })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        @Html.Label("Раздел предмета", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div id="placeForSubjectSectionsList" class="col-md-10">
+
+        </div>
+    </div>
+
+
+
+
+
+    <div id="testPlace">
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.WorkTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("WorkTypeId", null, htmlAttributes: new { @class = "form-control", id = "WorkTypeIdList" })
+            @Html.ValidationMessageFor(model => model.WorkTypeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(x => x.DivisionChildsString, htmlAttributes: new { id = "DivisionChildsString" })
+
+    
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.TaskDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.TaskDesc, new { id = "taskDesc", htmlAttributes = new { @class = "form-control", rows = 20 } })
+            @Html.ValidationMessageFor(model => model.TaskDesc, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <input id="hiddenSubmit" type="submit" class="hidden" value="Настоящий Поиск" />
+
+    <div id="fakeBtn" class="btn btn-success" onclick="fakeSearchClicked()">
+        Найти
+    </div>
+}
+
+
+@section scripts{
+
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    
+
+    <script>
+        
+    </script>
+
+    <!--Creating Drops-->
+    <script>
+        function GetDropList(data) {
+            var selectList = document.createElement("select");
+            selectList.className = "form-control";
+
+
+            var nullOption = document.createElement("option");
+            nullOption.value = 0;
+            nullOption.text = "Не выбрано";
+            selectList.appendChild(nullOption);
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+
+            return selectList;
+        }
+
+        function GetDropList(data, addedClassName) {
+            var selectList = document.createElement("select");
+            selectList.className = "form-control " + addedClassName;
+
+            var nullOption = document.createElement("option");
+            nullOption.value = 0;
+            nullOption.text = "Не выбрано";
+            selectList.appendChild(nullOption);
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+
+            return selectList;
+        }
+
+
+        function MakeDropListBase(data, placeId, toBuildSelectListId) {
+            var myDiv = document.getElementById(placeId);
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = GetDropList(data);
+            selectList.id = toBuildSelectListId;
+
+            myDiv.appendChild(selectList);
+
+
+        }
+
+        function MakeSubjectSectionDropList(data) {
+
+            console.log("Начинаем строить!");
+            console.log(data);
+
+            var myDiv = document.getElementById("placeForSubjectSectionsList");
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "SubjectSectionsList";
+            selectList.className = "form-control";
+            selectList.name = "SubjectSectionId";
+            myDiv.appendChild(selectList);
+
+            //Create and append the options
+            for (var i = 0; i < data.length; i++) {
+                var option = document.createElement("option");
+                option.value = data[i].Id;
+                option.text = data[i].Name;
+                selectList.appendChild(option);
+            }
+        }
+
+    </script>
+
+    <!--Функции создающие выпадающие списки-->
+    <script>
+        function MakeSubjectDivisionsDropList(data) {
+
+            var placeId = "placeForSubjectDivisionsList";
+            var toBuildSelectList = "SubjectDivisionsList";
+            MakeDropListBase(data, placeId, toBuildSelectList);
+        }
+
+        function MakeSubjectDivisionChildsDropList(data) {
+            var placeId = "placeForSubjectDivisionChildsList";
+            var toBuildSelectList = "SubjectDivisionChildsList";
+            MakeDropListBase(data, placeId, toBuildSelectList);
+        }
+
+    </script>
+    <!--/Функции создающие выпадающие списки-->
+
+    <!--Следилки за измененияи в списке предметов-->
+    <script>
+        var subjectNameSpan = document.getElementById("subjectNameSpan");
+
+        var subjectIdList = $("#SubjectIdList");
+
+        subjectIdList.change(function (e) {
+            e.preventDefault();
+
+            var subjectId = subjectIdList.val();
+
+            //получаем предмет выбранный в списке
+            var e = document.getElementById("SubjectIdList");
+            var subjectName = e.options[e.selectedIndex].text;
+            subjectNameSpan.innerHTML = subjectName;
+
+
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectSections?subjectId=' + subjectId,
+                success: function (response) {
+
+                    SubjectSections = response;
+                    MakeSubjectSectionDropList(response);
+                }
+            });
+        })
+
+
+    </script>
+    <!--/Следилки за измененияи в списке предметов-->
+
+    <!--Следилки за изменениями в списке разделов предметов-->
+    <script>
+        var SubjectSectionsList = $("#SubjectSectionsList");
+        //здесь нужно построить кучу выпадающих списков
+        $(document).on("change", "#SubjectSectionsList", function (e) {
+
+            //очищаем место
+            var myDiv = document.getElementById("testPlace");
+            myDiv.innerHTML = "";
+
+            var subjectSectionId = $(this).val();
+
+            console.log("Change in sections id=" + subjectSectionId)
+
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectDivisions?subjectSectionId=' + subjectSectionId,
+                success: function (response) {
+
+                    //SubjectSections = response;
+                    //MakeSubjectDivisionsDropList(response);
+                    BuildDropsForSubjectSection(response);
+                }
+            });
+        })
+
+    </script>
+    <!--/Следилки за изменениями в списке разделов предметов-->
+
+    <!--Функции которые строят выпадающие списки по каждому из разделов-->
+    <script>
+        function BuildDropsForSubjectSection(data) {
+            for (i = 0; i < data.length; i++) {
+                AJAXMakeDropList(data[i]);
+            }
+        }
+
+        //функция принимает селект и создает для него разметку
+        //также принимается имя для лейбла
+        function BuildOneDropFromList(selectList, labelName) {
+            var mainDiv = document.createElement("div");
+            mainDiv.className = "form-group subjectDivisionDrop";
+
+            var label = document.createElement("label");
+            label.className = "control-label col-md-2";
+            label.innerHTML = labelName;
+
+            mainDiv.appendChild(label);
+
+            var divForDrop = document.createElement("div");
+            divForDrop.className = "col-md-10";
+
+            divForDrop.appendChild(selectList);
+
+            mainDiv.appendChild(divForDrop);
+
+            //получаем элемент в котором хотим разместить на лист
+            var toPlaceDiv = document.getElementById("testPlace");
+            toPlaceDiv.appendChild(mainDiv);
+        }
+
+
+        //функция аяксом получает данные для построения
+        //выпадающего списка с вариантом уточнения по разделу предмета
+        function AJAXMakeDropList(dataBit) {
+            var labelName = dataBit.Name;
+            //аякс для получения вариантов уточнения по
+            //одному уточнению которое пришло параметром в функцию
+            $.ajax({
+                type: "GET",
+                url: '/Default/GetSubjectDivisionChilds?subjectDivisionId=' + dataBit.Id,
+                success: function (response) {
+                    var selectList = GetDropList(response, "selectDivision");
+                    BuildOneDropFromList(selectList, labelName);
+                }
+            });
+        }
+
+
+    </script>
+    <!--/Функции которые строят выпадающие списки по каждому из разделов-->
+
+    <!--Получение строки с уточнениями-->
+    <script>
+        function GetDivisionsChildString() {
+            var selects = document.getElementsByClassName("selectDivision");
+
+            var divisionsString = "";
+            for (i = 0; i < selects.length; i++) {
+                divisionsString += selects[i].value + ","
+            }
+
+            return divisionsString;
+        }
+    </script>
+    <!--/Получение строки с уточнениями-->
+    
+    <!--Обработчики клика-->
+    <script>
+        function fakeSearchClicked() {
+            console.log("клик на Поиск");
+
+            var divisionsString = GetDivisionsChildString();
+            console.log(divisionsString);
+
+            var DivisionChildsString = document.getElementById("DivisionChildsString");
+            DivisionChildsString.value = divisionsString;
+
+            console.log($("#DivisionChildsString").val())
+
+            if (CheckForm()) {
+                SendToServer();
+            }
+
+        }
+
+        function CheckForm() {
+            var count = 0;
+
+            
+            CheckTextInput() ? count = count + 1 : count = count;
+
+            return count == 1;
+        }
+
+        function SendToServer() {
+            document.getElementById("hiddenSubmit").click();
+        }
+    </script>
+    <!--/Обработчики клика-->
+
+    <!--Обработчики формы-->
+    <script>
+        function CheckTextInput() {
+            return true;
+        }
+    </script>
+    <!--/Обработчики формы-->
+
+}

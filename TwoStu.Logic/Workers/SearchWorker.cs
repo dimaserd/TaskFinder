@@ -60,7 +60,9 @@ namespace TwoStu.Logic.Workers
                         WordsFoundInFile = countOfMatchesInFile
                     };
                 })
-                .Where(x => x.WordsFoundInDesc > 0).ToList();
+                .Where(x => x.WordsFoundInDesc > 0)
+                .OrderByDescending(x => x.DescPercentage)
+                .ToList();
 
             return result;
         }

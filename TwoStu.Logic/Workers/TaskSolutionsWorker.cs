@@ -135,24 +135,8 @@ namespace TwoStu.Logic.Workers
         public async Task<List<SubjectDivisionChild>> GetSubjectDivisionsFromString(string divisionsString)
         {
             List<SubjectDivisionChild> allChilds = await Db.SubjectDivisionChilds.ToListAsync();
-          
-            List<int> divisionIds = divisionsString
-                .Split(separator: new string[] { "," }, options: StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => 
-                {
-                    int temp;
-                    if(int.TryParse(x, out temp))
-                    {
-                        return temp;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }).Where(x => x != 0)
-                .ToList();
 
-            return allChilds.Where(x => divisionIds.Contains(x.Id)).ToList();
+            return allChilds.GetSubjectDivisionsFromString(divisionsString).ToList();
         }
 
         #region Physics methods
