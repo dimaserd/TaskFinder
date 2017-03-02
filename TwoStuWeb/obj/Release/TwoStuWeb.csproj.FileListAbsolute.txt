@@ -241,3 +241,17 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\ru\System.Web.Http.Ow
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Release\TwoStuWeb.csprojResolveAssemblyReference.cache
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Release\TwoStuWeb.dll
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\obj\Release\TwoStuWeb.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\csc.exe.config
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\csc.rsp
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\csi.exe
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\csi.rsp
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\System.AppContext.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\vbc.exe.config
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStuWeb\bin\roslyn\vbc.rsp

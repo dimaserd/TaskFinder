@@ -10,7 +10,7 @@
     Создать решение по предмету <strong><span id="subjectNameSpan"></span></strong> 
 </h2>
 
-@using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     <div class="form-group">
         @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })

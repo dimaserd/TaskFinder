@@ -26,7 +26,10 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubjectDivision subjectDivision = await db.SubjectDivisions.FindAsync(id);
+            SubjectDivision subjectDivision = await db.SubjectDivisions
+                .Include(x => x.FromSubjectSection.FromSubject)
+                .Include(x => x.SubjectDivisionChilds)
+                .FirstOrDefaultAsync(x => x.Id == id.Value);
             if (subjectDivision == null)
             {
                 return HttpNotFound();

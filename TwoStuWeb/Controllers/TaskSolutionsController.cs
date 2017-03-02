@@ -10,6 +10,7 @@ using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
 using TwoStu.Logic;
 using TwoStu.Logic.Models.TaskSolutions;
+using System;
 
 namespace TwoStuWeb.Controllers
 {
@@ -19,7 +20,7 @@ namespace TwoStuWeb.Controllers
         #region Fields
         static MyDbContext _db;
 
-        private TaskSolutionsWorker worker = new TaskSolutionsWorker(Db);
+        TaskSolutionsWorker _worker;
         #endregion
 
         #region Properties
@@ -34,13 +35,29 @@ namespace TwoStuWeb.Controllers
                 return _db;
             }
         }
+
+        TaskSolutionsWorker Worker
+        {
+            get
+            {
+                if(_worker == null)
+                {
+                    _worker = new TaskSolutionsWorker(Db);
+                }
+                return _worker;
+            }
+        }
         #endregion
 
         #region HttpController methods
         // GET: TaskSolutions
         public async Task<ActionResult> Index()
         {
-            List<TaskSolution> model = await worker.Db.TaskSolutions.ToListAsync();
+            List<TaskSolution> model = await Worker.Db.TaskSolutions
+                .Include(x => x.TaskSubject)
+                .Include(x => x.TaskSubjectSection)
+                .Include(x => x.SubjectDivisionChilds.Select(y => y.SubjectDivisionParent))
+                .ToListAsync();
             return View(model.OrderByDescending(x => x.CreationDate));
         }
 
@@ -51,7 +68,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.Db.TaskSolutions
+            TaskSolution taskSolution = await Worker.Db.TaskSolutions
                 .Include(x => x.TypeOfWork)
                 .Include(x => x.TaskSubject)
                 .Include(x => x.TaskSubjectSection)
@@ -67,7 +84,7 @@ namespace TwoStuWeb.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
             ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
 
@@ -79,14 +96,14 @@ namespace TwoStuWeb.Controllers
         {
             if(ModelState.IsValid)
             {
-                WorkerResult result = await worker.CreateSolution(model);
+                WorkerResult result = await Worker.CreateSolution(model);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");
                 }
             }
 
-            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
             ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
 
@@ -96,10 +113,10 @@ namespace TwoStuWeb.Controllers
         // GET: TaskSolutions/Create
         public ActionResult CreatePhysics()
         {
-            int physicsId = worker.Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
-            ViewBag.SubjectSectionId = new SelectList(worker.Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
-            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+            ViewBag.SubjectSectionId = new SelectList(Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
             return View();
         }
 
@@ -112,16 +129,16 @@ namespace TwoStuWeb.Controllers
         {
             
 
-            int physicsId = worker.Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
-            ViewBag.SubjectSectionId = new SelectList(worker.Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
-            ViewBag.WorkTypeId = new SelectList(worker.Db.WorkTypes, "Id", "Name");
+            ViewBag.SubjectSectionId = new SelectList(Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
             
 
             if (ModelState.IsValid)
             {
-                WorkerResult result = await worker.CreatePhysicsSolution(model);
+                WorkerResult result = await Worker.CreatePhysicsSolution(model);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -149,7 +166,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
+            TaskSolution taskSolution = await Db.TaskSolutions.FindAsync(id);
             if (taskSolution == null)
             {
                 return HttpNotFound();
@@ -166,8 +183,8 @@ namespace TwoStuWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                worker.Db.Entry(taskSolution).State = EntityState.Modified;
-                await worker.Db.SaveChangesAsync();
+                Db.Entry(taskSolution).State = EntityState.Modified;
+                await Db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(taskSolution);
@@ -183,7 +200,7 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
+            TaskSolution taskSolution = await Db.TaskSolutions.FindAsync(id);
             if (taskSolution == null)
             {
                 return HttpNotFound();
@@ -197,9 +214,12 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
-            TaskSolution taskSolution = await worker.Db.TaskSolutions.FindAsync(id);
-            worker.Db.TaskSolutions.Remove(taskSolution);
-            await worker.Db.SaveChangesAsync();
+            WorkerResult result = await Worker.DeleteSolution(id);
+
+            if(!result.Succeeded)
+            {
+                return HttpNotFound();
+            }
             return RedirectToAction("Index");
         }
         #endregion
@@ -221,7 +241,18 @@ namespace TwoStuWeb.Controllers
         {
             if (disposing)
             {
-                worker.Dispose();
+                IDisposable[] toDisposes = new IDisposable[]
+                {
+                    //_worker, _db
+                };
+                for(int i = 0; i < toDisposes.Length; i++)
+                {
+                    if(toDisposes[i] != null)
+                    {
+                        toDisposes[i].Dispose();
+                        toDisposes[i] = null;
+                    }
+                }
             }
             base.Dispose(disposing);
         }

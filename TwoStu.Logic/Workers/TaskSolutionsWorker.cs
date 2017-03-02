@@ -120,7 +120,15 @@ namespace TwoStu.Logic.Workers
 
             //добавляем в базу
             Db.TaskSolutions.Add(solution);
-            await Db.SaveChangesAsync();
+            try
+            {
+                await Db.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                
+            }
+            
 
             return new WorkerResult
             {
@@ -128,6 +136,30 @@ namespace TwoStu.Logic.Workers
             };
         }
 
+        public async Task<WorkerResult> DeleteSolution(string id)
+        {
+            TaskSolution solution = await Db.TaskSolutions
+                .Include(x => x.SubjectDivisionChilds)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if(solution == null)
+            {
+                return new WorkerResult("Решение с указанным Id не найдено!");
+            }
+
+            foreach(var child in solution.SubjectDivisionChilds.ToList())
+            {
+                solution.SubjectDivisionChilds.Remove(child);
+            }
+            await Db.SaveChangesAsync();
+            Db.TaskSolutions.Remove(solution);
+            await Db.SaveChangesAsync();
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
         #endregion
 
         #region Help Methods

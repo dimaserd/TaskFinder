@@ -4,31 +4,49 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>
+    Подробнее об уточнении <strong>@Model.Name</strong> к предмету <strong>@Model.FromSubjectSection.FromSubject.Name</strong>
+    раздела <strong>@Model.FromSubjectSection.Name</strong>
+</h2>
+
+<hr />
 
 <div>
-    <h4>SubjectDivision</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FromSubjectSection.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FromSubjectSection.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-    </dl>
+    <h4><strong>Список вариантов уточнения</strong></h4>
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Вариант уточнения
+            </th>
+            <th>
+                Действия
+            </th>
+        </tr>
+        @foreach(var item in Model.SubjectDivisionChilds)
+        {
+            <tr>
+                <th>
+                    @item.Name
+                </th>
+                <th>
+                    <a href="/DivisionChilds/Details/@item.Id">[Подробнее]</a>
+                </th>
+            </tr>
+        }
+        <tr>
+            <th colspan="2" class="text-center">
+                <a href="/DivisionChilds/Create?toSubjectDivisionId=@Model.Id">[Создать новый варинт уточнения к @Model.Name]</a>
+            </th>
+        </tr>
+    </table>
 </div>
+
+<hr />
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <strong>
+        @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("К списку уточнений", "Index") |
+        @Html.ActionLink("К списку разделов", "Index", "SubjectSections") |
+        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    </strong>
 </p>

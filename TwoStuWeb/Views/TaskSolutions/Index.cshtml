@@ -13,23 +13,23 @@
     @Html.ActionLink("Создать новое", "Create") |
     @Html.ActionLink("Создать новое по физике", "CreatePhysics")
 </p>
-<table class="table">
+<table class="table table-striped">
     <tr>
         
         <th>
-            @Html.DisplayNameFor(model => model.TaskDesc)
+            Условие
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FilePath)
+            Предмет
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FileName)
+            Раздел предмета
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreationDate)
+            Атрибуты
         </th>
         <th>
-
+            Действия
         </th>
     </tr>
 
@@ -37,16 +37,26 @@
     <tr>
         
         <td>
-            @Html.DisplayFor(modelItem => item.TaskDesc)
+            <strong>@item.TaskDesc</strong>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FilePath)
+            <strong>@item.TaskSubject.Name</strong>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FileName)
+            <strong>@item.TaskSubjectSection.Name</strong>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
+            <table class="table table-striped">
+                
+                @foreach (var child in item.SubjectDivisionChilds)
+                {
+                    <tr>
+                        <th>
+                            @child.SubjectDivisionParent.Name : @child.Name
+                        </th>
+                    </tr>
+                }
+            </table>
         </td>
         <td>
             @Html.ActionLink("Редактировать", "Edit", new { id=item.Id }) |
