@@ -4,14 +4,16 @@ using System.Net;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
+using TwoStu.Logic.Models.WorkerResults;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SubjectDivisionsController : Controller
     {
         private MyDbContext db = new MyDbContext();
 
+        #region HttpController methods
         // GET: SubjectDivisions
         public async Task<ActionResult> Index()
         {
@@ -37,6 +39,7 @@ namespace TwoStuWeb.Controllers
             return View(subjectDivision);
         }
 
+        #region Create methods
         // GET: SubjectDivisions/Create
         public ActionResult Create(int? toSubjectSectionId = null)
         {
@@ -64,9 +67,18 @@ namespace TwoStuWeb.Controllers
             return View(subjectDivision);
         }
 
+        #endregion
+
+        #region Edit methods
         // GET: SubjectDivisions/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -87,6 +99,12 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,SubjectSectionId")] SubjectDivision subjectDivision)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if(!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(subjectDivision).State = EntityState.Modified;
@@ -97,9 +115,18 @@ namespace TwoStuWeb.Controllers
             return View(subjectDivision);
         }
 
+        #endregion
+
+        #region Delete methods
         // GET: SubjectDivisions/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -117,11 +144,35 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             SubjectDivision subjectDivision = await db.SubjectDivisions.FindAsync(id);
             db.SubjectDivisions.Remove(subjectDivision);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #endregion
+
+        #region Help methods
+        WorkerResult UserHasRightsToBeThere()
+        {
+            if (!User.IsInRole("Admin"))
+            {
+                return new WorkerResult("У вас недостаточно прав!");
+            }
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+        #endregion
 
         protected override void Dispose(bool disposing)
         {

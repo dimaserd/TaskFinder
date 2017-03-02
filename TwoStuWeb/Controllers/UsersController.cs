@@ -13,9 +13,12 @@ namespace TwoStuWeb.Controllers
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
+        #region Fields
         private MyDbContext db = new MyDbContext();
         private ApplicationUserManager _userManager;
+        #endregion
 
+        #region Properties
         public ApplicationUserManager UserManager
         {
             get
@@ -27,13 +30,16 @@ namespace TwoStuWeb.Controllers
                 _userManager = value;
             }
         }
+        #endregion
 
+        #region HttpController methods
         // GET: Users
         public async Task<ActionResult> Index()
         {
             return View(await db.Users.ToListAsync());
         }
 
+        #region Details methods
         // GET: Users/Details/5
         public async Task<ActionResult> Details(string id)
         {
@@ -49,6 +55,9 @@ namespace TwoStuWeb.Controllers
             return View(applicationUser);
         }
 
+        #endregion
+
+        #region Create methods
         // GET: Users/Create
         public ActionResult Create()
         {
@@ -86,6 +95,9 @@ namespace TwoStuWeb.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region Edit methods
         // GET: Users/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
@@ -116,7 +128,9 @@ namespace TwoStuWeb.Controllers
             }
             return View(applicationUser);
         }
+        #endregion
 
+        #region Delete methods
         // GET: Users/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
@@ -142,6 +156,9 @@ namespace TwoStuWeb.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #endregion
 
         protected override void Dispose(bool disposing)
         {

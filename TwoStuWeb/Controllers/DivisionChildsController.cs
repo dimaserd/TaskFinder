@@ -4,14 +4,18 @@ using System.Net;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
+using TwoStu.Logic.Models.WorkerResults;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class DivisionChildsController : Controller
     {
+        #region Fields
         private MyDbContext db = new MyDbContext();
+        #endregion
 
+        #region HttpController methods
         // GET: DivisionChilds
         public async Task<ActionResult> Index()
         {
@@ -19,6 +23,8 @@ namespace TwoStuWeb.Controllers
             return View(await subjectDivisionChilds.ToListAsync());
         }
 
+        
+        #region Details methods
         // GET: DivisionChilds/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -34,6 +40,9 @@ namespace TwoStuWeb.Controllers
             return View(subjectDivisionChild);
         }
 
+        #endregion
+
+        #region Details methods
         // GET: DivisionChilds/Create
         public ActionResult Create(int? toSubjectDivisionId = null)
         {
@@ -61,10 +70,18 @@ namespace TwoStuWeb.Controllers
             ViewBag.SubjectDivisionId = new SelectList(db.SubjectDivisions, "Id", "Name", subjectDivisionChild.SubjectDivisionId);
             return View(subjectDivisionChild);
         }
+        #endregion
 
+        #region Edit methods
         // GET: DivisionChilds/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if(!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -85,6 +102,12 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,SubjectDivisionId")] SubjectDivisionChild subjectDivisionChild)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(subjectDivisionChild).State = EntityState.Modified;
@@ -95,9 +118,18 @@ namespace TwoStuWeb.Controllers
             return View(subjectDivisionChild);
         }
 
+        #endregion
+
+        #region Delete methods
         // GET: DivisionChilds/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -115,12 +147,38 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             SubjectDivisionChild subjectDivisionChild = await db.SubjectDivisionChilds.FindAsync(id);
             db.SubjectDivisionChilds.Remove(subjectDivisionChild);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #endregion
+
+        #region Help methods
+        WorkerResult UserHasRightsToBeThere()
+        {
+            if (!User.IsInRole("Admin"))
+            {
+                return new WorkerResult("У вас недостаточно прав!");
+            }
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+        #endregion
+
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -130,4 +188,5 @@ namespace TwoStuWeb.Controllers
             base.Dispose(disposing);
         }
     }
+        #endregion
 }

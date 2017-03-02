@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
+using TwoStu.Logic.Models.WorkerResults;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SubjectSectionsController : Controller
     {
+        #region Fields
         private MyDbContext db = new MyDbContext();
+        #endregion
 
+        #region HttpController methods
         // GET: SubjectSections
         public async Task<ActionResult> Index()
         {
@@ -42,9 +43,16 @@ namespace TwoStuWeb.Controllers
             return View(subjectSection);
         }
 
+        #region Create methods
         // GET: SubjectSections/Create
         public ActionResult Create()
         {
+            WorkerResult result = UserHasRightsToBeThere();
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             ViewBag.SubjectId = new SelectList(db.Subjects, "Id", "Name");
             return View();
         }
@@ -56,8 +64,15 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name,SubjectId")] SubjectSection subjectSection)
         {
+            WorkerResult result = UserHasRightsToBeThere();
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
+
                 subjectSection.Id = db.SubjectSections.Count() + 1;
                 db.SubjectSections.Add(subjectSection);
                 await db.SaveChangesAsync();
@@ -68,9 +83,18 @@ namespace TwoStuWeb.Controllers
             return View(subjectSection);
         }
 
+        #endregion
+
+        #region Edit methods
         // GET: SubjectSections/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
+            WorkerResult result = UserHasRightsToBeThere();
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -101,9 +125,18 @@ namespace TwoStuWeb.Controllers
             return View(subjectSection);
         }
 
+        #endregion
+
+        #region Delete methods
         // GET: SubjectSections/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
+            WorkerResult result = UserHasRightsToBeThere();
+            if(!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -121,12 +154,38 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+            WorkerResult result = UserHasRightsToBeThere();
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             SubjectSection subjectSection = await db.SubjectSections.FindAsync(id);
             db.SubjectSections.Remove(subjectSection);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #endregion
+
+        #region Help methods
+        WorkerResult UserHasRightsToBeThere()
+        {
+            if (!User.IsInRole("Admin"))
+            {
+                return new WorkerResult("У вас недостаточно прав!");
+            }
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+        #endregion
+
+        #region Dispose
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -135,5 +194,6 @@ namespace TwoStuWeb.Controllers
             }
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

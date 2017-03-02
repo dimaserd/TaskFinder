@@ -346,7 +346,7 @@
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll">
-      <publishTime>03/01/2017 15:16:16</publishTime>
+      <publishTime>03/02/2017 13:01:15</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll.config">
       <publishTime>11/14/2016 20:54:06</publishTime>
@@ -355,7 +355,7 @@
       <publishTime>02/26/2017 22:10:56</publishTime>
     </File>
     <File Include="bin/TwoStuWeb.dll">
-      <publishTime>03/01/2017 15:16:25</publishTime>
+      <publishTime>03/02/2017 13:01:25</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -520,7 +520,7 @@
       <publishTime>11/14/2016 17:38:23</publishTime>
     </File>
     <File Include="Views/DivisionChilds/Create.cshtml">
-      <publishTime>02/27/2017 00:54:37</publishTime>
+      <publishTime>03/02/2017 12:52:43</publishTime>
     </File>
     <File Include="Views/DivisionChilds/Delete.cshtml">
       <publishTime>02/23/2017 17:02:44</publishTime>
@@ -562,7 +562,7 @@
       <publishTime>02/23/2017 17:00:57</publishTime>
     </File>
     <File Include="Views/SubjectDivisions/Details.cshtml">
-      <publishTime>02/23/2017 17:01:00</publishTime>
+      <publishTime>03/02/2017 12:48:11</publishTime>
     </File>
     <File Include="Views/SubjectDivisions/Edit.cshtml">
       <publishTime>02/23/2017 17:01:02</publishTime>
@@ -607,7 +607,7 @@
       <publishTime>02/24/2017 20:48:38</publishTime>
     </File>
     <File Include="Views/TaskSolutions/Delete.cshtml">
-      <publishTime>01/25/2017 20:51:08</publishTime>
+      <publishTime>03/02/2017 12:19:46</publishTime>
     </File>
     <File Include="Views/TaskSolutions/Details.cshtml">
       <publishTime>01/27/2017 00:49:53</publishTime>
@@ -616,7 +616,7 @@
       <publishTime>01/25/2017 20:48:54</publishTime>
     </File>
     <File Include="Views/TaskSolutions/Index.cshtml">
-      <publishTime>02/27/2017 00:34:48</publishTime>
+      <publishTime>03/02/2017 12:30:20</publishTime>
     </File>
     <File Include="Views/Users/Create.cshtml">
       <publishTime>02/27/2017 00:27:01</publishTime>

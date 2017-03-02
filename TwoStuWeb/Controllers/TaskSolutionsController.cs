@@ -14,7 +14,7 @@ using System;
 
 namespace TwoStuWeb.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class TaskSolutionsController : Controller
     {
         #region Fields
@@ -171,6 +171,8 @@ namespace TwoStuWeb.Controllers
             {
                 return HttpNotFound();
             }
+
+            
             return View(taskSolution);
         }
 
@@ -181,6 +183,13 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,SubjectType,Subject,TaskDesc,FilePath,FileName")] TaskSolution taskSolution)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+                AddErrors(hasRights);
+
+                return View(taskSolution);
+            }
             if (ModelState.IsValid)
             {
                 Db.Entry(taskSolution).State = EntityState.Modified;
@@ -196,10 +205,19 @@ namespace TwoStuWeb.Controllers
         // GET: TaskSolutions/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if (!hasRights.Succeeded)
+            {
+
+                return RedirectToAction("Index");
+            }
+
             TaskSolution taskSolution = await Db.TaskSolutions.FindAsync(id);
             if (taskSolution == null)
             {
@@ -214,6 +232,13 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if(!hasRights.Succeeded)
+            {
+                
+                return RedirectToAction("Index");
+            }
+
             WorkerResult result = await Worker.DeleteSolution(id);
 
             if(!result.Succeeded)
@@ -227,6 +252,20 @@ namespace TwoStuWeb.Controllers
         #endregion
 
         #region Help Methods
+        WorkerResult UserHasRightsToBeThere()
+        {
+            if(!User.IsInRole("Admin"))
+            {
+                return new WorkerResult("У вас недостаточно прав!");
+            }
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+
+
         void AddErrors(WorkerResult workerResult)
         {
             foreach(string error in workerResult.ErrorsList)

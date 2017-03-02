@@ -9,6 +9,8 @@ namespace TwoStu.Logic.Models
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
     public class ApplicationUser : IdentityUser
     {
+        public string Subjects { get; set; }
+
         public string Password { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)

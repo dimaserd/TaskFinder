@@ -50,7 +50,9 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("К списку варинтов уточнений", "Index") |
+    @Html.ActionLink("К списку уточнений", "Index", "SubjectDivisions") |
+    @Html.ActionLink("К списку разделов по предметам", "Index", "SubjectSections") |
 </div>
 
 @section scripts{
@@ -65,5 +67,9 @@
     </script>
     <!--/Скрипты автоматической установки данных в выпадающем списке-->
 
+    
     <!---->
+    <script>
+
+    </script>
 }

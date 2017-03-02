@@ -22,11 +22,24 @@
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>
+        
+    @if (User.IsInRole("Admin"))
+    {
         <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Детали", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
+        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+
+        @Html.ActionLink("Детали", "Details", new { id = item.Id }) |
+
+        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
         </td>
+    }
+    else
+    {
+        <td>
+        @Html.ActionLink("Детали", "Details", new { id = item.Id })
+        </td>
+    }
+
     </tr>
 }
 
