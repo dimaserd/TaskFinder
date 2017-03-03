@@ -127,10 +127,15 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreatePhysics(CreatePhysicsSolutionModel model)
         {
-            
-
             int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
+            WorkerResult hasRightsResult = await UserHasRightsForThatSubjectAsync(physicsId);
+            if (!hasRightsResult.Succeeded)
+            {
+                AddErrors(hasRightsResult);
+            }
+
+            
             ViewBag.SubjectSectionId = new SelectList(Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
@@ -150,8 +155,6 @@ namespace TwoStuWeb.Controllers
                 }
                 
             }
-
-            
 
             return View(model);
         }
@@ -265,6 +268,26 @@ namespace TwoStuWeb.Controllers
             {
                 Succeeded = true
             };
+        }
+
+        async Task<WorkerResult> UserHasRightsForThatSubjectAsync(int subjectId)
+        {
+            List<Subject> subjects = await Db.Subjects.ToListAsync();
+
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+
+            if (userSubjects.Any(x => x.Id == subjectId))
+            {
+                return new WorkerResult
+                {
+                    Succeeded = true
+                };
+            }
+
+
+            return new WorkerResult($"У вас недостаточно прав для создания раздела по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
+                + $"Вы можете создавать разделы только по предметам {userSubjects.GetSubjectNamesString()}");
         }
 
 
