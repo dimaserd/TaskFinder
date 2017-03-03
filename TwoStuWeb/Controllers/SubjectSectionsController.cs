@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
+using System.Collections.Generic;
+using TwoStu.Logic.Models;
 
 namespace TwoStuWeb.Controllers
 {
@@ -45,16 +47,12 @@ namespace TwoStuWeb.Controllers
 
         #region Create methods
         // GET: SubjectSections/Create
-        public ActionResult Create()
+        public ActionResult Create(int? toSubjectId = null)
         {
-            WorkerResult result = UserHasRightsToBeThere();
-            if (!result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-
             ViewBag.SubjectId = new SelectList(db.Subjects, "Id", "Name");
-            return View();
+            ViewBag.ToSubjectId = toSubjectId;
+
+            return View(new SubjectSection { Id = 2});
         }
 
         // POST: SubjectSections/Create
@@ -64,10 +62,10 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name,SubjectId")] SubjectSection subjectSection)
         {
-            WorkerResult result = UserHasRightsToBeThere();
+            WorkerResult result = await UserHasRightsForThatSubjectAsync(subjectSection.SubjectId);
             if (!result.Succeeded)
             {
-                return RedirectToAction("Index");
+                AddErrors(result);
             }
 
             if (ModelState.IsValid)
@@ -182,6 +180,34 @@ namespace TwoStuWeb.Controllers
             {
                 Succeeded = true
             };
+        }
+
+        async Task<WorkerResult> UserHasRightsForThatSubjectAsync(int subjectId)
+        {
+            List<Subject> subjects = await db.Subjects.ToListAsync();
+
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+
+            if(userSubjects.Any(x => x.Id == subjectId))
+            {
+                return new WorkerResult
+                {
+                    Succeeded = true
+                };
+            }
+
+
+            return new WorkerResult($"У вас недостаточно прав для создания раздела по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
+                + $"Вы можете создавать разделы только по предметам {userSubjects.GetSubjectNamesString()}");
+        }
+
+        void AddErrors(WorkerResult workerResult)
+        {
+            foreach (string error in workerResult.ErrorsList)
+            {
+                ModelState.AddModelError("", error);
+            }
         }
         #endregion
 

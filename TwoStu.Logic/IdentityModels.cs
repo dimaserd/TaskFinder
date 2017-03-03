@@ -7,6 +7,7 @@ using System.Security.Principal;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using TwoStu.Logic.Entities;
 
 namespace TwoStu.Logic.Models
 {
@@ -34,7 +35,25 @@ namespace TwoStu.Logic.Models
                 }).Where(x => x != -1).ToList();
         }
 
-        
+        public static IEnumerable<Subject> GetUserSubjects(this IIdentity identity, IEnumerable<Subject> subjects)
+        {
+            IEnumerable<int> userSubjectIds = GetSubjectIds(identity);
+
+            return subjects.Select(x =>
+            {
+                if (userSubjectIds.Contains(x.Id))
+                {
+                    return x;
+                }
+                else
+                {
+                    return null;
+                }
+            }).Where(x => x != null).ToList();
+
+
+        }
+
         #endregion
     }
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.

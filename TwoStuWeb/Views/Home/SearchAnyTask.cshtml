@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "SearchAnyTask";
 }
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <h2>Поиск любого задания по уточнениям по предмету <strong><span id="subjectNameSpan"></span></strong></h2>
 
@@ -332,8 +333,21 @@
             console.log($("#DivisionChildsString").val())
 
             if (CheckForm()) {
+
+                MakeLoading();
                 SendToServer();
             }
+
+        }
+        function MakeLoading()
+        {
+            var sp = document.createElement("span");
+            sp.className = "fa fa-spinner fa-5x fa-spin";
+
+            var searchResult = document.getElementById("searchResult");
+            searchResult.innerHTML = "";
+
+            searchResult.appendChild(sp);
 
         }
 
