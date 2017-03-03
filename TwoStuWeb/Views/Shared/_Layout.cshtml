@@ -22,9 +22,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                   <li>@Html.ActionLink("Банк задач", "Index", "TaskSolutions", new { area = "" }, null)</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Банк задач", "Index", "TaskSolutions", new { area = "" }, null)</li>
+
+                        <li>@Html.ActionLink("Предметы", "Index", "Subjects", new { area = "" }, null)</li>
+                    }
                    
-                   <li>@Html.ActionLink("Предметы", "Index", "Subjects", new { area = "" }, null)</li>
 
                     @if (User.IsInRole("Admin"))
                     {

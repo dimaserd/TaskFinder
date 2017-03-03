@@ -52,7 +52,7 @@ namespace TwoStu.Logic.Entities
         /// <summary>
         /// Сущности TaskSolution и SubjectDivisionChild связаны многое ко многим
         /// </summary>
-        public virtual ICollection<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
+        public virtual IList<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
         #endregion
 
 

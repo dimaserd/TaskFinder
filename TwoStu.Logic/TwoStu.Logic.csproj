@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201702231629543_fix.Designer.cs">
       <DependentUpon>201702231629543_fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703030951161_t.cs" />
+    <Compile Include="Migrations\201703030951161_t.Designer.cs">
+      <DependentUpon>201703030951161_t.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
@@ -155,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702231629543_fix.resx">
       <DependentUpon>201702231629543_fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703030951161_t.resx">
+      <DependentUpon>201703030951161_t.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

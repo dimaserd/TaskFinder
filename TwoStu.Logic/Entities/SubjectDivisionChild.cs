@@ -33,7 +33,7 @@ namespace TwoStu.Logic.Entities
         }
 
         [JsonIgnore]
-        public virtual ICollection<TaskSolution> TaskSolutions { get; set; }
+        public virtual IList<TaskSolution> TaskSolutions { get; set; }
     }
 
     #region Extensions

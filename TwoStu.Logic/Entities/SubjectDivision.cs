@@ -33,7 +33,7 @@ namespace TwoStu.Logic.Entities
         public virtual SubjectSection FromSubjectSection { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<SubjectDivisionChild> SubjectDivisionChilds
+        public virtual IList<SubjectDivisionChild> SubjectDivisionChilds
         {
             get; set;
         }

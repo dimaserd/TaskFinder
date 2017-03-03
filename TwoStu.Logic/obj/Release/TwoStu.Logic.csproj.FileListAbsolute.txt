@@ -92,3 +92,4 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Release\TwoStu.Log
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Release\TwoStu.Logic.csproj.GenerateResource.Cache
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Release\TwoStu.Logic.dll
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Release\TwoStu.Logic.pdb
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Release\TwoStu.Logic.Migrations.t.resources

@@ -32,6 +32,7 @@ namespace TwoStuWeb.Controllers
                 .Include(x => x.FromSubjectSection.FromSubject)
                 .Include(x => x.SubjectDivisionChilds)
                 .FirstOrDefaultAsync(x => x.Id == id.Value);
+
             if (subjectDivision == null)
             {
                 return HttpNotFound();

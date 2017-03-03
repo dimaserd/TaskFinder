@@ -1,7 +1,10 @@
-﻿@model IEnumerable<TwoStu.Logic.Entities.Subject>
+﻿@using TwoStu.Logic.Models
+@model IEnumerable<TwoStu.Logic.Entities.Subject>
 
 @{
     ViewBag.Title = "Index";
+
+    List<int> SubjectIds = User.Identity.GetSubjectIds().ToList();
 }
 
 <h2>Список Предметов</h2>
@@ -17,30 +20,36 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        
-    @if (User.IsInRole("Admin"))
+@foreach (var item in Model)
+{
+
+    if (SubjectIds.Contains(item.Id))
     {
-        <td>
-        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
 
-        @Html.ActionLink("Детали", "Details", new { id = item.Id }) |
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
 
-        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
-        </td>
+                    @Html.ActionLink("Детали", "Details", new { id = item.Id }) |
+
+                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.ActionLink("Детали", "Details", new { id = item.Id })
+                </td>
+            }
+
+        </tr>
     }
-    else
-    {
-        <td>
-        @Html.ActionLink("Детали", "Details", new { id = item.Id })
-        </td>
-    }
 
-    </tr>
 }
 
 </table>

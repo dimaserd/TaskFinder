@@ -185,12 +185,19 @@
     <script>
         var subjectNameSpan = document.getElementById("subjectNameSpan");
 
+        
         var subjectIdList = $("#SubjectIdList");
 
         subjectIdList.change(function (e) {
+            
             e.preventDefault();
 
-            var subjectId = subjectIdList.val();
+            SubjectListChangeHandler()
+        })
+
+        function SubjectListChangeHandler()
+        {
+            var subjectId = document.getElementById("SubjectIdList").value;
 
             //получаем предмет выбранный в списке
             var e = document.getElementById("SubjectIdList");
@@ -204,12 +211,13 @@
                 success: function (response) {
 
                     SubjectSections = response;
+                    document.getElementById("testPlace").innerHTML = "";
                     MakeSubjectSectionDropList(response);
                 }
             });
-        })
+        }
 
-
+        SubjectListChangeHandler();
     </script>
     <!--/Следилки за измененияи в списке предметов-->
 
@@ -339,7 +347,27 @@
         }
 
         function SendToServer() {
-            document.getElementById("hiddenSubmit").click();
+            //document.getElementById("hiddenSubmit").click();
+
+            console.log("Поиск");
+
+            var searchData =
+                {
+                    SubjectId: document.getElementById("SubjectIdList").value,
+                    SubjectSectionId: document.getElementById("SubjectSectionsList").value,
+                    WorkTypeId: document.getElementById("WorkTypeIdList").value,
+                    DivisionChildsString: document.getElementById("DivisionChildsString").value,
+                    TaskDesc: document.getElementById("taskDesc").value,
+                };
+
+            $.ajax({
+                type: "POST",
+                url: '/Home/TasksSearch',
+                data: searchData,
+                success: function (response) {
+                    document.getElementById("searchResult").innerHTML = response;                    
+                }
+            });
         }
     </script>
     <!--/Обработчики клика-->

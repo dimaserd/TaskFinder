@@ -17,41 +17,56 @@
                 Ссылка
             </th>
         </tr>
-        @foreach (var item in Model)
+        @if (Model.Count() > 0)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>
+                            @item.TaskSubjectSection.Name
+                        </strong>
+
+                    </td>
+                    <td>
+                        <strong>
+                            @item.TaskDesc
+                        </strong>
+                    </td>
+                    <td>
+                        <table class="table table-bordered">
+                            @foreach (var subItem in item.SubjectDivisionChilds)
+                            {
+                                <tr>
+
+                                    <td><strong>@subItem.SubjectDivisionParent.Name : @subItem.Name</strong></td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td>
+
+                        <a href="/File/DownloadByKey?key=@item.Id">
+                            <strong>
+                                [Скачать]
+                            </strong>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>
-                    <strong>
-                        @item.TaskSubjectSection.Name
-                    </strong>
-                    
+                <td class="text-center text-danger" colspan="4">
+                    <strong>ПО ВАШЕМУ ЗАПРОСУ НИЧЕГО НЕ НАЙДЕНО! (если вы считаете что это произошло по ошибке обратитесь к <a href="https://vk.com/dimaserd">Диме</a>) </strong>
                 </td>
-                <td>
-                    <strong>
-                        @item.TaskDesc
-                    </strong>  
+                <td class="text-center text-info" colspan="4">
+                    <strong>(если вы считаете что это произошло по ошибке обратитесь к <a href="https://vk.com/dimaserd">Диме</a>)</strong>
                 </td>
-                <td>
-                    <table class="table table-bordered">
-                        @foreach (var subItem in item.SubjectDivisionChilds)
-                        {
-                            <tr>
-                                
-                                <td><strong>@subItem.SubjectDivisionParent.Name : @subItem.Name</strong></td>
-                            </tr>
-                        }
-                    </table>
-                </td>
-                <td>
-                    
-                    <a href="/File/DownloadByKey?key=@item.Id">
-                        <strong>
-                            [Скачать]
-                        </strong>
-                    </a>
-                </td>
-                
             </tr>
         }
+
     </table>
 </div>

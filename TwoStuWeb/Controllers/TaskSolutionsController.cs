@@ -184,12 +184,14 @@ namespace TwoStuWeb.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "Id,SubjectType,Subject,TaskDesc,FilePath,FileName")] TaskSolution taskSolution)
         {
             WorkerResult hasRights = UserHasRightsToBeThere();
+
             if (!hasRights.Succeeded)
             {
                 AddErrors(hasRights);
 
                 return View(taskSolution);
             }
+
             if (ModelState.IsValid)
             {
                 Db.Entry(taskSolution).State = EntityState.Modified;

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
+using TwoStu.Logic.Models;
 
 namespace TwoStuWeb.Controllers
 {
@@ -26,12 +27,10 @@ namespace TwoStuWeb.Controllers
         // GET: Subjects/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-
-            if (id == null)
+            if (id == null || !User.Identity.GetSubjectIds().ToList().Contains(id.Value))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
 
             Subject subject = await db.Subjects
                 .Include(x => x.SubjectSections)
