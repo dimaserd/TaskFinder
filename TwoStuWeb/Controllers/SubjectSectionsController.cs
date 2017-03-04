@@ -157,7 +157,7 @@ namespace TwoStuWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             SubjectSection subjectSection = await db.SubjectSections
-                //.Include(x => x.TaskSolutions)
+                .Include(x => x.TaskSolutions)
                 .Include(x => x.SubjectDivisions.Select(y => y.SubjectDivisionChilds.Select(z => z.TaskSolutions)))
                 .FirstOrDefaultAsync(x => x.Id == id);
 

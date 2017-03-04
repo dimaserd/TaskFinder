@@ -17,45 +17,113 @@
 </h3>
 <div>
     
-    <hr />
-    <h4>Уточнения по разделу</h4>
-    <table class="table table-bordered table-striped">
-        <tr>
-            <th>
-                Название уточнения
-            </th>
-            <th>
-                Варианты уточнения
-            </th>
-        </tr>
-        @foreach(SubjectDivision division in Model.SubjectDivisions)
-        {
+
+    @if (Model.SubjectDivisions.Count > 0)
+    {
+        <hr />
+
+        <h4 class="text-danger">
+            <strong>
+                Внимание эти уточнения будут удалены @GISigns.Count(Model.SubjectDivisions.Count).ToHtml()
+            </strong>
+            
+        </h4>
+        <table class="table table-bordered table-striped">
             <tr>
-                <td>
-                    @division.Name
-                </td>
-                <td>
-                    <table class="table table-bordered table-striped">
-                        @foreach(SubjectDivisionChild child in division.SubjectDivisionChilds)
-                        {
-                            <tr>
-                                <td>
-                                    @child.Name @GISigns.Count(child.TaskSolutions.Count).ToHtml()
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </td>
+                <th>
+                    Название уточнения
+                </th>
+                <th>
+                    Варианты уточнения
+                </th>
             </tr>
-        }
-    </table>
+            @foreach (SubjectDivision division in Model.SubjectDivisions)
+            {
+                <tr>
+                    <td>
+                        @division.Name
+                    </td>
+                    <td>
+                        <table class="table table-bordered table-striped">
+                            @foreach (SubjectDivisionChild child in division.SubjectDivisionChilds)
+                            {
+                                <tr>
+                                    <td>
+                                        @child.Name @GISigns.Count(child.TaskSolutions.Count).ToHtml()
+                                    </td>
+                                    <td>
+                                        <a href="">[Показать в поиске]</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    }
+    else
+    {
+        <h4 class="text-info">С данным разделом не связано ни одного уточнения!</h4>
+    }
+
+    @if (Model.TaskSolutions.Count() > 0)
+    {
+        <hr />
+        <h4>
+            <strong class="text-danger">
+                Внимание
+            </strong>
+            эти
+            <strong class="text-danger">
+                решения будут удалены
+            </strong>
+            вместе с данным разделом @GISigns.Count(Model.TaskSolutions.Count).ToHtml()
+        </h4>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>
+                    Условие
+                </th>
+                <th>
+                    Действия
+                </th>
+            </tr>
+            @foreach (TaskSolution solution in Model.TaskSolutions)
+            {
+                <tr>
+                    <td>
+                        @solution.TaskDesc
+                    </td>
+                    <td>
+                        <a href="@solution.GetLinkToDownload()">[Скачать решение]</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h4 class="text-info">С данным разделом не связано ни одного решения!</h4>
+    }
+
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Удалить раздел и все решения" class="btn btn-default" /> |
-            @Html.ActionLink("К списку разделов", "Index")
         </div>
     }
+</div>
+
+<hr />
+
+<div>
+    <strong>
+        @Html.ActionLink("[К списку разделов]", "Index") |
+        @Html.ActionLink("[К списку предметов]", "Index", "Subjects")
+    </strong>
+    
 </div>

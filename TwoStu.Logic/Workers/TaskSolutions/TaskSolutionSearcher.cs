@@ -30,15 +30,16 @@ namespace TwoStu.Logic.Workers.TaskSolutions
             //получили все данные и материализовали коллекцию
             List<TaskSolution> solutions = Db.TaskSolutions
                 .Where(x => x.SubjectId == model.SubjectId)
-                .Where(x => x.SubjectSectionId == model.SubjectSectionId)
+                //.Where(x => x.SubjectSectionId == model.SubjectSectionId)
                 .Where(x => x.WorkTypeId == model.WorkTypeId)
                 .Include(x => x.SubjectDivisionChilds.Select(y => y.SubjectDivisionParent))
                 .ToList();
 
-
-                //.Where(x => x.SubjectDivisionChilds.Any(y => childsFromString.Any(z => z.Id == y.Id)))
-                //.ToList();
-             
+            if(model.SubjectSectionId > 0)
+            {
+                solutions = solutions.Where(x => x.SubjectSectionId == model.SubjectSectionId).ToList();
+            }
+            
             if(!string.IsNullOrEmpty(model.TaskDesc))
             {
                 solutions = solutions.Where(x => x.TaskDesc.Contains(model.TaskDesc)).ToList();

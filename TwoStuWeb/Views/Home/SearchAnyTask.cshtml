@@ -2,6 +2,20 @@
 @model SearchSolutionsModel
 @{
     ViewBag.Title = "SearchAnyTask";
+
+
+
+    int? subjectIdParam =  ViewBag.SubjectIdParam as int?;
+    int? workTypeIdParam = ViewBag.WorkTypeIdParam as int?;
+    int? subjectSectionIdParam = ViewBag.SubjectSectionIdParam as int?;
+    bool? needSearchParam = ViewBag.NeedSearchParam as bool?;
+
+    //для джаваскрипта
+    int subjectId = subjectIdParam.HasValue ? subjectIdParam.Value : -1;
+    int workTypeId = workTypeIdParam.HasValue ? workTypeIdParam.Value : -1;
+    int subjectSectionId = subjectSectionIdParam.HasValue ? subjectSectionIdParam.Value : -1;
+    bool needSearch = needSearchParam.HasValue ? needSearchParam.Value : false;
+
 }
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
@@ -393,5 +407,31 @@
         }
     </script>
     <!--/Обработчики формы-->
+
+    <!--Установщики значений поиска из параметров ссылки-->
+    <script>
+        var subjectId = @subjectId;
+        var workTypeId = @workTypeId;
+        var subjectSectionId = @subjectSectionId;
+        var needSearch = @needSearch.ToString().ToLower();
+
+        if (parseInt(subjectId) > 0)
+        {
+            console.log("subjectId", subjectId);
+            document.getElementById("SubjectIdList").value = subjectId;
+        }
+
+        //не успевает присвоить надо будет отлавливать и ставить в аякс коллбэк
+        //if (parseInt(subjectSectionId) > 0)
+        //{
+        //    document.getElementById("SubjectSectionsList").value = subjectSectionId;
+        //}
+
+        if (needSearch)
+        {
+            document.getElementById("hiddenSubmit").click();
+        }
+    </script>
+    <!--/Установщики значений поиска из параметров ссылки-->
 
 }

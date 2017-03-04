@@ -58,5 +58,11 @@ namespace TwoStu.Logic.Entities
 
     }
 
-
+    public static class TaskSolutionExtensions
+    {
+        public static string GetLinkToDownload(this TaskSolution solution)
+        {
+            return $"/File/DownloadByKey?key={solution.Id}";
+        }
+    }
 }

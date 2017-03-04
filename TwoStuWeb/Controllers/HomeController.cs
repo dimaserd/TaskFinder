@@ -68,8 +68,13 @@ namespace TwoStuWeb.Controllers
         }
 
         [HttpGet]
-        public ActionResult SearchAnyTask()
+        public ActionResult SearchAnyTask(int? subjectId = null, int? workTypeId = null, int? subjectSectionId = null, bool? needSearch = false)
         {
+            ViewBag.SubjectIdParam = subjectId;
+            ViewBag.WorkTypeIdParam = subjectId;
+            ViewBag.SubjectSectionIdParam = subjectId;
+            ViewBag.NeedSearchParam = needSearch;
+
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
             ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
