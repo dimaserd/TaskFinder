@@ -54,6 +54,12 @@ namespace TwoStu.Logic.Models
 
         }
 
+        public static bool HasUserThatSubjectFromList(this IIdentity identity, IEnumerable<Subject> subjects, Subject subject)
+        {
+            List<Subject> userSubjects = GetUserSubjects(identity, subjects).ToList();
+
+            return userSubjects.Any(x => x.Id == subject.Id);
+        }
         #endregion
     }
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.

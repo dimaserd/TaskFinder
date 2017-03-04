@@ -10,7 +10,7 @@
     <h4>Раздел <strong>@Model.Name</strong> предмета <strong>@Model.FromSubject.Name</strong></h4>
     <hr />
     
-    <h3>Список уточнений по разделу</h3>
+    <h3>Список уточнений по разделу <strong>@Model.Name</strong></h3>
     <table class="table table-bordered table-striped">
         <tr>
 
@@ -112,9 +112,12 @@
 <hr />
 
 <p>
-    @Html.ActionLink("Редактировать раздел", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("К списку разделов", "Index") |
-    @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    <strong>
+        @Html.ActionLink("Редактировать раздел", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("К списку разделов", "Index") |
+        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    </strong>
+    
 </p>
 
 

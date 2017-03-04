@@ -23,8 +23,16 @@ namespace TwoStuWeb.Controllers
         // GET: SubjectSections
         public async Task<ActionResult> Index()
         {
-            var subjectSections = db.SubjectSections.Include(s => s.FromSubject);
-            return View(await subjectSections.ToListAsync());
+            List<Subject> subjects = await db.Subjects
+                .Include(x => x.SubjectSections.Select(y => y.FromSubject))
+                .ToListAsync();
+
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+
+
+            
+            return View(userSubjects);
         }
 
         // GET: SubjectSections/Details/5
@@ -62,7 +70,7 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Name,SubjectId")] SubjectSection subjectSection)
         {
-            WorkerResult result = await UserHasRightsForThatSubjectAsync(subjectSection.SubjectId);
+            WorkerResult result = await UserHasRightsToCreateThatSubjectSectionAsync(subjectSection);
             if (!result.Succeeded)
             {
                 AddErrors(result);
@@ -87,17 +95,19 @@ namespace TwoStuWeb.Controllers
         // GET: SubjectSections/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            WorkerResult result = UserHasRightsToBeThere();
-            if (!result.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubjectSection subjectSection = await db.SubjectSections.FindAsync(id);
+
+            WorkerResult result = await UserHasRightsForThatSubjectSectionAsync(id.Value);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SubjectSection subjectSection = await db.SubjectSections.FirstOrDefaultAsync(x => x.Id == id.Value);
             if (subjectSection == null)
             {
                 return HttpNotFound();
@@ -113,6 +123,13 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,SubjectId")] SubjectSection subjectSection)
         {
+
+            WorkerResult result = await UserHasRightsForThatSubjectSectionAsync(subjectSection.Id);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(subjectSection).State = EntityState.Modified;
@@ -139,7 +156,11 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubjectSection subjectSection = await db.SubjectSections.FindAsync(id);
+            SubjectSection subjectSection = await db.SubjectSections
+                //.Include(x => x.TaskSolutions)
+                .Include(x => x.SubjectDivisions.Select(y => y.SubjectDivisionChilds.Select(z => z.TaskSolutions)))
+                .FirstOrDefaultAsync(x => x.Id == id);
+
             if (subjectSection == null)
             {
                 return HttpNotFound();
@@ -182,14 +203,25 @@ namespace TwoStuWeb.Controllers
             };
         }
 
-        async Task<WorkerResult> UserHasRightsForThatSubjectAsync(int subjectId)
+        async Task<WorkerResult> UserHasRightsForThatSubjectSectionAsync(int subjectSectionId)
         {
             List<Subject> subjects = await db.Subjects.ToListAsync();
 
+            //получили список предметов пользователя
             List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
 
+            SubjectSection subjectSection = await db.SubjectSections
+                .Include(x => x.FromSubject)
+                .FirstOrDefaultAsync(x => x.Id == subjectSectionId);
 
-            if(userSubjects.Any(x => x.Id == subjectId))
+            if(subjectSection == null)
+            {
+                return new WorkerResult("Раздел предмета не найден!");
+            }
+
+            Subject subjectFromSection = subjectSection.FromSubject;
+
+            if(userSubjects.Any(x => x.Id == subjectFromSection.Id))
             {
                 return new WorkerResult
                 {
@@ -198,8 +230,26 @@ namespace TwoStuWeb.Controllers
             }
 
 
-            return new WorkerResult($"У вас недостаточно прав для создания раздела по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
-                + $"Вы можете создавать разделы только по предметам {userSubjects.GetSubjectNamesString()}");
+            return new WorkerResult($"У вас недостаточно прав для данного раздела!");
+        }
+
+        async Task<WorkerResult> UserHasRightsToCreateThatSubjectSectionAsync(SubjectSection subjectSection)
+        {
+            List<Subject> subjects = await db.Subjects.ToListAsync();
+
+            //получили список предметов пользователя
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+            if(userSubjects.Any(x => x.Id == subjectSection.SubjectId))
+            {
+                return new WorkerResult
+                {
+                    Succeeded = true
+                };
+
+            }
+
+            return new WorkerResult("У вас недостаточно прав для создания раздела по данному предмету!");
         }
 
         void AddErrors(WorkerResult workerResult)
@@ -209,6 +259,7 @@ namespace TwoStuWeb.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
         #endregion
 
         #region Dispose

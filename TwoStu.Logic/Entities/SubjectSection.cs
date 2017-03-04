@@ -23,5 +23,8 @@ namespace TwoStu.Logic.Entities
 
         [JsonIgnore]
         public virtual IList<SubjectDivision> SubjectDivisions { get; set; }
+
+        [JsonIgnore]
+        public virtual IList<TaskSolution> TaskSolutions { get; set; }
     }
 }

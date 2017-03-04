@@ -5,6 +5,9 @@ using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
+using System.Linq;
+using System.Collections.Generic;
+using TwoStu.Logic.Models;
 
 namespace TwoStuWeb.Controllers
 {
@@ -17,8 +20,19 @@ namespace TwoStuWeb.Controllers
         // GET: SubjectDivisions
         public async Task<ActionResult> Index()
         {
-            var subjectDivisions = db.SubjectDivisions.Include(s => s.FromSubjectSection);
-            return View(await subjectDivisions.ToListAsync());
+            //List<SubjectSection> subjectSections = await db.SubjectSections
+            //    .Include(x => x.SubjectDivisions.Select(y => y.SubjectDivisionChilds))
+            //    .ToListAsync();
+
+            List<Subject> subjects = await db.Subjects
+                .Include(x => x.SubjectSections.Select(y => y.SubjectDivisions.Select(z => z.SubjectDivisionChilds)))
+                .ToListAsync();
+
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+            List<SubjectSection> userSubjectSections = userSubjects.SelectMany(x => x.SubjectSections).ToList();
+
+            return View(userSubjectSections);
         }
 
         // GET: SubjectDivisions/Details/5
@@ -74,17 +88,17 @@ namespace TwoStuWeb.Controllers
         // GET: SubjectDivisions/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            WorkerResult hasRights = UserHasRightsToBeThere();
-            if (!hasRights.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
+            
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubjectDivision subjectDivision = await db.SubjectDivisions.FindAsync(id);
+
+            SubjectDivision subjectDivision = await db.SubjectDivisions
+                .Include(x => x.FromSubjectSection.FromSubject)
+                .Include(x => x.SubjectDivisionChilds)
+                .FirstOrDefaultAsync(x => x.Id == id.Value);
             if (subjectDivision == null)
             {
                 return HttpNotFound();
@@ -100,12 +114,6 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,SubjectSectionId")] SubjectDivision subjectDivision)
         {
-            WorkerResult hasRights = UserHasRightsToBeThere();
-            if(!hasRights.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-
             if (ModelState.IsValid)
             {
                 db.Entry(subjectDivision).State = EntityState.Modified;
@@ -175,6 +183,7 @@ namespace TwoStuWeb.Controllers
         }
 
         
+
         #endregion
 
         protected override void Dispose(bool disposing)

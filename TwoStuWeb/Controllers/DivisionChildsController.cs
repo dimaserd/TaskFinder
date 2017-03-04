@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
+using System.Collections.Generic;
+using TwoStu.Logic.Models;
 
 namespace TwoStuWeb.Controllers
 {
@@ -76,16 +78,17 @@ namespace TwoStuWeb.Controllers
         // GET: DivisionChilds/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            WorkerResult hasRights = UserHasRightsToBeThere();
-            if(!hasRights.Succeeded)
-            {
-                return RedirectToAction("Index");
-            }
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            WorkerResult hasRights = await UserHasRightsForThatSubjectDivisionChildAsync(id.Value);
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
             SubjectDivisionChild subjectDivisionChild = await db.SubjectDivisionChilds.FindAsync(id);
             if (subjectDivisionChild == null)
             {
@@ -102,7 +105,7 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Description,SubjectDivisionId")] SubjectDivisionChild subjectDivisionChild)
         {
-            WorkerResult hasRights = UserHasRightsToBeThere();
+            WorkerResult hasRights = await UserHasRightsForThatSubjectDivisionChildAsync(subjectDivisionChild.Id);
             if (!hasRights.Succeeded)
             {
                 return RedirectToAction("Index");
@@ -175,6 +178,32 @@ namespace TwoStuWeb.Controllers
             {
                 Succeeded = true
             };
+        }
+
+        async Task<WorkerResult> UserHasRightsForThatSubjectDivisionChildAsync(int subjectDivisionChildId)
+        {
+            SubjectDivisionChild child = await db.SubjectDivisionChilds
+                .Include(x => x.SubjectDivisionParent.FromSubjectSection.FromSubject)
+                .FirstOrDefaultAsync(x => x.Id == subjectDivisionChildId);
+
+            if(child == null)
+            {
+                return new WorkerResult("Такого варианта уточнения не существует");
+            }
+
+            Subject subjectFromChild = child.SubjectDivisionParent.FromSubjectSection.FromSubject;
+
+            List<Subject> subjects = await db.Subjects.ToListAsync();
+
+            if(User.Identity.HasUserThatSubjectFromList(subjects,subjectFromChild))
+            {
+                return new WorkerResult
+                {
+                    Succeeded = true
+                };
+            }
+
+            return new WorkerResult("У вас нет прав для редактирования этого варианта уточнения");
         }
         #endregion
 

@@ -24,9 +24,30 @@
                     <th>
                         @subjectSection.Name
                     </th>
-                    <th>
-                        <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
-                    </th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th>
+                            <p>
+                                <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                            </p>
+                            
+                            <p>
+                                <a href="/SubjectSections/Edit/@subjectSection.Id">[Редактировать]</a>
+                            </p>
+
+                            <p>
+                                <a href="/SubjectSections/Delete/@subjectSection.Id">[Удалить]</a>
+                            </p>
+                            
+                        </th>
+                    }
+                    else
+                    {
+                        <th>
+                            <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                        </th>
+                    }
+                    
                 </tr>
             }
         }
@@ -51,8 +72,12 @@
 </div>
 
 <hr/>
-<p>
-    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("К списку предметов", "Index")
-</p>
+<div>
+    <strong>
+        @Html.ActionLink("[Редактировать]", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("[К списку предметов]", "Index")
+        @Html.ActionLink("[К списку разделов по предметам]", "Index", "SubjectSections") |
+        @Html.ActionLink("[К списку уточнений по разделам]", "Index", "SubjectDivisions") |
+    </strong>
+</div>
 

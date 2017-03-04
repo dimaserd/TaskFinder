@@ -141,7 +141,10 @@ namespace TwoStuWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Subject subject = await db.Subjects.FindAsync(id);
+            Subject subject = await db.Subjects
+                .Include(x => x.SubjectSections)
+                .Include(x => x.TaskSolutions)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (subject == null)
             {
                 return HttpNotFound();

@@ -9,15 +9,23 @@
 
 <h2>Список Предметов</h2>
 
-<p>
-    @Html.ActionLink("Создать новый", "Create")
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <strong>
+            @Html.ActionLink("[Создать новый]", "Create")
+        </strong>
+    </p>
+}
+
 <table class="table table-bordered table-striped">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Название предмета
         </th>
-        <th></th>
+        <th>
+            Действия
+        </th>
     </tr>
 
 @foreach (var item in Model)
@@ -27,23 +35,29 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <strong>
+                    @item.Name
+                </strong>
             </td>
 
             @if (User.IsInRole("Admin"))
             {
                 <td>
-                    @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                    <strong>
+                        @Html.ActionLink("[Редактировать]", "Edit", new { id = item.Id }) |
 
-                    @Html.ActionLink("Детали", "Details", new { id = item.Id }) |
+                        @Html.ActionLink("[Детали]", "Details", new { id = item.Id }) |
 
-                    @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
+                        @Html.ActionLink("[Удалить]", "Delete", new { id = item.Id })
+                    </strong>
                 </td>
             }
             else
             {
                 <td>
-                    @Html.ActionLink("Детали", "Details", new { id = item.Id })
+                    <strong>
+                        @Html.ActionLink("[Детали]", "Details", new { id = item.Id })
+                    </strong>
                 </td>
             }
 
@@ -56,4 +70,9 @@
 
 <hr />
 
-@Html.ActionLink("К списку разделов по предметам", "Index", "SubjectSections") 
+<div>
+    <strong>
+        @Html.ActionLink("[К списку разделов по предметам]", "Index", "SubjectSections") |
+        @Html.ActionLink("[К списку уточнений по разделам]", "Index", "SubjectDivisions")
+    </strong>
+</div>
