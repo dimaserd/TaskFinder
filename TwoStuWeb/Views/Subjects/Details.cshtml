@@ -1,8 +1,14 @@
 ﻿@using TwoStu.Logic.Entities
+@using Extensions.String
+@using HtmlExtensions.Renderers
 @model TwoStu.Logic.Entities.Subject
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = $"Подробнее о {Model.Name}";
+
+    string linkToSearch = $"/Home/SearchAnyTask{Model.GetSearchParams()}";
+
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
 }
 
 <h2>Подробнее о предмете</h2>
@@ -22,7 +28,7 @@
             {
                 <tr>
                     <th>
-                        @subjectSection.Name
+                        @subjectSection.Name @GISigns.Count(subjectSection.TaskSolutions.Count).ToHtml()
                     </th>
                     @if (User.IsInRole("Admin"))
                     {
@@ -69,13 +75,20 @@
             </th>
         </tr>
     </table>
+
+    <strong>
+        <a href="@linkToSearch" class="btn btn-block btn-info">
+            Показать решения по данному предмету @GISigns.Count(Model.TaskSolutions.Count).ToHtml()
+        </a>
+    </strong>
+    
 </div>
 
 <hr/>
 <div>
     <strong>
         @Html.ActionLink("[Редактировать]", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("[К списку предметов]", "Index")
+        @Html.ActionLink("[К списку предметов]", "Index") |
         @Html.ActionLink("[К списку разделов по предметам]", "Index", "SubjectSections") |
         @Html.ActionLink("[К списку уточнений по разделам]", "Index", "SubjectDivisions") |
     </strong>

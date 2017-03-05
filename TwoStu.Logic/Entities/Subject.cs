@@ -41,5 +41,10 @@ namespace TwoStu.Logic.Entities
 
             return result.Substring(0, result.Length - 1);
         }
+
+        public static string GetSearchParams(this Subject subject)
+        {
+            return $"?subjectId={subject.Id}&subjectSectionId={-1}&needSearch=true";
+        }
     }
 }

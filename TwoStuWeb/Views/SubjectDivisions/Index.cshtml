@@ -1,8 +1,11 @@
 ﻿@using TwoStu.Logic.Entities
+@using HtmlExtensions.Renderers
+@using Extensions.String
 @model IEnumerable<SubjectSection>
 
 @{
     ViewBag.Title = "Index";
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
 }
 
 <h2>Список уточнений по разделам предметов</h2>
@@ -28,7 +31,7 @@
 @foreach (SubjectSection subjectSection in Model) {
     <tr>
         <td>
-           <strong>@subjectSection.Name</strong> 
+           <strong>@subjectSection.Name @GISigns.Count(subjectSection.TaskSolutions.Count).ToHtml()</strong> 
         </td>
         <td>
             @*Таблица с уточнениями по разделу предмета*@
@@ -51,7 +54,7 @@
                     {
                         <tr>
                             <td>
-                                <strong>@division.Name</strong>
+                                <strong>@division.Name @GISigns.Count(division.GetCountOfTaskSolutions()).ToHtml()</strong>
                             </td>
                             <td>
                                 <p>
@@ -90,7 +93,8 @@
                 <strong>
                     <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее о разделе]</a>
                 </strong>
-            </p> 
+            </p>
+
             <p>
                 <strong>
                     <a href="/SubjectSections/Edit/@subjectSection.Id">[Редактировать раздел]</a>
@@ -105,8 +109,8 @@
 <hr/>
 <div>
     <strong>
-        @Html.ActionLink("К списку разделов", "Index", "SubjectSections") |
-        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+        @Html.ActionLink("[К списку разделов]", "Index", "SubjectSections") |
+        @Html.ActionLink("[К списку предметов]", "Index", "Subjects")
     </strong>
     
 </div>

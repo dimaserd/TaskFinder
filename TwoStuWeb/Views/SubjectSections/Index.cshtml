@@ -91,4 +91,9 @@
 </table>
 
 <hr />
-@Html.ActionLink("К списку предметов", "Index", "Subjects")
+<div>
+    <strong>
+        @Html.ActionLink("[К списку предметов]", "Index", "Subjects") |
+        @Html.ActionLink("[К списку уточнений]", "Index", "SubjectDivisions")
+    </strong>
+</div>

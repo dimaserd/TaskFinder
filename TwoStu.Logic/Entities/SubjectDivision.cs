@@ -37,5 +37,21 @@ namespace TwoStu.Logic.Entities
         {
             get; set;
         }
+
+    }
+
+    public static class SubjectDivisionExtensions
+    {
+        public static int GetCountOfTaskSolutions(this SubjectDivision subjectDivision)
+        {
+            int result = 0;
+            foreach(SubjectDivisionChild child in subjectDivision.SubjectDivisionChilds)
+            {
+                result += child.TaskSolutions.Count;
+            }
+
+            return result;
+        }
+        
     }
 }

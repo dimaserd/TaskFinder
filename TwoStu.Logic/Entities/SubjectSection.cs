@@ -27,4 +27,12 @@ namespace TwoStu.Logic.Entities
         [JsonIgnore]
         public virtual IList<TaskSolution> TaskSolutions { get; set; }
     }
+
+    public static class SubjectSectionExtensions
+    {
+        public static string GetSearchParamsString(this SubjectSection subjectSection)
+        {
+            return $"?subjectId={subjectSection.FromSubject.Id}&subjectSectionId={subjectSection.Id}&needSearch=true";
+        }
+    }
 }

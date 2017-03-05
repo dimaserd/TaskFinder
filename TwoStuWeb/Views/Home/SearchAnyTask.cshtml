@@ -167,6 +167,11 @@
             selectList.name = "SubjectSectionId";
             myDiv.appendChild(selectList);
 
+            var notChosenOption = document.createElement("option");
+            notChosenOption.value = -1;
+            notChosenOption.text = "Не выбрано";
+            selectList.appendChild(notChosenOption);
+
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
                 var option = document.createElement("option");
@@ -176,6 +181,33 @@
             }
         }
 
+        function MakeSubjectSectionDropListForAutoSearch(subjectSectionId) {
+
+            
+
+            var myDiv = document.getElementById("placeForSubjectSectionsList");
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "SubjectSectionsList";
+            selectList.className = "form-control";
+            selectList.name = "SubjectSectionId";
+            myDiv.appendChild(selectList);
+
+            var notChosenOption = document.createElement("option");
+            notChosenOption.value = -1;
+            notChosenOption.text = "Не выбрано";
+            selectList.appendChild(notChosenOption);
+
+            
+            var option = document.createElement("option");
+            option.value = subjectSectionId;
+            option.text = "Из запроса";
+            option.selected = true;
+            selectList.appendChild(option);
+            
+        }
     </script>
 
     <!--Функции создающие выпадающие списки-->
@@ -421,11 +453,12 @@
             document.getElementById("SubjectIdList").value = subjectId;
         }
 
-        //не успевает присвоить надо будет отлавливать и ставить в аякс коллбэк
-        //if (parseInt(subjectSectionId) > 0)
-        //{
-        //    document.getElementById("SubjectSectionsList").value = subjectSectionId;
-        //}
+        
+        if (parseInt(subjectSectionId) > 0)
+        {
+            MakeSubjectSectionDropListForAutoSearch(subjectSectionId)
+            document.getElementById("SubjectSectionsList").value = subjectSectionId;
+        }
 
         if (needSearch)
         {

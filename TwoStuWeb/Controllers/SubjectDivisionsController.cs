@@ -25,7 +25,8 @@ namespace TwoStuWeb.Controllers
             //    .ToListAsync();
 
             List<Subject> subjects = await db.Subjects
-                .Include(x => x.SubjectSections.Select(y => y.SubjectDivisions.Select(z => z.SubjectDivisionChilds)))
+                .Include(x => x.SubjectSections.Select(y => y.SubjectDivisions.Select(z => z.SubjectDivisionChilds.Select(q => q.TaskSolutions))))
+                .Include(x => x.SubjectSections.Select(y => y.TaskSolutions))
                 .ToListAsync();
 
             List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();

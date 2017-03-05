@@ -33,7 +33,8 @@ namespace TwoStuWeb.Controllers
             }
 
             Subject subject = await db.Subjects
-                .Include(x => x.SubjectSections)
+                .Include(x => x.SubjectSections.Select(y => y.TaskSolutions))
+                .Include(x => x.TaskSolutions)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (subject == null)
