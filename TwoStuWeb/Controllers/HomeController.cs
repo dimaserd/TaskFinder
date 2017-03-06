@@ -71,8 +71,8 @@ namespace TwoStuWeb.Controllers
         public ActionResult SearchAnyTask(int? subjectId = null, int? workTypeId = null, int? subjectSectionId = null, bool? needSearch = false)
         {
             ViewBag.SubjectIdParam = subjectId;
-            ViewBag.WorkTypeIdParam = subjectId;
-            ViewBag.SubjectSectionIdParam = subjectId;
+            ViewBag.WorkTypeIdParam = workTypeId;
+            ViewBag.SubjectSectionIdParam = subjectSectionId;
             ViewBag.NeedSearchParam = needSearch;
 
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
@@ -83,10 +83,22 @@ namespace TwoStuWeb.Controllers
         }
 
 
+        [HttpGet]
+        public PartialViewResult TasksSearch2(SearchSolutionsModel model)
+        {
+            List<TaskSolution> solutions = Searcher.SearchTasks(model).ToList();
+
+            ViewBag.SearchModel = model;
+
+            return PartialView(viewName:"TasksSearch", model: solutions);
+        }
+
         [HttpPost]
         public PartialViewResult TasksSearch(SearchSolutionsModel model)
         {
             List<TaskSolution> solutions = Searcher.SearchTasks(model).ToList();
+
+            ViewBag.SearchModel = model;
 
             return PartialView(solutions);
         }

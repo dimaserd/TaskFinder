@@ -92,6 +92,12 @@ namespace TwoStu.Logic.Workers
             
         }
         
+        /// <summary>
+        /// Здесь нужно проверять утонения на принадлежность к разделу
+        /// предмета а разделы предмета на принадлежность к самому предмету
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<WorkerResult> CreateSolution(CreateSolutionModel model)
         {
             List<SubjectDivisionChild> solutionDivisionChilds = 

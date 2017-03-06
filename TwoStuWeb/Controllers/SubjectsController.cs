@@ -21,7 +21,7 @@ namespace TwoStuWeb.Controllers
         // GET: Subjects
         public async Task<ActionResult> Index()
         {
-            return View(await db.Subjects.ToListAsync());
+            return View(await db.Subjects.Include(x => x.TaskSolutions).ToListAsync());
         }
 
         // GET: Subjects/Details/5

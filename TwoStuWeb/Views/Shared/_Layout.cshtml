@@ -25,6 +25,8 @@
 
                     @if (Request.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("Поиск", "SearchAnyTask", "Home", new { area = "" }, null)</li>
+
                         <li>@Html.ActionLink("Банк задач", "Index", "TaskSolutions", new { area = "" }, null)</li>
 
                         <li>@Html.ActionLink("Предметы", "Index", "Subjects", new { area = "" }, null)</li>

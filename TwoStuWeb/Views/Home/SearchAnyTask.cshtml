@@ -25,9 +25,7 @@
 
 </div>
 
-@using (Ajax.BeginForm(actionName: "TasksSearch", controllerName: "Home", ajaxOptions: 
-    new AjaxOptions { UpdateTargetId = "searchResult", InsertionMode = InsertionMode.ReplaceWith},
-    routeValues: null, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+@using (Html.BeginForm("TasksSearch", "Home", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     <div class="form-group">
         @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -170,15 +168,25 @@
             var notChosenOption = document.createElement("option");
             notChosenOption.value = -1;
             notChosenOption.text = "Не выбрано";
+            notChosenOption.selected = true;
             selectList.appendChild(notChosenOption);
 
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
                 var option = document.createElement("option");
                 option.value = data[i].Id;
+                if (subjectSectionId != null && parseInt(subjectSectionId) > 0 && option.value == parseInt(subjectSectionId))
+                {
+                    subjectSectionId = null;
+                    option.selected = true;
+                }
                 option.text = data[i].Name;
                 selectList.appendChild(option);
             }
+
+            
+
+
         }
 
         function MakeSubjectSectionDropListForAutoSearch(subjectSectionId) {
@@ -258,7 +266,9 @@
                 success: function (response) {
 
                     SubjectSections = response;
+                    //так как предмет поменялся значит место для уточнений нужно убрать
                     document.getElementById("testPlace").innerHTML = "";
+
                     MakeSubjectSectionDropList(response);
                 }
             });
@@ -414,23 +424,48 @@
             var searchData =
                 {
                     SubjectId: document.getElementById("SubjectIdList").value,
-                    SubjectSectionId: document.getElementById("SubjectSectionsList").value,
+                    SubjectSectionId: (document.getElementById("SubjectSectionsList") != null) ?
+                        document.getElementById("SubjectSectionsList").value : 0,
                     WorkTypeId: document.getElementById("WorkTypeIdList").value,
                     DivisionChildsString: document.getElementById("DivisionChildsString").value,
                     TaskDesc: document.getElementById("taskDesc").value,
                 };
 
-            $.ajax({
-                type: "POST",
-                url: '/Home/TasksSearch',
-                data: searchData,
-                success: function (response) {
-                    document.getElementById("searchResult").innerHTML = response;                    
-                }
-            });
+            SearchAndUpdateDivGet(searchData);
         }
     </script>
     <!--/Обработчики клика-->
+
+    <!--Функции посылающие посиковый запрос-->
+    <script>
+        function SearchAndUpdateDivAjaxPost(searchData)
+        {
+            console.log("Поисковый объект", searchData);
+
+            $.ajax({
+                type: "GET",
+                url: '/Home/TasksSearch',
+                async: false,
+                data: searchData,
+                success: function (response) {
+                    $("#searchResult").replaceWith(response);
+                }
+            });
+        }
+
+        function SearchAndUpdateDivGet(searchData)
+        {
+            
+            var paramsString = "?SubjectId=" + searchData.SubjectId
+                + "&SubjectSectionId=" + searchData.SubjectSectionId
+                + "&DivisionChildsString=" + searchData.DivisionChildsString
+                + "&WorkTypeId=" + searchData.WorkTypeId
+                + "&TaskDesc=" + searchData.TaskDesc;
+            $('#searchResult').load('/Home/TasksSearch2' + paramsString);
+        }
+    </script>
+    <!--/Функции посылающие посиковый запрос-->
+
 
     <!--Обработчики формы-->
     <script>
@@ -462,7 +497,7 @@
 
         if (needSearch)
         {
-            document.getElementById("hiddenSubmit").click();
+            SendToServer();
         }
     </script>
     <!--/Установщики значений поиска из параметров ссылки-->

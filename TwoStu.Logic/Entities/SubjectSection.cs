@@ -34,5 +34,10 @@ namespace TwoStu.Logic.Entities
         {
             return $"?subjectId={subjectSection.FromSubject.Id}&subjectSectionId={subjectSection.Id}&needSearch=true";
         }
+
+        public static string GetCreateParamsString(this SubjectSection subjectSection)
+        {
+            return $"?subjectId={subjectSection.FromSubject.Id}&subjectSectionId={subjectSection.Id}";
+        }
     }
 }

@@ -86,15 +86,29 @@ namespace TwoStuWeb.Controllers
         {
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
-            ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
+            ViewBag.SubjectId = new SelectList(User.Identity.GetUserSubjects(Db.Subjects), "Id", "Name");
 
             return View();
         }
 
+
+        /// <summary>
+        /// Защиту можно пока обойти так как нет проверки на раздел предмета
+        /// тем самым нужно проверять принадлежит ли указанный раздел предмета к 
+        /// самому предмету и тоже самое с уточнениями
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> Create(CreateSolutionModel model)
         {
-            if(ModelState.IsValid)
+            WorkerResult hasRights = await UserHasRightsForThatSubjectAsync(model.SubjectId);
+            if(!hasRights.Succeeded)
+            {
+                AddErrors(hasRights);
+            }
+
+            if (ModelState.IsValid)
             {
                 WorkerResult result = await Worker.CreateSolution(model);
                 if(result.Succeeded)
@@ -111,9 +125,16 @@ namespace TwoStuWeb.Controllers
         }
 
         // GET: TaskSolutions/Create
-        public ActionResult CreatePhysics()
+        public async Task<ActionResult> CreatePhysics()
         {
             int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+
+            WorkerResult hasRights = await UserHasRightsForThatSubjectAsync(physicsId);
+            if (!hasRights.Succeeded)
+            {
+                return RedirectToAction("Create");
+            }
+            
 
             ViewBag.SubjectSectionId = new SelectList(Db.SubjectSections.Where(x => x.SubjectId == physicsId), "Id", "Name");
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
@@ -165,6 +186,13 @@ namespace TwoStuWeb.Controllers
         // GET: TaskSolutions/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
+            WorkerResult hasRights = UserHasRightsToBeThere();
+            if(!hasRights.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+            
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -270,6 +298,26 @@ namespace TwoStuWeb.Controllers
             };
         }
 
+        async Task<WorkerResult> UserHasRightsToCreateThatSubjectSectionAsync(SubjectSection subjectSection)
+        {
+            List<Subject> subjects = await Db.Subjects.ToListAsync();
+
+            //получили список предметов пользователя
+            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
+
+            if (userSubjects.Any(x => x.Id == subjectSection.SubjectId))
+            {
+                return new WorkerResult
+                {
+                    Succeeded = true
+                };
+
+            }
+
+            return new WorkerResult("У вас недостаточно прав для создания раздела по данному предмету!");
+        }
+
+
         async Task<WorkerResult> UserHasRightsForThatSubjectAsync(int subjectId)
         {
             List<Subject> subjects = await Db.Subjects.ToListAsync();
@@ -286,8 +334,8 @@ namespace TwoStuWeb.Controllers
             }
 
 
-            return new WorkerResult($"У вас недостаточно прав для создания раздела по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
-                + $"Вы можете создавать разделы только по предметам {userSubjects.GetSubjectNamesString()}");
+            return new WorkerResult($"У вас недостаточно прав для создания решения по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
+                + $"Вы можете создавать решения только по предметам {userSubjects.GetSubjectNamesString()}");
         }
 
 

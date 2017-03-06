@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
+    <Compile Include="Models\Search\SearchParamsModel.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
     <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
     <Compile Include="Models\TaskSolutions\SearchSolutionsModel.cs" />

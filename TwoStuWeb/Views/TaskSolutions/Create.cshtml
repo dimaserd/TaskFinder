@@ -162,6 +162,8 @@
                 option.text = data[i].Name;
                 selectList.appendChild(option);
             }
+
+            
         }
         
     </script>
@@ -193,6 +195,11 @@
         subjectIdList.change(function (e) {
             e.preventDefault();
 
+            SubjectChangeHandler();
+        })
+
+        function SubjectChangeHandler()
+        {
             var subjectId = subjectIdList.val();
 
             //получаем предмет выбранный в списке
@@ -205,14 +212,15 @@
                 type: "GET",
                 url: '/Default/GetSubjectSections?subjectId=' + subjectId,
                 success: function (response) {
-                    
+
                     SubjectSections = response;
                     MakeSubjectSectionDropList(response);
+
                 }
             });
-        })
+        }
 
-
+        SubjectChangeHandler();
     </script>
     <!--/Следилки за измененияи в списке предметов-->
 

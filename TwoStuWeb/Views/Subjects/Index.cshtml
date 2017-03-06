@@ -1,8 +1,12 @@
 ﻿@using TwoStu.Logic.Models
+@using HtmlExtensions.Renderers
+@using Extensions.String
 @model IEnumerable<TwoStu.Logic.Entities.Subject>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Предметы";
+
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
 
     List<int> SubjectIds = User.Identity.GetSubjectIds().ToList();
 }
@@ -18,6 +22,9 @@
     </p>
 }
 
+<h5 class="text-info">
+    Число справа от названия предмета означает колличество решений по данному предмету имеющихся в системе
+</h5>
 <table class="table table-bordered table-striped">
     <tr>
         <th>
@@ -36,7 +43,7 @@
         <tr>
             <td>
                 <strong>
-                    @item.Name
+                    @item.Name @GISigns.Count(item.TaskSolutions.Count).ToHtml()
                 </strong>
             </td>
 

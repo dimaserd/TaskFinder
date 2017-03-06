@@ -13,10 +13,19 @@
 
 <h2>Подробнее о предмете</h2>
 
+
+
 <div>
     <h3>Предмет <strong>@Model.Name</strong></h3>
     <hr />
     <h3>Разделы предмета</h3>
+
+    <div>
+        <strong>
+            <a href="/SubjectSections/Create?toSubjectId=@Model.Id">[Создать новый раздел для предмета @Model.Name]</a>
+        </strong>
+    </div>
+
     <table class="table table-bordered table-striped">
         <tr>
             <th>Название раздела</th>
@@ -51,6 +60,7 @@
                     {
                         <th>
                             <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                            <a href="/TaskSolutions/Create">[Добавить решение задачи по @subjectSection.Name]</a>
                         </th>
                     }
                     
