@@ -4,42 +4,105 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Редактировать уточнение <strong>@Model.Name</strong> к разделу предмета <strong>@Model.FromSubjectSection.Name</strong></h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>SubjectDivision</h4>
-        <hr />
+        
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.SubjectSectionId)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" }, labelText: "Название уточнения")
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SubjectSectionId, "SubjectSectionId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("SubjectSectionId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.SubjectSectionId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Сохранить изменения" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
+<hr />
+
+<h4>Варианты уточнения <strong>@Model.Name</strong></h4>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>
+                    <strong>
+                        Название
+                    </strong>
+                </th>
+                <th>
+                    <strong>
+                        Действия
+                    </strong>
+                </th>
+            </tr>
+            @if (Model.SubjectDivisionChilds.Count > 0)
+            {
+                foreach (var child in Model.SubjectDivisionChilds)
+                {
+                    <tr>
+                        <td>
+                            @child.Name
+                        </td>
+                        <td>
+                            <strong>
+                                <a href="">[Подробнее]</a>
+                                <a href="">[Редактировать]</a>
+                                <a href="">[Удалить]</a>
+                            </strong>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2" class="text-center text-danger">
+                        <strong>
+                            Не найдено вариантов по данному уточнению @Model.Name
+                        </strong>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="2" class="text-center">
+                    <strong>
+                        <a href="">[Создать новый вариант уточнения к уточнению @Model.Name]</a>
+                    </strong>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+
+
+<hr />
+
+
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <strong>
+        @Html.ActionLink("К списку уточнений", "Index") |
+        @Html.ActionLink("К списку разделов по предметам", "Index", "SubjectSections") |
+        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    </strong>
+    
+
 </div>

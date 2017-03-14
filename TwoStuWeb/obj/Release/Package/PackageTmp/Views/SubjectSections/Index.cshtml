@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TwoStu.Logic.Entities.SubjectSection>
+﻿@using TwoStu.Logic.Entities
+@model IEnumerable<Subject>
 
 @{
     ViewBag.Title = "Index";
@@ -7,33 +8,82 @@
 <h2>Список разделов по предметам</h2>
 
 <p>
-    @Html.ActionLink("Создать новый раздел", "Create")
+    <strong>
+        @Html.ActionLink("[Создать новый раздел]", "Create")
+    </strong>
 </p>
 <table class="table table-bordered table-striped">
     <tr>
         
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Название предмета
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FromSubject.Name)
+            Разделы предмета
         </th>
-        <th></th>
+        <th>
+            Действия
+        </th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (Subject subject in Model) {
     <tr>
         
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            <strong>
+                @subject.Name
+            </strong>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.FromSubject.Name)
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td>
+                        <strong>
+                            Название раздела
+                        </strong>
+                    </td>
+                    <td>
+                        <strong>
+                            Действия
+                        </strong>
+                    </td>
+                </tr>
+                    @foreach(SubjectSection subjSection in subject.SubjectSections)
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @subjSection.Name
+                                </strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    
+                                    <a href="/SubjectSections/Details/@subjSection.Id">[Подробнее]</a>
+                                    <a href="/SubjectSections/Edit/@subjSection.Id">[Редактировать]</a>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a href="/SubjectSections/Delete/@subjSection.Id">[Удалить]</a>
+                                    }
+                                </strong>
+                            </td>
+                        </tr>
+                    }
+                
+            </table>
         </td>
         <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Детали", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
+            <p>
+                <strong>
+                    <a href="/Subjects/Edit/@subject.Id">[Редактировать предмет]</a>
+                </strong>
+            </p>
+            <p>
+                <strong>
+                    <a href="/Subjects/Details/@subject.Id">[Подробнее о предмете]</a>
+                </strong>
+            </p>
+            
         </td>
     </tr>
 }
@@ -41,4 +91,9 @@
 </table>
 
 <hr />
-@Html.ActionLink("К списку предметов", "Index", "Subjects")
+<div>
+    <strong>
+        @Html.ActionLink("[К списку предметов]", "Index", "Subjects") |
+        @Html.ActionLink("[К списку уточнений]", "Index", "SubjectDivisions")
+    </strong>
+</div>

@@ -2,7 +2,22 @@
 @model SearchSolutionsModel
 @{
     ViewBag.Title = "SearchAnyTask";
+
+
+
+    int? subjectIdParam =  ViewBag.SubjectIdParam as int?;
+    int? workTypeIdParam = ViewBag.WorkTypeIdParam as int?;
+    int? subjectSectionIdParam = ViewBag.SubjectSectionIdParam as int?;
+    bool? needSearchParam = ViewBag.NeedSearchParam as bool?;
+
+    //для джаваскрипта
+    int subjectId = subjectIdParam.HasValue ? subjectIdParam.Value : -1;
+    int workTypeId = workTypeIdParam.HasValue ? workTypeIdParam.Value : -1;
+    int subjectSectionId = subjectSectionIdParam.HasValue ? subjectSectionIdParam.Value : -1;
+    bool needSearch = needSearchParam.HasValue ? needSearchParam.Value : false;
+
 }
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <h2>Поиск любого задания по уточнениям по предмету <strong><span id="subjectNameSpan"></span></strong></h2>
 
@@ -10,9 +25,7 @@
 
 </div>
 
-@using (Ajax.BeginForm(actionName: "TasksSearch", controllerName: "Home", ajaxOptions: 
-    new AjaxOptions { UpdateTargetId = "searchResult", InsertionMode = InsertionMode.ReplaceWith},
-    routeValues: null, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
+@using (Html.BeginForm("TasksSearch", "Home", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
     <div class="form-group">
         @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -152,15 +165,57 @@
             selectList.name = "SubjectSectionId";
             myDiv.appendChild(selectList);
 
+            var notChosenOption = document.createElement("option");
+            notChosenOption.value = -1;
+            notChosenOption.text = "Не выбрано";
+            notChosenOption.selected = true;
+            selectList.appendChild(notChosenOption);
+
             //Create and append the options
             for (var i = 0; i < data.length; i++) {
                 var option = document.createElement("option");
                 option.value = data[i].Id;
+                if (subjectSectionId != null && parseInt(subjectSectionId) > 0 && option.value == parseInt(subjectSectionId))
+                {
+                    subjectSectionId = null;
+                    option.selected = true;
+                }
                 option.text = data[i].Name;
                 selectList.appendChild(option);
             }
+
+            
+
+
         }
 
+        function MakeSubjectSectionDropListForAutoSearch(subjectSectionId) {
+
+            
+
+            var myDiv = document.getElementById("placeForSubjectSectionsList");
+
+            myDiv.innerHTML = "";
+            //Create and append select list
+            var selectList = document.createElement("select");
+            selectList.id = "SubjectSectionsList";
+            selectList.className = "form-control";
+            selectList.name = "SubjectSectionId";
+            myDiv.appendChild(selectList);
+
+            var notChosenOption = document.createElement("option");
+            notChosenOption.value = -1;
+            notChosenOption.text = "Не выбрано";
+            selectList.appendChild(notChosenOption);
+
+            
+            var option = document.createElement("option");
+            option.value = subjectSectionId;
+            option.text = "Из запроса";
+            option.selected = true;
+            selectList.appendChild(option);
+            
+        }
     </script>
 
     <!--Функции создающие выпадающие списки-->
@@ -211,7 +266,9 @@
                 success: function (response) {
 
                     SubjectSections = response;
+                    //так как предмет поменялся значит место для уточнений нужно убрать
                     document.getElementById("testPlace").innerHTML = "";
+
                     MakeSubjectSectionDropList(response);
                 }
             });
@@ -332,8 +389,21 @@
             console.log($("#DivisionChildsString").val())
 
             if (CheckForm()) {
+
+                MakeLoading();
                 SendToServer();
             }
+
+        }
+        function MakeLoading()
+        {
+            var sp = document.createElement("span");
+            sp.className = "fa fa-spinner fa-5x fa-spin";
+
+            var searchResult = document.getElementById("searchResult");
+            searchResult.innerHTML = "";
+
+            searchResult.appendChild(sp);
 
         }
 
@@ -354,23 +424,48 @@
             var searchData =
                 {
                     SubjectId: document.getElementById("SubjectIdList").value,
-                    SubjectSectionId: document.getElementById("SubjectSectionsList").value,
+                    SubjectSectionId: (document.getElementById("SubjectSectionsList") != null) ?
+                        document.getElementById("SubjectSectionsList").value : 0,
                     WorkTypeId: document.getElementById("WorkTypeIdList").value,
                     DivisionChildsString: document.getElementById("DivisionChildsString").value,
                     TaskDesc: document.getElementById("taskDesc").value,
                 };
 
-            $.ajax({
-                type: "POST",
-                url: '/Home/TasksSearch',
-                data: searchData,
-                success: function (response) {
-                    document.getElementById("searchResult").innerHTML = response;                    
-                }
-            });
+            SearchAndUpdateDivGet(searchData);
         }
     </script>
     <!--/Обработчики клика-->
+
+    <!--Функции посылающие посиковый запрос-->
+    <script>
+        function SearchAndUpdateDivAjaxPost(searchData)
+        {
+            console.log("Поисковый объект", searchData);
+
+            $.ajax({
+                type: "GET",
+                url: '/Home/TasksSearch',
+                async: false,
+                data: searchData,
+                success: function (response) {
+                    $("#searchResult").replaceWith(response);
+                }
+            });
+        }
+
+        function SearchAndUpdateDivGet(searchData)
+        {
+            
+            var paramsString = "?SubjectId=" + searchData.SubjectId
+                + "&SubjectSectionId=" + searchData.SubjectSectionId
+                + "&DivisionChildsString=" + searchData.DivisionChildsString
+                + "&WorkTypeId=" + searchData.WorkTypeId
+                + "&TaskDesc=" + searchData.TaskDesc;
+            $('#searchResult').load('/Home/TasksSearch2' + paramsString);
+        }
+    </script>
+    <!--/Функции посылающие посиковый запрос-->
+
 
     <!--Обработчики формы-->
     <script>
@@ -379,5 +474,32 @@
         }
     </script>
     <!--/Обработчики формы-->
+
+    <!--Установщики значений поиска из параметров ссылки-->
+    <script>
+        var subjectId = @subjectId;
+        var workTypeId = @workTypeId;
+        var subjectSectionId = @subjectSectionId;
+        var needSearch = @needSearch.ToString().ToLower();
+
+        if (parseInt(subjectId) > 0)
+        {
+            console.log("subjectId", subjectId);
+            document.getElementById("SubjectIdList").value = subjectId;
+        }
+
+        
+        if (parseInt(subjectSectionId) > 0)
+        {
+            MakeSubjectSectionDropListForAutoSearch(subjectSectionId)
+            document.getElementById("SubjectSectionsList").value = subjectSectionId;
+        }
+
+        if (needSearch)
+        {
+            SendToServer();
+        }
+    </script>
+    <!--/Установщики значений поиска из параметров ссылки-->
 
 }

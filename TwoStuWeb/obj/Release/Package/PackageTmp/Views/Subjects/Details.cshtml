@@ -1,16 +1,31 @@
 ﻿@using TwoStu.Logic.Entities
+@using Extensions.String
+@using HtmlExtensions.Renderers
 @model TwoStu.Logic.Entities.Subject
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = $"Подробнее о {Model.Name}";
+
+    string linkToSearch = $"/Home/SearchAnyTask{Model.GetSearchParams()}";
+
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
 }
 
 <h2>Подробнее о предмете</h2>
+
+
 
 <div>
     <h3>Предмет <strong>@Model.Name</strong></h3>
     <hr />
     <h3>Разделы предмета</h3>
+
+    <div>
+        <strong>
+            <a href="/SubjectSections/Create?toSubjectId=@Model.Id">[Создать новый раздел для предмета @Model.Name]</a>
+        </strong>
+    </div>
+
     <table class="table table-bordered table-striped">
         <tr>
             <th>Название раздела</th>
@@ -22,11 +37,33 @@
             {
                 <tr>
                     <th>
-                        @subjectSection.Name
+                        @subjectSection.Name @GISigns.Count(subjectSection.TaskSolutions.Count).ToHtml()
                     </th>
-                    <th>
-                        <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
-                    </th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th>
+                            <p>
+                                <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                            </p>
+                            
+                            <p>
+                                <a href="/SubjectSections/Edit/@subjectSection.Id">[Редактировать]</a>
+                            </p>
+
+                            <p>
+                                <a href="/SubjectSections/Delete/@subjectSection.Id">[Удалить]</a>
+                            </p>
+                            
+                        </th>
+                    }
+                    else
+                    {
+                        <th>
+                            <a href="/SubjectSections/Details/@subjectSection.Id">[Подробнее]</a>
+                            <a href="/TaskSolutions/Create">[Добавить решение задачи по @subjectSection.Name]</a>
+                        </th>
+                    }
+                    
                 </tr>
             }
         }
@@ -43,16 +80,27 @@
         <tr>
             <th colspan="2" class="text-center text-danger">
                 <strong>
-                    <a href="/SubjectSections/Create">[Создать новый раздел для предмета @Model.Name]</a>
+                    <a href="/SubjectSections/Create?toSubjectId=@Model.Id">[Создать новый раздел для предмета @Model.Name]</a>
                 </strong>
             </th>
         </tr>
     </table>
+
+    <strong>
+        <a href="@linkToSearch" class="btn btn-block btn-info">
+            Показать решения по данному предмету @GISigns.Count(Model.TaskSolutions.Count).ToHtml()
+        </a>
+    </strong>
+    
 </div>
 
 <hr/>
-<p>
-    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("К списку предметов", "Index")
-</p>
+<div>
+    <strong>
+        @Html.ActionLink("[Редактировать]", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("[К списку предметов]", "Index") |
+        @Html.ActionLink("[К списку разделов по предметам]", "Index", "SubjectSections") |
+        @Html.ActionLink("[К списку уточнений по разделам]", "Index", "SubjectDivisions") |
+    </strong>
+</div>
 

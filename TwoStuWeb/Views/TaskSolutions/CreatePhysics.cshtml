@@ -7,7 +7,7 @@
 <h2>@ViewBag.Title</h2>
 
 
-@using (Html.BeginForm("CreatePhysisc", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }) ) 
+@using (Html.BeginForm("CreatePhysics", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data" }) ) 
 {
      @Html.AntiForgeryToken()
 
@@ -59,7 +59,11 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <strong>
+        @Html.ActionLink("К списку решений", "Index") |
+        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    </strong>
+    
 </div>
 
 @section Scripts {

@@ -1,17 +1,21 @@
 ﻿@using HtmlExtensions.Renderers
 @using Extensions.String
-@model IEnumerable<TwoStu.Logic.Entities.TaskSolution>
+@using TwoStu.Logic.Entities
+@model IEnumerable<TaskSolution>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Все загруженные решения";
     GlyphiconRenderer GISigns = new GlyphiconRenderer();
 }
 
 <h2>Список загруженных решений @GISigns.Count(Model.Count()).ToHtml()</h2>
 
 <p>
-    @Html.ActionLink("Создать новое", "Create") |
-    @Html.ActionLink("Создать новое по физике", "CreatePhysics")
+    <strong>
+        @Html.ActionLink("[Создать новое]", "Create") |
+        @Html.ActionLink("[Создать новое по физике]", "CreatePhysics")
+    </strong>
+    
 </p>
 <table class="table table-striped">
     <tr>
@@ -58,11 +62,46 @@
                 }
             </table>
         </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.Id }) |
-            @*@Html.ActionLink("Детали", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Удалить", "Delete", new { id=item.Id })
-        </td>
+        
+        @if (User.IsInRole("Admin"))
+        {
+            <td>
+                <p>
+                    <strong>
+                        <a href="@item.GetLinkToDownload()">[Скачать]</a>
+
+                    </strong>
+                </p>
+                <p>
+                    <strong>
+                        @Html.ActionLink("[Редактировать]", "Edit", new { id = item.Id })
+                    </strong>
+                </p>
+                <p>
+                    <strong>
+                        @Html.ActionLink("[Удалить]", "Delete", new { id = item.Id })
+                    </strong>
+                </p>
+            </td>
+        }
+        else
+        {
+            <td>
+                <p>
+                    <strong>
+                        <a href="@item.GetLinkToDownload()">[Скачать]</a>
+
+                    </strong>
+                </p>
+                <p>
+                    <strong>
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id })
+                    </strong>
+                </p>
+                
+            </td>
+        }
+
     </tr>
 }
 

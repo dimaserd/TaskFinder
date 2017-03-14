@@ -1,8 +1,19 @@
-﻿@model IEnumerable<TwoStu.Logic.Entities.TaskSolution>
+﻿@using TwoStu.Logic.Entities
+@using HtmlExtensions.Renderers
+@using Extensions.String
+@using TwoStu.Logic.Models.TaskSolutions
+@model IEnumerable<TaskSolution>
+@{ 
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
+    SearchSolutionsModel searchModel = ViewBag.SearchModel as SearchSolutionsModel;
+}
 
 <div>
-    <h3>Результат поиска</h3>
-    <table class="table table-striped">
+    <h3>Результат поиска @GISigns.Count(Model.Count()).ToHtml()</h3>
+
+    <h4>Параметры поиска: {Пока этой функции нет!} </h4>
+
+    <table class="table table-striped table-bordered">
         <tr>
             <th>
                Раздел предмета 
@@ -46,7 +57,7 @@
                     </td>
                     <td>
 
-                        <a href="/File/DownloadByKey?key=@item.Id">
+                        <a href="@item.GetLinkToDownload()">
                             <strong>
                                 [Скачать]
                             </strong>

@@ -11,6 +11,9 @@
     List<int> SubjectIds = User.Identity.GetSubjectIds().ToList();
 }
 
+@AlertHelper.GetAlert("Подсказка", "Число справа от названия предмета означает колличество решений по данному предмету имеющихся в системе")
+
+
 <h2>Список Предметов</h2>
 
 @if (User.IsInRole("Admin"))
@@ -22,9 +25,6 @@
     </p>
 }
 
-<h5 class="text-info">
-    Число справа от названия предмета означает колличество решений по данному предмету имеющихся в системе
-</h5>
 <table class="table table-bordered table-striped">
     <tr>
         <th>
@@ -43,7 +43,7 @@
         <tr>
             <td>
                 <strong>
-                    @item.Name @GISigns.Count(item.TaskSolutions.Count).ToHtml()
+                    @item.Name <span class="badge" data-toggle="tooltip" title="По данному предмету в системе столько решений">@item.TaskSolutions.Count</span>
                 </strong>
             </td>
 

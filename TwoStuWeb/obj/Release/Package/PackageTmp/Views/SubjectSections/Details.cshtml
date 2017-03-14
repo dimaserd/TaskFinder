@@ -1,16 +1,28 @@
-﻿@model TwoStu.Logic.Entities.SubjectSection
+﻿@using TwoStu.Logic.Entities
+@using HtmlExtensions.Renderers
+@using Extensions.String
+@model SubjectSection
 
 @{
+    GlyphiconRenderer GISigns = new GlyphiconRenderer();
     ViewBag.Title = "Details";
+
+
+    string linkToSearch = $"/Home/SearchAnyTask{Model.GetSearchParamsString()}";
 }
 
 <h2>Подробнее о разделе</h2>
 
 <div>
     <h4>Раздел <strong>@Model.Name</strong> предмета <strong>@Model.FromSubject.Name</strong></h4>
+    
     <hr />
     
-    <h3>Список уточнений по разделу</h3>
+    
+    <h3>Список уточнений по разделу <strong>@Model.Name</strong> @GISigns.Count(Model.SubjectDivisions.Count).ToHtml()</h3>
+    <h5 class="text-info">
+        Числа внутри таблицы означают колличество решений связанных с уточнением и вариантом данного уточнения
+    </h5>
     <table class="table table-bordered table-striped">
         <tr>
 
@@ -31,7 +43,7 @@
                 <tr>
 
                     <td>
-                        <strong>@item.Name</strong>
+                        <strong>@item.Name @GISigns.Count(item.GetCountOfTaskSolutions()).ToHtml()</strong>
                     </td>
                     <td>
 
@@ -50,7 +62,7 @@
                                 {
                                     <tr>
                                         <th>
-                                            @child.Name
+                                            @child.Name @GISigns.Count(child.TaskSolutions.Count).ToHtml()
                                         </th>
                                         <th>
                                             <a href="@Url.Action("Details", "DivisionChilds", new { id = child.Id })">
@@ -106,15 +118,20 @@
 
     </table>
     
-    
+    <a href="@linkToSearch" class="btn btn-info btn-block">
+        Посмотреть решения по разделу @Model.Name @GISigns.Count(Model.TaskSolutions.Count).ToHtml()
+    </a>
 </div>
 
 <hr />
 
 <p>
-    @Html.ActionLink("Редактировать раздел", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("К списку разделов", "Index") |
-    @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    <strong>
+        @Html.ActionLink("[Редактировать раздел]", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("[К списку разделов]", "Index") |
+        @Html.ActionLink("[К списку предметов]", "Index", "Subjects")
+    </strong>
+    
 </p>
 
 
