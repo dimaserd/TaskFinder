@@ -10,10 +10,10 @@
 
     GlyphiconRenderer GISigns = new GlyphiconRenderer();
 }
+@AlertHelper.GetAlert("Подсказка", "Число справа от названия раздела предмета означает колличество решений по этому разделу в системе")
+
 
 <h2>Подробнее о предмете</h2>
-
-
 
 <div>
     <h3>Предмет <strong>@Model.Name</strong></h3>
@@ -37,7 +37,9 @@
             {
                 <tr>
                     <th>
-                        @subjectSection.Name @GISigns.Count(subjectSection.TaskSolutions.Count).ToHtml()
+                        @subjectSection.Name 
+                        <span class="badge" data-toggle="tooltip" title="По данному разделу предмета в системе столько решений">@subjectSection.TaskSolutions.Count</span>
+                        @*@GISigns.Count(subjectSection.TaskSolutions.Count).ToHtml()*@
                     </th>
                     @if (User.IsInRole("Admin"))
                     {

@@ -31,9 +31,13 @@ namespace TwoStu.Logic.Entities
         {
             get; set;
         }
-
+        #region Many to many relationship
         [JsonIgnore]
         public virtual IList<TaskSolution> TaskSolutions { get; set; }
+
+        [JsonIgnore]
+        public virtual IList<TaskSolutionVersion> TaskSolutionVersions { get; set; }
+        #endregion
     }
 
     #region Extensions

@@ -12,6 +12,11 @@ namespace TwoStuWeb.Controllers
         [HttpGet]
         public ActionResult DownloadByKey(string key)
         {
+            if(!Request.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             using (MyDbContext context = new MyDbContext())
             {
                 TaskSolution a = context.TaskSolutions.FirstOrDefault(t => t.Id == key);

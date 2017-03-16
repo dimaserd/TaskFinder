@@ -8,6 +8,8 @@ namespace TwoStu.Logic
     {
         public DbSet<TaskSolution> TaskSolutions { get; set; }
 
+        public DbSet<TaskSolutionVersion> TaskSolutionVersions { get; set; }
+
         public DbSet<Subject> Subjects { get; set; }
 
         public DbSet<SubjectSection> SubjectSections { get; set; }

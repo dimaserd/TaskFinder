@@ -59,7 +59,11 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <strong>
+        @Html.ActionLink("К списку решений", "Index") |
+        @Html.ActionLink("К списку предметов", "Index", "Subjects")
+    </strong>
+    
 </div>
 
 @section Scripts {

@@ -71,6 +71,7 @@
     <Compile Include="Entities\SubjectSection.cs" />
     <Compile Include="Entities\Subject.cs" />
     <Compile Include="Entities\TaskSolution.cs" />
+    <Compile Include="Entities\TaskSolutionVersion.cs" />
     <Compile Include="Entities\WorkType.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Migrations\201701091451106_Init.cs" />
@@ -105,11 +106,20 @@
     <Compile Include="Migrations\201703030951161_t.Designer.cs">
       <DependentUpon>201703030951161_t.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703160705225_Spat.cs" />
+    <Compile Include="Migrations\201703160705225_Spat.Designer.cs">
+      <DependentUpon>201703160705225_Spat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703160741427_t1.cs" />
+    <Compile Include="Migrations\201703160741427_t1.Designer.cs">
+      <DependentUpon>201703160741427_t1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\SearchParamsModel.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
     <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
+    <Compile Include="Models\TaskSolutions\MakeTaskSolutionVersionModel.cs" />
     <Compile Include="Models\TaskSolutions\SearchSolutionsModel.cs" />
     <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
     <Compile Include="Models\UserModels\CreateUserModel.cs" />
@@ -163,6 +173,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703030951161_t.resx">
       <DependentUpon>201703030951161_t.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703160705225_Spat.resx">
+      <DependentUpon>201703160705225_Spat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703160741427_t1.resx">
+      <DependentUpon>201703160741427_t1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

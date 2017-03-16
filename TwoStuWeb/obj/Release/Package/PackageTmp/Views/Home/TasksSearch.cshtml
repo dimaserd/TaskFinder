@@ -6,6 +6,8 @@
 @{ 
     GlyphiconRenderer GISigns = new GlyphiconRenderer();
     SearchSolutionsModel searchModel = ViewBag.SearchModel as SearchSolutionsModel;
+
+    bool canEdit = User.IsInRole("Admin");
 }
 
 <div>
@@ -62,6 +64,19 @@
                                 [Скачать]
                             </strong>
                         </a>
+                        @if (canEdit)
+                        {
+                            <a href="/TaskSolutions/Edit/@item.Id">
+                                <strong>
+                                    [Редактировать]
+                                </strong>
+                            </a>
+                            <a href="/TaskSolutions/Details/@item.Id">
+                                <strong>
+                                    [Подробнее]
+                                </strong>
+                            </a>
+                        }
                     </td>
 
                 </tr>

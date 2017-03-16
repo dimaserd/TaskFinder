@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using TwoStu.Logic.Models.TaskSolutions;
 
 namespace TwoStu.Logic.Entities
 {
@@ -53,6 +55,13 @@ namespace TwoStu.Logic.Entities
         /// Сущности TaskSolution и SubjectDivisionChild связаны многое ко многим
         /// </summary>
         public virtual IList<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
+
+        /// <summary>
+        /// Версии данного решения могут изменяться например может стать другим описание
+        /// задачи и так далее
+        /// </summary>
+        public virtual IList<TaskSolutionVersion> Versions { get; set; }
+
         #endregion
 
 
@@ -63,6 +72,18 @@ namespace TwoStu.Logic.Entities
         public static string GetLinkToDownload(this TaskSolution solution)
         {
             return $"/File/DownloadByKey?key={solution.Id}";
+        }
+
+        public static MakeTaskSolutionVersionModel GetModelForCreatingVersion(this TaskSolution solution, List<SubjectDivision> subjectDivisionsWithChilds)
+        {
+            return new MakeTaskSolutionVersionModel
+            {
+                TaskSolutionId = solution.Id,
+                VersionDate = DateTime.Now,
+                ExistingVersions = solution.Versions.ToList(),
+
+                SubjectDivisionsWithChilds = subjectDivisionsWithChilds,
+            };
         }
     }
 }
