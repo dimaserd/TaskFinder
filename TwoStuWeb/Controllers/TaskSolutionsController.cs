@@ -11,30 +11,21 @@ using System.Collections.Generic;
 using TwoStu.Logic;
 using TwoStu.Logic.Models.TaskSolutions;
 using System;
+using TwoStuWeb.Controllers.Base;
 
 namespace TwoStuWeb.Controllers
 {
     [Authorize]
-    public class TaskSolutionsController : Controller
+    public class TaskSolutionsController : BaseController
     {
         #region Fields
-        static MyDbContext _db;
+        
 
         TaskSolutionsWorker _worker;
         #endregion
 
         #region Properties
-        static MyDbContext Db
-        {
-            get
-            {
-                if(_db == null)
-                {
-                    _db = new MyDbContext();
-                }
-                return _db;
-            }
-        }
+        
 
         TaskSolutionsWorker Worker
         {
@@ -284,90 +275,6 @@ namespace TwoStuWeb.Controllers
 
         #endregion
 
-        #region Help Methods
-        WorkerResult UserHasRightsToBeThere()
-        {
-            if(!User.IsInRole("Admin"))
-            {
-                return new WorkerResult("У вас недостаточно прав!");
-            }
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
-
-        async Task<WorkerResult> UserHasRightsToCreateThatSubjectSectionAsync(SubjectSection subjectSection)
-        {
-            List<Subject> subjects = await Db.Subjects.ToListAsync();
-
-            //получили список предметов пользователя
-            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
-
-            if (userSubjects.Any(x => x.Id == subjectSection.SubjectId))
-            {
-                return new WorkerResult
-                {
-                    Succeeded = true
-                };
-
-            }
-
-            return new WorkerResult("У вас недостаточно прав для создания раздела по данному предмету!");
-        }
-
-
-        async Task<WorkerResult> UserHasRightsForThatSubjectAsync(int subjectId)
-        {
-            List<Subject> subjects = await Db.Subjects.ToListAsync();
-
-            List<Subject> userSubjects = User.Identity.GetUserSubjects(subjects).ToList();
-
-
-            if (userSubjects.Any(x => x.Id == subjectId))
-            {
-                return new WorkerResult
-                {
-                    Succeeded = true
-                };
-            }
-
-
-            return new WorkerResult($"У вас недостаточно прав для создания решения по предмету {subjects.FirstOrDefault(x => x.Id == subjectId).Name}!\n"
-                + $"Вы можете создавать решения только по предметам {userSubjects.GetSubjectNamesString()}");
-        }
-
-
-        void AddErrors(WorkerResult workerResult)
-        {
-            foreach(string error in workerResult.ErrorsList)
-            {
-                ModelState.AddModelError("", error);
-            }
-        }
-        #endregion
-
-        #region Dispose
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                IDisposable[] toDisposes = new IDisposable[]
-                {
-                    //_worker, _db
-                };
-                for(int i = 0; i < toDisposes.Length; i++)
-                {
-                    if(toDisposes[i] != null)
-                    {
-                        toDisposes[i].Dispose();
-                        toDisposes[i] = null;
-                    }
-                }
-            }
-            base.Dispose(disposing);
-        }
-        #endregion
+        
     }
 }

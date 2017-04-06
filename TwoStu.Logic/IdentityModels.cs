@@ -60,6 +60,23 @@ namespace TwoStu.Logic.Models
 
             return userSubjects.Any(x => x.Id == subject.Id);
         }
+       
+        public static DateTime GetExpirationDate(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("ExpirationDate");
+            // Test for null to avoid issues during local testing
+            string value = (claim != null) ? claim.Value : string.Empty;
+
+
+            DateTime expDate;
+
+            if(DateTime.TryParse(value, out expDate))
+            {
+                return expDate;
+            }
+
+            return null;
+        }
         #endregion
     }
     // Чтобы добавить данные профиля для пользователя, можно добавить дополнительные свойства в класс ApplicationUser. Дополнительные сведения см. по адресу: http://go.microsoft.com/fwlink/?LinkID=317594.
@@ -69,6 +86,11 @@ namespace TwoStu.Logic.Models
 
         public string Password { get; set; }
 
+        /// <summary>
+        /// После этой даты пользователю будет ограничен доступ к сервису
+        /// </summary>
+        public DateTime? ExpirationDate { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
@@ -76,7 +98,7 @@ namespace TwoStu.Logic.Models
 
             // Здесь добавьте настраиваемые утверждения пользователя
             userIdentity.AddClaim(new Claim("Subjects", this.Subjects));
-
+            userIdentity.AddClaim(new Claim("ExpirationDate", this.ExpirationDate.ToString()));
 
             return userIdentity;
         }

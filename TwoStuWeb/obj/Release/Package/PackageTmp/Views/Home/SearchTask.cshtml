@@ -44,8 +44,8 @@
                             <th>@result.TaskDesc.ToHtml()</th>
                             <th><a href="/File/DownloadByKey?key=@result.SolutionId">[Скачать]</a></th>
                         </tr>
-                                    }
-                                }
+                     }
+                }
 
 
 
@@ -167,6 +167,7 @@
     {
         $("#deviceTable tbody").empty();
     }
+
     function GetLink(dataBit)
     {
         return "/File/DownloadByKey?key=" + dataBit.SolutionId;
@@ -176,6 +177,9 @@
 }
 
 <style>
+    mark{
+        background-color: yellow!important;
+    }
     .container {
     
     /*width: 100%; */   

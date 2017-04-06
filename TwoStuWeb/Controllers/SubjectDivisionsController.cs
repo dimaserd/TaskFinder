@@ -8,11 +8,12 @@ using TwoStu.Logic.Models.WorkerResults;
 using System.Linq;
 using System.Collections.Generic;
 using TwoStu.Logic.Models;
+using TwoStuWeb.Controllers.Base;
 
 namespace TwoStuWeb.Controllers
 {
     [Authorize]
-    public class SubjectDivisionsController : Controller
+    public class SubjectDivisionsController : BaseController
     {
         private MyDbContext db = new MyDbContext();
 
@@ -169,23 +170,7 @@ namespace TwoStuWeb.Controllers
 
         #endregion
 
-        #region Help methods
-        WorkerResult UserHasRightsToBeThere()
-        {
-            if (!User.IsInRole("Admin"))
-            {
-                return new WorkerResult("У вас недостаточно прав!");
-            }
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
-
         
-
-        #endregion
 
         protected override void Dispose(bool disposing)
         {

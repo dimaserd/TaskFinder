@@ -206,7 +206,7 @@ namespace Extensions.String
                 ":", ",", ".", "?", ";",
                 "\\", "|", "~", "-", "'",
                 "\"", ">", "<", "`", "*",
-                "(", ")"
+                "(", ")", "..."
 
             };
             return word.Split(separator: toReplaces, options: StringSplitOptions.RemoveEmptyEntries).ToList();

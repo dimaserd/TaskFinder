@@ -7,11 +7,12 @@ using TwoStu.Logic;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
 using TwoStu.Logic.Models;
+using TwoStuWeb.Controllers.Base;
 
 namespace TwoStuWeb.Controllers
 {
     [Authorize]
-    public class SubjectsController : Controller
+    public class SubjectsController : BaseController
     {
         #region Fields
         private MyDbContext db = new MyDbContext();
@@ -174,20 +175,7 @@ namespace TwoStuWeb.Controllers
         #endregion
 
 
-        #region Help Methods
-        WorkerResult UserHasRightsToBeThere()
-        {
-            if (!User.IsInRole("Admin"))
-            {
-                return new WorkerResult("У вас недостаточно прав!");
-            }
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
-        #endregion
+        
 
         #region Dispose
         protected override void Dispose(bool disposing)

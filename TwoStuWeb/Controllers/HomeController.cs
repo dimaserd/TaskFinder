@@ -9,31 +9,21 @@ using TwoStu.Logic.Models.TaskSolutions;
 using TwoStu.Logic.Workers;
 using System.Data.Entity;
 using TwoStu.Logic.Workers.TaskSolutions;
+using TwoStuWeb.Controllers.Base;
 
 namespace TwoStuWeb.Controllers
 {
     
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         #region Fields
-        static MyDbContext _db;
+        
 
         TaskSolutionSearcher _searcher;
         #endregion
 
         #region Properties
-        static MyDbContext Db
-        {
-            get
-            {
-                if (_db == null)
-                {
-                    _db = new MyDbContext();
-                }
-                return _db;
-            }
-        }
-
+        
         TaskSolutionSearcher Searcher
         {
             get
@@ -50,6 +40,12 @@ namespace TwoStuWeb.Controllers
 
         public ActionResult Index()
         {
+            //если дата подошла к концу разлогиниваем пользователя
+            if(IsDateExpired())
+            {
+                return RedirectToAction("Quit", "Account");
+            }
+
             ViewBag.Title = "Home Page";
 
             return View();
@@ -58,6 +54,12 @@ namespace TwoStuWeb.Controllers
         [Authorize]
         public ActionResult SearchTask(string desc = "")
         {
+            //если дата подошла к концу разлогиниваем пользователя
+            if (IsDateExpired())
+            {
+                return RedirectToAction("Quit", "Account");
+            }
+
             using (SearchWorker searcher = new SearchWorker(new MyDbContext()))
             {
                 
@@ -70,6 +72,13 @@ namespace TwoStuWeb.Controllers
         [HttpGet]
         public ActionResult SearchAnyTask(int? subjectId = null, int? workTypeId = null, int? subjectSectionId = null, bool? needSearch = false)
         {
+            //если дата подошла к концу разлогиниваем пользователя
+            if (IsDateExpired())
+            {
+                return RedirectToAction("Quit", "Account");
+            }
+
+
             ViewBag.SubjectIdParam = subjectId;
             ViewBag.WorkTypeIdParam = workTypeId;
             ViewBag.SubjectSectionIdParam = subjectSectionId;
