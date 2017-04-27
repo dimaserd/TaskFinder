@@ -50,6 +50,7 @@ namespace TwoStu.Logic.Workers
 
                     return new TaskSearchResult
                     {
+                        //
                         SolutionId = x.Id,
                         TaskDesc = (markText) ? x.TaskDesc.MarkManyText(searchWords.ToArray()) : x.TaskDesc,
 

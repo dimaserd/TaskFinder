@@ -17,13 +17,10 @@
     bool needSearch = needSearchParam.HasValue ? needSearchParam.Value : false;
 
 }
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
 <h2>Поиск любого задания по уточнениям по предмету <strong><span id="subjectNameSpan"></span></strong></h2>
 
-<div id="searchResult">
 
-</div>
 
 @using (Html.BeginForm("TasksSearch", "Home", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
@@ -83,6 +80,8 @@
     </div>
 }
 
+
+
 <hr />
 
 <div>
@@ -92,6 +91,14 @@
         @Html.ActionLink("[К списку предметов]", "Index", "Subjects")
     </strong>
 </div>
+
+<hr/>
+
+
+<div id="searchResult">
+
+</div>
+
 
 @section scripts{
 
@@ -399,17 +406,18 @@
 
             if (CheckForm()) {
 
-                MakeLoading();
+                MakeLoading("searchResult");
                 SendToServer();
             }
 
         }
-        function MakeLoading()
+
+        function MakeLoading(elementId)
         {
             var sp = document.createElement("span");
             sp.className = "fa fa-spinner fa-5x fa-spin";
 
-            var searchResult = document.getElementById("searchResult");
+            var searchResult = document.getElementById(elementId);
             searchResult.innerHTML = "";
 
             searchResult.appendChild(sp);
@@ -426,10 +434,7 @@
         }
 
         function SendToServer() {
-            //document.getElementById("hiddenSubmit").click();
-
-            console.log("Поиск");
-
+            
             var searchData =
                 {
                     SubjectId: document.getElementById("SubjectIdList").value,
@@ -447,29 +452,17 @@
 
     <!--Функции посылающие посиковый запрос-->
     <script>
-        function SearchAndUpdateDivAjaxPost(searchData)
-        {
-            console.log("Поисковый объект", searchData);
-
-            $.ajax({
-                type: "GET",
-                url: '/Home/TasksSearch',
-                async: false,
-                data: searchData,
-                success: function (response) {
-                    $("#searchResult").replaceWith(response);
-                }
-            });
-        }
+        
 
         function SearchAndUpdateDivGet(searchData)
         {
             
-            var paramsString = "?SubjectId=" + searchData.SubjectId
-                + "&SubjectSectionId=" + searchData.SubjectSectionId
-                + "&DivisionChildsString=" + searchData.DivisionChildsString
-                + "&WorkTypeId=" + searchData.WorkTypeId
-                + "&TaskDesc=" + searchData.TaskDesc;
+            var paramsString = "?SubjectId=" + encodeURIComponent(searchData.SubjectId)
+                + "&SubjectSectionId=" + encodeURIComponent(searchData.SubjectSectionId)
+                + "&DivisionChildsString=" + encodeURIComponent(searchData.DivisionChildsString)
+                + "&WorkTypeId=" + encodeURIComponent(searchData.WorkTypeId)
+                + "&TaskDesc=" + encodeURIComponent(searchData.TaskDesc);
+
             $('#searchResult').load('/Home/TasksSearch2' + paramsString);
         }
     </script>

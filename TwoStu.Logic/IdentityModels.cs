@@ -75,7 +75,7 @@ namespace TwoStu.Logic.Models
                 return expDate;
             }
 
-            return null;
+            return DateTime.Now.AddYears(10);
         }
         #endregion
     }

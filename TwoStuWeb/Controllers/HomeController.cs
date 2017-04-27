@@ -10,6 +10,7 @@ using TwoStu.Logic.Workers;
 using System.Data.Entity;
 using TwoStu.Logic.Workers.TaskSolutions;
 using TwoStuWeb.Controllers.Base;
+using System.Threading.Tasks;
 
 namespace TwoStuWeb.Controllers
 {
@@ -52,7 +53,7 @@ namespace TwoStuWeb.Controllers
         }
 
         [Authorize]
-        public ActionResult SearchTask(string desc = "")
+        public ActionResult SearchTask()
         {
             //если дата подошла к концу разлогиниваем пользователя
             if (IsDateExpired())
@@ -60,17 +61,25 @@ namespace TwoStuWeb.Controllers
                 return RedirectToAction("Quit", "Account");
             }
 
-            using (SearchWorker searcher = new SearchWorker(new MyDbContext()))
-            {
-                
-                var result = searcher.SearchByTaskDesc(desc: desc, searchFile: false, markText: true);
-                return View(result);
-            }
+            
+            return View();
+            
             
         }
 
+        [Authorize]
+        public ActionResult SearchTaskByDescPartial(string desc = "")
+        {
+            using (SearchWorker searcher = new SearchWorker(new MyDbContext()))
+            {
+
+                var result = searcher.SearchByTaskDesc(desc: desc, searchFile: false, markText: true);
+                return PartialView(result);
+            }
+        }
+
         [HttpGet]
-        public ActionResult SearchAnyTask(int? subjectId = null, int? workTypeId = null, int? subjectSectionId = null, bool? needSearch = false)
+        public async Task<ActionResult> SearchAnyTask(int? subjectId = null, int? workTypeId = null, int? subjectSectionId = null, bool? needSearch = false)
         {
             //если дата подошла к концу разлогиниваем пользователя
             if (IsDateExpired())
@@ -84,9 +93,9 @@ namespace TwoStuWeb.Controllers
             ViewBag.SubjectSectionIdParam = subjectSectionId;
             ViewBag.NeedSearchParam = needSearch;
 
-            ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
+            ViewBag.WorkTypeId = new SelectList(await Db.WorkTypes.ToListAsync(), "Id", "Name");
 
-            ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
+            ViewBag.SubjectId = new SelectList(await Db.Subjects.ToListAsync(), "Id", "Name");
 
             return View();
         }

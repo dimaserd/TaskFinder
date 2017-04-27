@@ -95,3 +95,4 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\bin\Debug\TwoStu.Setti
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.t.resources
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.Spat.resources
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.t1.resources
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.date1.resources

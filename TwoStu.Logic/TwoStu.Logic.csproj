@@ -114,6 +114,10 @@
     <Compile Include="Migrations\201703160741427_t1.Designer.cs">
       <DependentUpon>201703160741427_t1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704270642036_date1.cs" />
+    <Compile Include="Migrations\201704270642036_date1.Designer.cs">
+      <DependentUpon>201704270642036_date1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\SearchParamsModel.cs" />
@@ -179,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703160741427_t1.resx">
       <DependentUpon>201703160741427_t1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704270642036_date1.resx">
+      <DependentUpon>201704270642036_date1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

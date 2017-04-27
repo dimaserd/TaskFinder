@@ -63,7 +63,8 @@ namespace TwoStuWeb.Controllers.Base
                 return false;
             }
 
-            return expDate > dateNow;
+            //если текущая дата больше чем дата окончания
+            return dateNow > expDate;
         }
 
         protected WorkerResult UserHasRightsToBeThere()

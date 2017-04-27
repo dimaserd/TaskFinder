@@ -1,0 +1,44 @@
+﻿@using TwoStu.Logic.Models.Search
+@using Extensions.String
+@model IEnumerable<TaskSearchResult>
+@{
+    ViewBag.Title = "SearchTaskByDescPartial";
+}
+
+<div class="col-md-12">
+
+    @if (Model != null && Model.Count() > 0)
+    {
+        <table class="table table-bordered" id="deviceTable">
+            <thead>
+                <tr>
+                    <th>Найдено</th>
+                    <th>Условие</th>
+                    <th>Скачать</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (TaskSearchResult result in Model)
+                {
+                    <tr>
+                        @{
+                            string d = $"{(int)(result.DescPercentage * 100)}%";
+                        }
+
+                        <th>@d</th>
+                        <th>@result.TaskDesc.ToHtml()</th>
+                        <th><a href="/File/DownloadByKey?key=@result.SolutionId">[Скачать]</a></th>
+                    </tr>
+                  }
+
+            </tbody>
+        </table>
+                            }
+                            else
+                            {
+                                <strong>Ничего не найдено!</strong>
+                            }
+
+</div>
+
