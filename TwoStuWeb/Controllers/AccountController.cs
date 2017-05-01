@@ -10,6 +10,7 @@ using TwoStuWeb;
 using TwoStu.Logic.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using TwoStu.Logic;
+using TwoStu.Logic.Workers.Temporary;
 
 namespace WebApplication1.Controllers
 {
@@ -56,6 +57,14 @@ namespace WebApplication1.Controllers
         }
 
         [AllowAnonymous]
+        public string Files()
+        {
+            new TaskSolutionsFixer().FixSolutions();
+
+            return "Готово!";
+        }
+
+        [AllowAnonymous]
         public async Task<string> Dev()
         {
             #region Добавление ролей в систему
@@ -73,13 +82,18 @@ namespace WebApplication1.Controllers
             #endregion
 
             string adminEmail = "dimaserd84@gmail.com";
+            string oldPass = "testpass";
+            string newPass = "findtasktestpass";
+
             ApplicationUser maybeAdmin = UserManager.FindByEmail(adminEmail);
+
+
 
             if(maybeAdmin == null)
             {
                 ApplicationUser admin = new ApplicationUser
                 {
-                    Password = "testpass",
+                    Password = "findtasktestpass",
                     Email = adminEmail,
                     EmailConfirmed = true,
                     UserName = adminEmail,
@@ -90,6 +104,11 @@ namespace WebApplication1.Controllers
                 {
                     UserManager.AddToRole(admin.Id, "Admin");
                 }
+            }
+            else
+            {
+                //если пользователь уже существует
+                await UserManager.ChangePasswordAsync(maybeAdmin.Id, oldPass, newPass);
             }
             
             return "готово";

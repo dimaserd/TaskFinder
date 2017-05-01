@@ -97,8 +97,8 @@ namespace TwoStu.Logic.Models
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
 
             // Здесь добавьте настраиваемые утверждения пользователя
-            userIdentity.AddClaim(new Claim("Subjects", this.Subjects));
-            userIdentity.AddClaim(new Claim("ExpirationDate", this.ExpirationDate.ToString()));
+            userIdentity.AddClaim(new Claim("Subjects", (Subjects == null) ? string.Empty: Subjects));
+            userIdentity.AddClaim(new Claim("ExpirationDate", (ExpirationDate== null) ? string.Empty : ExpirationDate.ToString()));
 
             return userIdentity;
         }

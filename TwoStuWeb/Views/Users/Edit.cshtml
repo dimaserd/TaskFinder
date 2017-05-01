@@ -47,13 +47,20 @@
 
         
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        
+        @Html.HiddenFor(m => m.SecurityStamp)
+        @Html.HiddenFor(m => m.AccessFailedCount)
+        @Html.HiddenFor(m => m.Claims)
+        @Html.HiddenFor(m => m.EmailConfirmed)
+        @Html.HiddenFor(m => m.LockoutEnabled)
+        @Html.HiddenFor(m => m.LockoutEndDateUtc)
+        @Html.HiddenFor(m => m.PasswordHash)
+        @Html.HiddenFor(m => m.PhoneNumber)
+        @Html.HiddenFor(m => m.PhoneNumberConfirmed)
+        @Html.HiddenFor(m => m.Subjects)
+
+        @Html.HiddenFor(m => m.UserName)
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

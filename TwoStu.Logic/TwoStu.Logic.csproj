@@ -72,6 +72,7 @@
     <Compile Include="Entities\Subject.cs" />
     <Compile Include="Entities\TaskSolution.cs" />
     <Compile Include="Entities\TaskSolutionVersion.cs" />
+    <Compile Include="Entities\TheFile.cs" />
     <Compile Include="Entities\WorkType.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Migrations\201701091451106_Init.cs" />
@@ -118,6 +119,10 @@
     <Compile Include="Migrations\201704270642036_date1.Designer.cs">
       <DependentUpon>201704270642036_date1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705012018010_dbFiles.cs" />
+    <Compile Include="Migrations\201705012018010_dbFiles.Designer.cs">
+      <DependentUpon>201705012018010_dbFiles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\SearchParamsModel.cs" />
@@ -138,6 +143,7 @@
     <Compile Include="Workers\String\StringWorker.cs" />
     <Compile Include="Workers\TaskSolutionsWorker.cs" />
     <Compile Include="Workers\TaskSolutions\TaskSolutionSearcher.cs" />
+    <Compile Include="Workers\Temporary\TaskSolutionsFixer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -186,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704270642036_date1.resx">
       <DependentUpon>201704270642036_date1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705012018010_dbFiles.resx">
+      <DependentUpon>201705012018010_dbFiles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,12 @@ namespace TwoStu.Logic.Entities
         [JsonIgnore]
         public virtual TaskSolution FromTaskSolution { get; set; }
 
+
+        [ForeignKey("File")]
+        public int FileId { get; set; }
+        [JsonIgnore]
+        public virtual TheFile File { get; set; }
+
         /// <summary>
         /// Флаг по которому будет определяться является ли данная версия решения активной
         /// </summary>
