@@ -77,7 +77,8 @@ namespace TwoStuWeb.Controllers
                 {
                     Email = model.Email,
                     UserName = model.Email,
-                    Password = model.Password
+                    Password = model.Password,
+                    EmailConfirmed = true
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 
