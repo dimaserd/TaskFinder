@@ -20,7 +20,5 @@ namespace TwoStu.Logic
 
         public DbSet<WorkType> WorkTypes { get; set; }
 
-        public DbSet<TheFile> TheFiles { get; set; }
-
     }
 }

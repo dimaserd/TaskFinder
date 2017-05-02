@@ -11,17 +11,20 @@ using TwoStu.Logic.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using TwoStu.Logic;
 using TwoStu.Logic.Workers.Temporary;
+using System.Web.Hosting;
 
 namespace WebApplication1.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        #region Поля
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private RoleManager<IdentityRole> _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new MyDbContext()));
+        #endregion
 
-
+        #region Конструкторы
         public AccountController()
         {
         }
@@ -31,7 +34,9 @@ namespace WebApplication1.Controllers
             UserManager = userManager;
             SignInManager = signInManager;
         }
+        #endregion
 
+        #region Свойства
         public ApplicationSignInManager SignInManager
         {
             get
@@ -55,13 +60,52 @@ namespace WebApplication1.Controllers
                 _userManager = value;
             }
         }
+        #endregion
+
+        #region Http Обработчики
+
+
+        #region Методы для починки
+
+        [AllowAnonymous]
+        public string Difference()
+        {
+            return $"{new TaskSolutionsFixer().GetVersionsMinusSolutions()}";
+        }
+
+        [AllowAnonymous]
+        public string SolutionsWithNoFiles()
+        {
+            return $"{new TaskSolutionsFixer().GetSolutionsWithNoFiles().Count()}";
+        }
+
+        [AllowAnonymous]
+        public string CountFiles()
+        {
+            return $"{System.IO.Directory.GetFiles(HostingEnvironment.MapPath("~/Files")).Count()}";
+        }
+
+        [AllowAnonymous]
+        public string Drop()
+        {
+            new TaskSolutionsFixer().DropVersions();
+
+            return $"Готово!";
+        }
 
         [AllowAnonymous]
         public string Files()
         {
-            new TaskSolutionsFixer().FixSolutions();
+            
 
-            return "Готово!";
+            return $"{new TaskSolutionsFixer().FixSolutions()}";
+        }
+
+        [AllowAnonymous]
+        public string NotLocalSolutions()
+        {
+
+            return $"{new TaskSolutionsFixer().GetNotLocalSolutions().Count()}";
         }
 
         [AllowAnonymous]
@@ -114,6 +158,7 @@ namespace WebApplication1.Controllers
             return "готово";
         }
 
+        #endregion
 
         #region Login methods
         //
@@ -483,6 +528,8 @@ namespace WebApplication1.Controllers
             return View();
         }
 
+        #endregion
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -502,6 +549,7 @@ namespace WebApplication1.Controllers
 
             base.Dispose(disposing);
         }
+
 
         #region Вспомогательные приложения
         // Используется для защиты от XSRF-атак при добавлении внешних имен входа

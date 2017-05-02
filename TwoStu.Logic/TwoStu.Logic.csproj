@@ -50,9 +50,8 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -72,7 +71,6 @@
     <Compile Include="Entities\Subject.cs" />
     <Compile Include="Entities\TaskSolution.cs" />
     <Compile Include="Entities\TaskSolutionVersion.cs" />
-    <Compile Include="Entities\TheFile.cs" />
     <Compile Include="Entities\WorkType.cs" />
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Migrations\201701091451106_Init.cs" />
@@ -122,6 +120,14 @@
     <Compile Include="Migrations\201705012018010_dbFiles.cs" />
     <Compile Include="Migrations\201705012018010_dbFiles.Designer.cs">
       <DependentUpon>201705012018010_dbFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705012049072_dsrtwe.cs" />
+    <Compile Include="Migrations\201705012049072_dsrtwe.Designer.cs">
+      <DependentUpon>201705012049072_dsrtwe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705020559037_d.cs" />
+    <Compile Include="Migrations\201705020559037_d.Designer.cs">
+      <DependentUpon>201705020559037_d.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
@@ -195,6 +201,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705012018010_dbFiles.resx">
       <DependentUpon>201705012018010_dbFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705012049072_dsrtwe.resx">
+      <DependentUpon>201705012049072_dsrtwe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705020559037_d.resx">
+      <DependentUpon>201705020559037_d.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

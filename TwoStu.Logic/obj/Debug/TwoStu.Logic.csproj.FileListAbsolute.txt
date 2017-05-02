@@ -97,3 +97,5 @@ C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.t1.resources
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.date1.resources
 C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.dbFiles.resources
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.dsrtwe.resources
+C:\Users\dmitryserdyukov\Projects\TaskFinder\TwoStu.Logic\obj\Debug\TwoStu.Logic.Migrations.d.resources
