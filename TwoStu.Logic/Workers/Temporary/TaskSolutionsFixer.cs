@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using TwoStu.Logic.Entities;
 using System.Data.Entity;
+using System.Text;
 
 namespace TwoStu.Logic.Workers.Temporary
 {
@@ -17,8 +18,8 @@ namespace TwoStu.Logic.Workers.Temporary
         int countSetting = 250;
 
         #endregion
-
-         MyDbContext Db
+        #region Свойства
+        MyDbContext Db
         {
             get
             {
@@ -29,7 +30,9 @@ namespace TwoStu.Logic.Workers.Temporary
                 return _db;
             }
         }
+        #endregion
 
+        #region Публичные методы
         public int GetVersionsMinusSolutions()
         {
             List<TaskSolution> solutions = Db.TaskSolutions.ToList();
@@ -39,6 +42,9 @@ namespace TwoStu.Logic.Workers.Temporary
             return (solutionVersions.Count - solutions.Count);
         }
 
+        /// <summary>
+        /// Удаление всех версий решения из базы
+        /// </summary>
         public void DropVersions()
         {
             Db.TaskSolutionVersions.RemoveRange(Db.TaskSolutionVersions.ToList());
@@ -46,13 +52,14 @@ namespace TwoStu.Logic.Workers.Temporary
             Db.SaveChanges();
         }
 
+        
         public List<TaskSolution> GetSolutionsWithNoFiles()
         {
             List<TaskSolution> solutions = Db.TaskSolutions.ToList();
 
             return solutions.Where(x =>
             {
-                return File.Exists(x.FilePath);
+                return !File.Exists(x.FilePath);
             }).ToList();
         }
 
@@ -97,8 +104,29 @@ namespace TwoStu.Logic.Workers.Temporary
             }).Where(x => x != null);
         }
 
+        public string GetSolutionsWithVersionsInfo()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            List <TaskSolution> solutions = GetSolutionsWithVersions().OrderByDescending(t => t.Versions.Count()).ToList();
+
+            foreach(TaskSolution solution in solutions)
+            {
+                sb.Append($"{solution.Id} : {solution.Versions.Count} \n");
+            }
+
+            return sb.ToString();
+        }
+
+        public int GetSolutionsWithVersion()
+        {
+            return Db.TaskSolutions.Include(t => t.Versions).ToList().Where(t => t.Versions.Count > 0).ToList().Count;
+        }
+        #endregion
+
+
         #region Вспомогательные методы    
-        
+
 
         TaskSolutionVersion GetTaskSolutionVersion(TaskSolution solution)
         {
@@ -132,6 +160,15 @@ namespace TwoStu.Logic.Workers.Temporary
                
                 TrimmedTaskDesc = solution.TrimmedTaskDesc,
             };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        List<TaskSolution> GetSolutionsWithVersions()
+        {
+            return Db.TaskSolutions.Include(x => x.Versions).ToList();
         }
 
         #endregion

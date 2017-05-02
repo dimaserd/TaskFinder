@@ -415,7 +415,7 @@
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll">
-      <publishTime>05/02/2017 10:02:40</publishTime>
+      <publishTime>05/02/2017 12:54:16</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll.config">
       <publishTime>11/14/2016 20:54:06</publishTime>
@@ -424,7 +424,7 @@
       <publishTime>03/14/2017 11:57:48</publishTime>
     </File>
     <File Include="bin/TwoStuWeb.dll">
-      <publishTime>05/02/2017 10:02:49</publishTime>
+      <publishTime>05/02/2017 12:54:28</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>

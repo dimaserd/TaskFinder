@@ -73,6 +73,19 @@ namespace WebApplication1.Controllers
             return $"{new TaskSolutionsFixer().GetVersionsMinusSolutions()}";
         }
 
+
+        [AllowAnonymous]
+        public string Info()
+        {
+            return $"{new TaskSolutionsFixer().GetSolutionsWithVersionsInfo()}";
+        }
+
+        [AllowAnonymous]
+        public string SolutionsWithVersionsInfo()
+        {
+            return $"{new TaskSolutionsFixer().GetSolutionsWithVersion()}";
+        }
+
         [AllowAnonymous]
         public string SolutionsWithNoFiles()
         {
@@ -96,8 +109,6 @@ namespace WebApplication1.Controllers
         [AllowAnonymous]
         public string Files()
         {
-            
-
             return $"{new TaskSolutionsFixer().FixSolutions()}";
         }
 

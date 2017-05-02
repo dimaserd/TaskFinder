@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TwoStu.Settings.Enumerations;
+﻿using TwoStu.Settings.Enumerations;
 
 namespace TwoStu.Settings
 {

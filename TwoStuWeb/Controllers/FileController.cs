@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using TwoStu.Logic;
 using TwoStu.Logic.Entities;
+using System.Data.Entity;
 
 namespace TwoStuWeb.Controllers
 {
@@ -10,11 +11,32 @@ namespace TwoStuWeb.Controllers
     public class FileController : Controller
     {
         [HttpGet]
-        public ActionResult DownloadByKey(string key)
+        public ActionResult DownloadByKey(string key, bool fromVersion = false)
         {
             if(!Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
+            }
+
+            if(fromVersion)
+            {
+                using (MyDbContext context = new MyDbContext())
+                {
+                    TaskSolution solution = context.TaskSolutions.Include(t => t.Versions).FirstOrDefault(t => t.Id == key);
+                    if (solution == null || solution.Versions.Count == 0)
+                    {
+                        return new HttpStatusCodeResult(404);
+                    }
+
+                    TaskSolutionVersion version = solution.Versions.FirstOrDefault(t => t.IsActive);
+
+                    if(version == null)
+                    {
+                        return new HttpStatusCodeResult(404);
+                    }
+
+                    return File(version.FileData, version.FileMymeType, version.FileName);
+                }
             }
 
             using (MyDbContext context = new MyDbContext())
@@ -28,5 +50,7 @@ namespace TwoStuWeb.Controllers
                 return File(a.FilePath, MimeMapping.GetMimeMapping(a.FilePath), a.FileName);
             }
         }
+
+
     }
 }
