@@ -11,13 +11,14 @@ namespace TwoStuWeb.Controllers
     public class FileController : Controller
     {
         [HttpGet]
-        public ActionResult DownloadByKey(string key, bool fromVersion = false)
+        public ActionResult DownloadByKey(string key, bool fromVersion = true)
         {
             if(!Request.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
 
+            //если флаг то через версии
             if(fromVersion)
             {
                 using (MyDbContext context = new MyDbContext())
@@ -50,7 +51,6 @@ namespace TwoStuWeb.Controllers
                 return File(a.FilePath, MimeMapping.GetMimeMapping(a.FilePath), a.FileName);
             }
         }
-
 
     }
 }

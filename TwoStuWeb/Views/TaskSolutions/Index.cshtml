@@ -37,7 +37,10 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
+
+    string _class = (item.Versions.Count == 0) ? "warning" : "success";
+
+    <tr class="@_class">
         
         <td>
             <strong>@item.TaskDesc</strong>

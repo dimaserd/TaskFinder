@@ -47,9 +47,10 @@ namespace TwoStuWeb.Controllers
             List<TaskSolution> model = await Worker.Db.TaskSolutions
                 .Include(x => x.TaskSubject)
                 .Include(x => x.TaskSubjectSection)
+                .Include(x => x.Versions)
                 .Include(x => x.SubjectDivisionChilds.Select(y => y.SubjectDivisionParent))
                 .ToListAsync();
-            return View(model.OrderByDescending(x => x.CreationDate));
+            return View(model.OrderByDescending(x => x.CreationDate).OrderBy(x => x.Versions.Count));
         }
 
         // GET: TaskSolutions/Details/5
