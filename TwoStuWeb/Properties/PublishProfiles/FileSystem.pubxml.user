@@ -415,7 +415,7 @@
       <publishTime>01/28/2015 04:04:30</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll">
-      <publishTime>05/03/2017 09:47:06</publishTime>
+      <publishTime>05/12/2017 13:54:24</publishTime>
     </File>
     <File Include="bin/TwoStu.Logic.dll.config">
       <publishTime>11/14/2016 20:54:06</publishTime>
@@ -424,7 +424,7 @@
       <publishTime>05/03/2017 09:47:04</publishTime>
     </File>
     <File Include="bin/TwoStuWeb.dll">
-      <publishTime>05/03/2017 09:56:02</publishTime>
+      <publishTime>05/12/2017 13:54:31</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -688,7 +688,7 @@
       <publishTime>03/16/2017 10:25:21</publishTime>
     </File>
     <File Include="Views/TaskSolutions/Index.cshtml">
-      <publishTime>05/03/2017 09:46:24</publishTime>
+      <publishTime>05/12/2017 13:23:24</publishTime>
     </File>
     <File Include="Views/Users/Create.cshtml">
       <publishTime>02/27/2017 00:27:01</publishTime>

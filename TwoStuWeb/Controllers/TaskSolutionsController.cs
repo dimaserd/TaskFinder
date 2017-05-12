@@ -42,15 +42,28 @@ namespace TwoStuWeb.Controllers
 
         #region HttpController methods
         // GET: TaskSolutions
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int page = 1)
         {
+            DateTime startDate = DateTime.Now;
+
             List<TaskSolution> model = await Worker.Db.TaskSolutions
+                .OrderByDescending(x => x.CreationDate)
+                .Skip((page - 1) * 100)
+                .Take(100)
                 .Include(x => x.TaskSubject)
                 .Include(x => x.TaskSubjectSection)
                 .Include(x => x.Versions)
                 .Include(x => x.SubjectDivisionChilds.Select(y => y.SubjectDivisionParent))
                 .ToListAsync();
-            return View(model.OrderByDescending(x => x.CreationDate).OrderBy(x => x.Versions.Count));
+
+            DateTime finishDate = DateTime.Now;
+
+            double? milliSecs = (finishDate - startDate).TotalMilliseconds;
+
+            ViewData["milliSecs"] = milliSecs;
+            ViewData["page"] = page;
+
+            return View(model.OrderBy(x => x.Versions.Count));
         }
 
         // GET: TaskSolutions/Details/5
@@ -140,7 +153,7 @@ namespace TwoStuWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreatePhysics(CreatePhysicsSolutionModel model)
         {
-            int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
+            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
 
             WorkerResult hasRightsResult = await UserHasRightsForThatSubjectAsync(physicsId);
             if (!hasRightsResult.Succeeded)
@@ -156,7 +169,8 @@ namespace TwoStuWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                WorkerResult result = await Worker.CreatePhysicsSolution(model);
+                //WorkerResult result = await Worker.CreatePhysicsSolution(model);
+                WorkerResult result = await Worker.CreatePhysicsSolutionNew(model);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");

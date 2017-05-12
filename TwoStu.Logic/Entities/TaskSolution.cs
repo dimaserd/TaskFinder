@@ -10,6 +10,15 @@ namespace TwoStu.Logic.Entities
 {
     public class TaskSolution
     {
+        #region Конструкторы
+        public TaskSolution()
+        {
+            SubjectDivisionChilds = new List<SubjectDivisionChild>();
+            Versions = new List<TaskSolutionVersion>();
+        }
+
+        #endregion
+
         [Key]
         public string Id { get; set; }
 
@@ -31,7 +40,8 @@ namespace TwoStu.Logic.Entities
 
         public string FileName { get; set; }
 
-        #region Foreign Keys Properties
+        #region Отношения к коллекциям
+
         [Required]
         [ForeignKey("TypeOfWork")]
         public int WorkTypeId { get; set; }
@@ -50,6 +60,7 @@ namespace TwoStu.Logic.Entities
         public int SubjectSectionId { get; set; }
         [JsonIgnore]
         public virtual SubjectSection TaskSubjectSection { get; set; }
+
 
         /// <summary>
         /// Сущности TaskSolution и SubjectDivisionChild связаны многое ко многим
@@ -83,6 +94,24 @@ namespace TwoStu.Logic.Entities
                 ExistingVersions = solution.Versions.ToList(),
 
                 SubjectDivisionsWithChilds = subjectDivisionsWithChilds,
+            };
+        }
+
+        public static TaskSolution ToTaskSolution(this CreateSolutionModel model, List<SubjectDivisionChild> solutionDivisionChilds, string textInFile)
+        {
+            return new TaskSolution
+            {
+                Id = Guid.NewGuid().ToString(),
+                CreationDate = DateTime.Now,
+                TaskDesc = model.TaskDesc,
+                SubjectId = model.SubjectId,
+                SubjectSectionId = model.SubjectSectionId,
+                WorkTypeId = model.WorkTypeId,
+                //FilePath = filePath,
+                FileName = model.File.FileName,
+                SubjectDivisionChilds = solutionDivisionChilds,
+                //Mark = null,
+                TaskDescFromFile = textInFile,
             };
         }
     }

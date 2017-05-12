@@ -25,7 +25,72 @@ namespace TwoStu.Logic.Workers
         public MyDbContext Db { get; set; }
         #endregion
 
-        #region Public Methods
+        #region Публичные методы
+
+        #region Создание решений
+
+        #region Методы с физикой
+        
+        
+        /// <summary>
+        /// Новая версия метода создания решений
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<WorkerResult> CreatePhysicsSolutionNew(CreatePhysicsSolutionModel model)
+        {
+            int wordsCount = model.TaskDesc.GetWordsFromText().Count;
+            int wordsSetting = 20 - 12;
+
+            //проверяем на кол-во слов в решении с настройкой
+            if (wordsCount < wordsSetting)
+            {
+                return new WorkerResult
+                    ("Слишком мало слов в условии!" +
+                    $"Проверьте условие! Найдено слов {wordsCount} из нужных {wordsSetting}"
+                    );
+            }
+
+            // получаем текст из файла в переменную textInFile
+            string textInFile = new FileWorker().GetTextFromFile(model.File);
+
+            //проверяем не существует ли уже решение с таким условием и файлом решения
+            string errorText;
+            if (IsThereAnyEqualSolution(model, textInFile, out errorText))
+            {
+                return new WorkerResult(errorText);
+            }
+
+            //если программе не удалось найти текст 
+            //из файла то мы должны
+            //просто записать имеющиеся результаты
+            if (string.IsNullOrEmpty(textInFile))
+            {
+                //записываем сущность в базу данных без проверки текста решения 
+                //и файла 
+                return await CreatePhysicsSolutionWithDescOrNotNew(model, textInFile);
+            }
+            //иначе если программе удалось вытащить текст из файла
+            //например docx то нужно прогнать проверку на введенное условие
+            else
+            {
+                //проверяем совпадения слов в введеном тексте
+                //и в том который достали из файла
+                decimal percents;
+                if (CheckSolutionsTexts(model.TaskDesc, textInFile, out percents))
+                {
+                    return await CreatePhysicsSolutionWithDescOrNotNew(model, textInFile);
+                }
+                else
+                {
+                    //возвращаем причину того почему мы не можем записать это решение
+                    //в банк решений
+                    return new WorkerResult("Процент совпадения введенного условия и найденного в файле "
+                        + $"менее 99 процентов а точнее {percents}");
+
+                }
+            }
+        }
 
         public async Task<WorkerResult> CreatePhysicsSolution(CreatePhysicsSolutionModel model)
         {
@@ -47,7 +112,7 @@ namespace TwoStu.Logic.Workers
 
             //проверяем не существует ли уже заказ с таким условием и файлом решения
             string errorText;
-            if(IsThereAnyEqualOrder(model, textInFile, out errorText))
+            if(IsThereAnyEqualSolution(model, textInFile, out errorText))
             {
                 return new WorkerResult(errorText);
             }
@@ -91,7 +156,9 @@ namespace TwoStu.Logic.Workers
 
             
         }
-        
+
+        #endregion
+
         /// <summary>
         /// Здесь нужно проверять утонения на принадлежность к разделу
         /// предмета а разделы предмета на принадлежность к самому предмету
@@ -121,7 +188,6 @@ namespace TwoStu.Logic.Workers
                 SubjectDivisionChilds = solutionDivisionChilds,
                 Mark = null,
                 TaskDescFromFile = textInFile,
-                
             };
 
             //добавляем в базу
@@ -141,6 +207,8 @@ namespace TwoStu.Logic.Workers
                 Succeeded = true
             };
         }
+        #endregion
+
 
         public async Task<WorkerResult> DeleteSolution(string id)
         {
@@ -168,7 +236,7 @@ namespace TwoStu.Logic.Workers
         }
         #endregion
 
-        #region Help Methods
+        #region Вспомогательные методы
 
         public async Task<List<SubjectDivisionChild>> GetSubjectDivisionsFromString(string divisionsString)
         {
@@ -177,7 +245,7 @@ namespace TwoStu.Logic.Workers
             return allChilds.GetSubjectDivisionsFromString(divisionsString).ToList();
         }
 
-        #region Physics methods
+        #region Методы с физикой
         bool CheckSolutionsTexts(string userSolution, string fileSolution, out decimal percents)
         {
             List<string> userWords = userSolution.GetWordsFromText();
@@ -225,8 +293,48 @@ namespace TwoStu.Logic.Workers
                 Succeeded = true
             };
         }
-        
-        bool IsThereAnyEqualOrder(CreatePhysicsSolutionModel model, string textFromFile, out string errorText)
+
+        /// <summary>
+        /// Новая версия
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="filePath"></param>
+        /// <param name="textFromFile"></param>
+        /// <returns></returns>
+        async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNotNew(CreatePhysicsSolutionModel model, string textFromFile)
+        {
+            //получаю Id физики
+            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
+            
+            //получаю решение из модели
+            TaskSolution t = model.ToTaskSolution(physicsId, textFromFile);
+
+            //получаю первую версию решения
+            TaskSolutionVersion firstVersion = model.ToTaskSolutionVersion(textFromFile);
+
+            //добавление версии к решению
+            t.Versions.Add(firstVersion);
+            
+            //добавляю решение с версией в базу данных
+            Db.TaskSolutions.Add(t);
+            
+            //сохранение изменений в базе
+            await Db.SaveChangesAsync();
+
+            return new WorkerResult
+            {
+                Succeeded = true
+            };
+        }
+
+        /// <summary>
+        /// Проверяет систему на наличие такого же решения
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="textFromFile"></param>
+        /// <param name="errorText"></param>
+        /// <returns></returns>
+        bool IsThereAnyEqualSolution(CreatePhysicsSolutionModel model, string textFromFile, out string errorText)
         {
             //если текст из файла пустой
             //то есть его не удалось прочесть
@@ -260,6 +368,8 @@ namespace TwoStu.Logic.Workers
             errorText = "Ошибок нет!";
             return false;
         }
+
+        
         #endregion
 
         #endregion

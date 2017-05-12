@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
+using TwoStu.Logic.Entities;
+using TwoStu.Logic.Workers;
 
 namespace TwoStu.Logic.Models
 {
@@ -29,5 +32,29 @@ namespace TwoStu.Logic.Models
         public HttpPostedFileBase File { get; set; }
     }
 
-    
+    public static class CreatePhysicsSolutionModelExtensions
+    {
+        public static TaskSolution ToTaskSolution(this CreatePhysicsSolutionModel model, int physicsId, string textFromFile)
+        {
+            return new TaskSolution
+            {
+                Id = Guid.NewGuid().ToString(),
+                SubjectId = physicsId,
+                SubjectSectionId = model.SubjectSectionId,
+                CreationDate = DateTime.Now,
+
+                FileName = model.File.FileName,
+                //Mark = mark,
+                TaskDesc = model.TaskDesc,
+                WorkTypeId = model.WorkTypeId,
+                TrimmedTaskDesc = StringWorker.RemoveSymbols(model.TaskDesc).ToLowerInvariant(),
+                TaskDescFromFile = textFromFile,
+                //то записываем без слов полученных из файла
+                //FilePath = filePath,
+
+            };
+        }
+    }
+
+
 }

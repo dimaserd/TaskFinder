@@ -6,9 +6,16 @@
 @{
     ViewBag.Title = "Все загруженные решения";
     GlyphiconRenderer GISigns = new GlyphiconRenderer();
+
+    int? page = ViewData["page"] as int?;
+
+    int nextPage = page.Value + 1;
+    int previousPage = page.Value - 1;
+
+    double? milliSecs =  ViewData["milliSecs"] as double?;
 }
 
-<h2>Список загруженных решений @GISigns.Count(Model.Count()).ToHtml()</h2>
+<h2>Список загруженных решений @GISigns.Count(Model.Count()).ToHtml() [@milliSecs.Value мс]</h2>
 
 <p>
     <strong>
@@ -108,3 +115,10 @@
 }
 
 </table>
+
+<nav>
+    <ul class="pager">
+        <li class="previous"><a href=""/TaskSolutions/Index?page=@previousPage""><span aria-hidden="true">&larr;</span> Назад</a></li>
+        <li class="next"><a href="/TaskSolutions/Index?page=@nextPage">Вперед <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+</nav>

@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Web;
+using TwoStu.Logic.Models;
+using TwoStu.Logic.Workers;
 
 namespace TwoStu.Logic.Entities
 {
@@ -48,5 +52,42 @@ namespace TwoStu.Logic.Entities
         /// </summary>
         public virtual IList<SubjectDivisionChild> SubjectDivisionChilds { get; set; }
 
+    }
+
+    public static class TaskSolutionVersionExtensions
+    {
+        public static TaskSolutionVersion ToTaskSolutionVersion(this CreatePhysicsSolutionModel model, string textFromFile, bool isActive = true)
+        {
+            return new TaskSolutionVersion
+            {
+                Id = 0,
+                FileData = GetDataFromHttpPostedFileBase(model.File),
+                FileMymeType = model.File.ContentType,
+                FileName = model.File.FileName,
+                FilePath = null,
+                IsActive = isActive,
+                TaskDesc = model.TaskDesc,
+                TaskDescFromFile = textFromFile,
+                TrimmedTaskDesc = StringWorker.RemoveSymbols(model.TaskDesc).ToLowerInvariant(),
+                VersionDate = DateTime.Now,
+            };
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        static byte[] GetDataFromHttpPostedFileBase(HttpPostedFileBase file)
+        {
+            byte[] myFile;
+            using (var memoryStream = new MemoryStream())
+            {
+                file.InputStream.CopyTo(memoryStream);
+                myFile = memoryStream.ToArray();// or use .GetBuffer() as suggested by Morten Anderson
+                return myFile;
+            }
+        }
     }
 }
