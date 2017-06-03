@@ -172,10 +172,11 @@ namespace TwoStuWeb.Controllers
 
             
 
+
             if (ModelState.IsValid)
             {
                 //WorkerResult result = await Worker.CreatePhysicsSolution(model);
-                WorkerResult result = await Worker.CreatePhysicsSolutionNew(model);
+                WorkerResult result = await Worker.CreatePhysicsSolutionAsync(model);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");
