@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models;
 using TwoStu.Logic.Models.TaskSolutions;
+using TwoStu.Logic.Models.TaskSolutions.Base;
 using TwoStu.Logic.Models.WorkerResults;
 using TwoStu.Logic.Workers.String;
 
@@ -68,7 +69,7 @@ namespace TwoStu.Logic.Workers
             {
                 //записываем сущность в базу данных без проверки текста решения 
                 //и файла 
-                return await CreatePhysicsSolutionWithDescOrNotNew(model, textInFile);
+                return await CreatePhysicsSolutionWithDescOrNot(model, textInFile);
             }
             //иначе если программе удалось вытащить текст из файла
             //например docx то нужно прогнать проверку на введенное условие
@@ -79,7 +80,7 @@ namespace TwoStu.Logic.Workers
                 decimal percents;
                 if (CheckSolutionsTexts(model.TaskDesc, textInFile, out percents))
                 {
-                    return await CreatePhysicsSolutionWithDescOrNotNew(model, textInFile);
+                    return await CreatePhysicsSolutionWithDescOrNot(model, textInFile);
                 }
                 else
                 {
@@ -92,71 +93,7 @@ namespace TwoStu.Logic.Workers
             }
         }
 
-        public async Task<WorkerResult> CreatePhysicsSolution(CreatePhysicsSolutionModel model)
-        {
-            int wordsCount = model.TaskDesc.GetWordsFromText().Count;
-            int wordsSetting = 20 - 12;
-
-            if (wordsCount < wordsSetting)
-            {
-                return new WorkerResult
-                    ("Слишком мало слов в условии!" + 
-                    $"Проверьте условие! Найдено слов {wordsCount} из нужных {wordsSetting}"
-                    ); 
-            }
-
-            //сохраняем файл и получаем текст из файла
-            //в переменную textInFile
-            string textInFile;
-            string filePath = new FileWorker().SaveFileToSolution(model.File, out textInFile);
-
-            //проверяем не существует ли уже заказ с таким условием и файлом решения
-            string errorText;
-            if(IsThereAnyEqualSolution(model, textInFile, out errorText))
-            {
-                return new WorkerResult(errorText);
-            }
-
-            //если программе не удалось найти текст 
-            //из файла то мы должны
-            //просто записать имеющиеся результаты
-            if(string.IsNullOrEmpty(textInFile))
-            {
-                //записываем сущность в базу данных без проверки текста решения 
-                //и файла 
-                return await CreatePhysicsSolutionWithDescOrNot(model, filePath, textInFile);
-            }
-            //иначе если программе удалось вытащить текст из файла
-            //например docx то нужно прогнать проверку на введенное условие
-            else
-            {
-                //проверяем совпадения слов в введеном тексте
-                //и в том который достали из файла
-                decimal percents;
-                if(CheckSolutionsTexts(model.TaskDesc, textInFile, out percents))
-                {
-                    return await CreatePhysicsSolutionWithDescOrNot(model, filePath, textInFile);
-                }
-                else
-                {
-                    //удаляем только что записанный файл из системы
-                    System.IO.File.Delete(filePath);
-                    
-                    //возвращаем причину того почему мы не можем записать это решение
-                    //в банк решений
-                    return new WorkerResult("Процент совпадения введенного условия и найденного в файле "
-                        + $"менее 99 процентов а точнее {percents}");
-                    
-                }
-            }
-
-            
-
-            
-
-            
-        }
-
+        
         #endregion
 
         /// <summary>
@@ -165,33 +102,22 @@ namespace TwoStu.Logic.Workers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<WorkerResult> CreateSolution(CreateSolutionModel model)
+        public async Task<WorkerResult> CreateSolutionBase(CreateSolutionModelBase model)
         {
-            List<SubjectDivisionChild> solutionDivisionChilds = 
-                await GetSubjectDivisionsFromString(model.DivisionChildsString);
+            List<SubjectDivisionChild> solutionDivisionChilds = model.GetSubjectDivisions(await Db.SubjectDivisionChilds.ToListAsync());
 
             //сохраняем файл на сервер и получаем путь куда он был сохранен
             //так же при возможности класс получает текст из файла
-            string textInFile = string.Empty;
-            string filePath = new FileWorker().SaveFileToSolution(model.File, out textInFile);
+            string textFromFile = string.Empty;
+            string filePath = new FileWorker().SaveFileToSolution(model.File, out textFromFile);
 
-            TaskSolution solution = new TaskSolution
-            {
-                Id = Guid.NewGuid().ToString(),
-                CreationDate = DateTime.Now,
-                TaskDesc = model.TaskDesc,
-                SubjectId = model.SubjectId,
-                SubjectSectionId = model.SubjectSectionId,
-                WorkTypeId = model.WorkTypeId,
-                FilePath = filePath,
-                FileName = model.File.FileName,
-                SubjectDivisionChilds = solutionDivisionChilds,
-                Mark = null,
-                TaskDescFromFile = textInFile,
-            };
+            TaskSolution solution = model.ToTaskSolution(textFromFile);
+            TaskSolutionVersion firstVersion = model.ToTaskSolutionVersion(textFromFile);
 
-            //добавляем в базу
+            //добавляем в базу решение
             Db.TaskSolutions.Add(solution);
+            //добавяляем версию и делаем ее активной
+            Db.TaskSolutionVersions.Add(model.ToTaskSolutionVersion(textFromFile));
             try
             {
                 await Db.SaveChangesAsync();
@@ -238,12 +164,7 @@ namespace TwoStu.Logic.Workers
 
         #region Вспомогательные методы
 
-        public async Task<List<SubjectDivisionChild>> GetSubjectDivisionsFromString(string divisionsString)
-        {
-            List<SubjectDivisionChild> allChilds = await Db.SubjectDivisionChilds.ToListAsync();
-
-            return allChilds.GetSubjectDivisionsFromString(divisionsString).ToList();
-        }
+        
 
         #region Методы с физикой
         bool CheckSolutionsTexts(string userSolution, string fileSolution, out decimal percents)
@@ -260,40 +181,9 @@ namespace TwoStu.Logic.Workers
             return percents == 1;
         }
 
-        async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNot(CreatePhysicsSolutionModel model, string filePath, string textFromFile)
-        {
-            int physicsId = Db.Subjects.FirstOrDefault(x => x.Name == "Физика").Id;
 
-            string mark = $"{physicsId}|{model.SubjectSectionId}";
 
-            
-
-            TaskSolution t = new TaskSolution
-            {
-                Id = Guid.NewGuid().ToString(),
-                SubjectId = physicsId,
-                SubjectSectionId = model.SubjectSectionId,
-                CreationDate = DateTime.Now,
-
-                FileName = model.File.FileName,
-                Mark = mark,
-                TaskDesc = model.TaskDesc,
-                WorkTypeId = model.WorkTypeId,
-                TrimmedTaskDesc = StringWorker.RemoveSymbols(model.TaskDesc).ToLowerInvariant(),
-                TaskDescFromFile = textFromFile,
-                //то записываем без слов полученных из файла
-                FilePath = filePath,
-
-            };
-            Db.TaskSolutions.Add(t);
-            await Db.SaveChangesAsync();
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
-
+        #region Добавление в базу решения и его первой версии
         /// <summary>
         /// Новая версия
         /// </summary>
@@ -301,7 +191,7 @@ namespace TwoStu.Logic.Workers
         /// <param name="filePath"></param>
         /// <param name="textFromFile"></param>
         /// <returns></returns>
-        async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNotNew(CreatePhysicsSolutionModel model, string textFromFile)
+        async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNot(CreatePhysicsSolutionModel model, string textFromFile)
         {
             //получаю Id физики
             int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
@@ -327,6 +217,9 @@ namespace TwoStu.Logic.Workers
             };
         }
 
+        
+
+        #endregion
         /// <summary>
         /// Проверяет систему на наличие такого же решения
         /// </summary>

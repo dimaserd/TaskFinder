@@ -133,10 +133,11 @@
     <Compile Include="Models\Api\SubjectsApiResult.cs" />
     <Compile Include="Models\Search\SearchParamsModel.cs" />
     <Compile Include="Models\Search\TaskSearchResult.cs" />
+    <Compile Include="Models\TaskSolutions\Base\CreateSolutionModelBase.cs" />
     <Compile Include="Models\TaskSolutions\CreateSolutionModel.cs" />
     <Compile Include="Models\TaskSolutions\MakeTaskSolutionVersionModel.cs" />
     <Compile Include="Models\TaskSolutions\SearchSolutionsModel.cs" />
-    <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
+    <Compile Include="Models\TaskSolutions\CreatePhysicsSolutionModel.cs" />
     <Compile Include="Models\TaskSolutionVersions\AddVersionToSolutionModel.cs" />
     <Compile Include="Models\UserModels\CreateUserModel.cs" />
     <Compile Include="Models\WorkerResults\WorkerResult.cs" />

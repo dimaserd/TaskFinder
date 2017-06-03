@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using TwoStu.Logic.Models.TaskSolutions;
 using System;
 using TwoStuWeb.Controllers.Base;
+using TwoStu.Logic.Models.TaskSolutions.Base;
 
 namespace TwoStuWeb.Controllers
 {
@@ -85,6 +86,8 @@ namespace TwoStuWeb.Controllers
         }
 
         #region Create methods
+
+        #region Create
         [HttpGet]
         public ActionResult Create()
         {
@@ -95,7 +98,6 @@ namespace TwoStuWeb.Controllers
             return View();
         }
 
-
         /// <summary>
         /// Защиту можно пока обойти так как нет проверки на раздел предмета
         /// тем самым нужно проверять принадлежит ли указанный раздел предмета к 
@@ -104,7 +106,7 @@ namespace TwoStuWeb.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Create(CreateSolutionModel model)
+        public async Task<ActionResult> Create(CreateSolutionModelBase model)
         {
             WorkerResult hasRights = await UserHasRightsForThatSubjectAsync(model.SubjectId);
             if(!hasRights.Succeeded)
@@ -114,7 +116,7 @@ namespace TwoStuWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                WorkerResult result = await Worker.CreateSolution(model);
+                WorkerResult result = await Worker.CreateSolutionBase(model);
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -127,6 +129,10 @@ namespace TwoStuWeb.Controllers
 
             return View();
         }
+
+        #endregion
+
+        #region CreatePhysics
 
         // GET: TaskSolutions/Create
         public async Task<ActionResult> CreatePhysics()
@@ -184,6 +190,8 @@ namespace TwoStuWeb.Controllers
 
             return View(model);
         }
+
+        #endregion
 
         #endregion
 

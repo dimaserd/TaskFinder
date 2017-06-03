@@ -65,7 +65,7 @@ namespace TwoStuWeb.Controllers
         {
             TaskSolution solution = await db.TaskSolutions.FirstOrDefaultAsync(x => x.Id == id);
 
-
+            return View();
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using TwoStu.Logic.Models.TaskSolutions;
+using TwoStu.Logic.Models.TaskSolutions.Base;
 
 namespace TwoStu.Logic.Entities
 {
@@ -19,6 +20,7 @@ namespace TwoStu.Logic.Entities
 
         #endregion
 
+        #region Свойства
         [Key]
         public string Id { get; set; }
 
@@ -75,6 +77,7 @@ namespace TwoStu.Logic.Entities
 
         #endregion
 
+        #endregion
 
     }
 
@@ -97,7 +100,7 @@ namespace TwoStu.Logic.Entities
             };
         }
 
-        public static TaskSolution ToTaskSolution(this CreateSolutionModel model, List<SubjectDivisionChild> solutionDivisionChilds, string textInFile)
+        public static TaskSolution ToTaskSolution(this CreateSolutionModelBase model, List<SubjectDivisionChild> solutionDivisionChilds, string textInFile)
         {
             return new TaskSolution
             {
