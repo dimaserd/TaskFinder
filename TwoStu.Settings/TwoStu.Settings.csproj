@@ -45,6 +45,7 @@
     <Compile Include="Enumerations\ConnectionType.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Solutions\SolutionSettings.cs" />
     <Compile Include="Statics\ConnectionStringStatic.cs" />
   </ItemGroup>
   <ItemGroup />

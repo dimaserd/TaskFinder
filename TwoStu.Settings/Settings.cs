@@ -4,8 +4,8 @@ namespace TwoStu.Settings
 {
     public static class Settings
     {
-        public static ConnectionType Connection = ConnectionType.Production;
+        public const ConnectionType Connection = ConnectionType.Production;
 
-        public static ApplicationSettingType AppSetting = ApplicationSettingType.Production;
+        public const ApplicationSettingType AppSetting = ApplicationSettingType.Production;
     }
 }

@@ -31,11 +31,19 @@ namespace TwoStu.Logic.Models
     #region Расширения
     public static class CreatePhysicsSolutionModelExtensions
     {
-        public static CreateSolutionModelBase ToCreateSolutionModel(this CreatePhysicsSolutionModel model, int physicsId, string textFromFile)
+        public static CreateSolutionModelBase ToCreateSolutionModel(this CreatePhysicsSolutionModel model, int physicsId)
         {
             return new CreateSolutionModelBase
             {
-                
+                SubjectId = physicsId,
+                TaskDesc = model.TaskDesc,
+               
+                File = model.File,
+                SubjectSectionId = model.SubjectSectionId,
+                WorkTypeId = model.WorkTypeId,
+
+                DivisionChildsString = null,
+
             };
         }
 

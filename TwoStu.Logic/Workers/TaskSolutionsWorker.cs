@@ -6,23 +6,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models;
-using TwoStu.Logic.Models.TaskSolutions;
 using TwoStu.Logic.Models.TaskSolutions.Base;
 using TwoStu.Logic.Models.WorkerResults;
 using TwoStu.Logic.Workers.String;
+using TwoStu.Settings.Solutions;
 
 namespace TwoStu.Logic.Workers
 {
     public class TaskSolutionsWorker : IDisposable
     {
-        #region Constructors
+        #region Конструкторы
         public TaskSolutionsWorker(MyDbContext db)
         {
             Db = db;
         }
         #endregion
 
-        #region Properties
+        #region Свойства
         public MyDbContext Db { get; set; }
         #endregion
 
@@ -38,17 +38,29 @@ namespace TwoStu.Logic.Workers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<WorkerResult> CreatePhysicsSolutionNew(CreatePhysicsSolutionModel model)
+        public async Task<WorkerResult> CreatePhysicsSolutionAsync(CreatePhysicsSolutionModel model)
+        {
+            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
+
+            return await CreateSolutionAsync(model.ToCreateSolutionModel(physicsId));
+        }
+
+        /// <summary>
+        /// Базовая версия метода для создания решений. Все модели являющиеся производными от базовой должны
+        /// приводиться к базовой версии и вызывать этот метод для создания решения.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<WorkerResult> CreateSolutionAsync(CreateSolutionModelBase model)
         {
             int wordsCount = model.TaskDesc.GetWordsFromText().Count;
-            int wordsSetting = 20 - 12;
 
             //проверяем на кол-во слов в решении с настройкой
-            if (wordsCount < wordsSetting)
+            if (wordsCount < SolutionSettings.NeededWordsCount)
             {
                 return new WorkerResult
                     ("Слишком мало слов в условии!" +
-                    $"Проверьте условие! Найдено слов {wordsCount} из нужных {wordsSetting}"
+                    $"Проверьте условие! Найдено слов {wordsCount} из нужных {SolutionSettings.NeededWordsCount}"
                     );
             }
 
@@ -62,6 +74,9 @@ namespace TwoStu.Logic.Workers
                 return new WorkerResult(errorText);
             }
 
+            //получаю Id физики
+            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
+
             //если программе не удалось найти текст 
             //из файла то мы должны
             //просто записать имеющиеся результаты
@@ -69,7 +84,7 @@ namespace TwoStu.Logic.Workers
             {
                 //записываем сущность в базу данных без проверки текста решения 
                 //и файла 
-                return await CreatePhysicsSolutionWithDescOrNot(model, textInFile);
+                return await CreateSolutionWithDescOrNot(model, textInFile);
             }
             //иначе если программе удалось вытащить текст из файла
             //например docx то нужно прогнать проверку на введенное условие
@@ -80,7 +95,7 @@ namespace TwoStu.Logic.Workers
                 decimal percents;
                 if (CheckSolutionsTexts(model.TaskDesc, textInFile, out percents))
                 {
-                    return await CreatePhysicsSolutionWithDescOrNot(model, textInFile);
+                    return await CreateSolutionWithDescOrNot(model, textInFile);
                 }
                 else
                 {
@@ -92,8 +107,6 @@ namespace TwoStu.Logic.Workers
                 }
             }
         }
-
-        
         #endregion
 
         /// <summary>
@@ -118,8 +131,10 @@ namespace TwoStu.Logic.Workers
             Db.TaskSolutions.Add(solution);
             //добавяляем версию и делаем ее активной
             Db.TaskSolutionVersions.Add(model.ToTaskSolutionVersion(textFromFile));
+
             try
             {
+                //пишем изменения в базу
                 await Db.SaveChangesAsync();
             }
             catch(Exception ex)
@@ -135,6 +150,7 @@ namespace TwoStu.Logic.Workers
         }
         #endregion
 
+        #region Удаление 
 
         public async Task<WorkerResult> DeleteSolution(string id)
         {
@@ -160,13 +176,22 @@ namespace TwoStu.Logic.Workers
                 Succeeded = true
             };
         }
+
+        #endregion
+
         #endregion
 
         #region Вспомогательные методы
 
-        
 
-        #region Методы с физикой
+
+        /// <summary>
+        /// Проверка текстов по словам. (В дальнейшем вынеси в отдельный класс)
+        /// </summary>
+        /// <param name="userSolution"></param>
+        /// <param name="fileSolution"></param>
+        /// <param name="percents"></param>
+        /// <returns></returns>
         bool CheckSolutionsTexts(string userSolution, string fileSolution, out decimal percents)
         {
             List<string> userWords = userSolution.GetWordsFromText();
@@ -184,6 +209,7 @@ namespace TwoStu.Logic.Workers
 
 
         #region Добавление в базу решения и его первой версии
+        
         /// <summary>
         /// Новая версия
         /// </summary>
@@ -191,23 +217,21 @@ namespace TwoStu.Logic.Workers
         /// <param name="filePath"></param>
         /// <param name="textFromFile"></param>
         /// <returns></returns>
-        async Task<WorkerResult> CreatePhysicsSolutionWithDescOrNot(CreatePhysicsSolutionModel model, string textFromFile)
+        async Task<WorkerResult> CreateSolutionWithDescOrNot(CreateSolutionModelBase model, string textFromFile)
         {
-            //получаю Id физики
-            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
             
             //получаю решение из модели
-            TaskSolution t = model.ToTaskSolution(physicsId, textFromFile);
+            TaskSolution t = model.ToTaskSolution(textFromFile);
 
             //получаю первую версию решения
             TaskSolutionVersion firstVersion = model.ToTaskSolutionVersion(textFromFile);
 
             //добавление версии к решению
             t.Versions.Add(firstVersion);
-            
+
             //добавляю решение с версией в базу данных
             Db.TaskSolutions.Add(t);
-            
+
             //сохранение изменений в базе
             await Db.SaveChangesAsync();
 
@@ -217,17 +241,12 @@ namespace TwoStu.Logic.Workers
             };
         }
 
-        
-
         #endregion
-        /// <summary>
-        /// Проверяет систему на наличие такого же решения
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="textFromFile"></param>
-        /// <param name="errorText"></param>
-        /// <returns></returns>
-        bool IsThereAnyEqualSolution(CreatePhysicsSolutionModel model, string textFromFile, out string errorText)
+
+        #region Методы проверки на повторы
+
+
+        bool IsThereAnyEqualSolution(CreateSolutionModelBase model, string textFromFile, out string errorText)
         {
             //если текст из файла пустой
             //то есть его не удалось прочесть
@@ -242,16 +261,16 @@ namespace TwoStu.Logic.Workers
 
             bool taskDescResult = Db.TaskSolutions.Any(x => x.TaskDesc == model.TaskDesc);
             bool taskDescFromFileResult = Db.TaskSolutions.Any(x => x.TaskDescFromFile == textFromFile);
-            
+
             //если текст из файлов идентичен
-            if(taskDescFromFileResult)
+            if (taskDescFromFileResult)
             {
                 errorText = "Найден такой же файл решения!";
                 return taskDescFromFileResult;
             }
 
             //если нет то проверяем просто по условиям
-            if(taskDescResult)
+            if (taskDescResult)
             {
                 errorText = "Найдено точно такое-же условие!";
                 return taskDescResult;
@@ -262,10 +281,10 @@ namespace TwoStu.Logic.Workers
             return false;
         }
 
-        
         #endregion
 
         #endregion
+
 
         #region IDisposable Support
         private bool disposedValue = false; // Для определения избыточных вызовов
