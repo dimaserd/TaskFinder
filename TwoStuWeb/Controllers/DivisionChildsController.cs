@@ -7,13 +7,15 @@ using TwoStu.Logic.Entities;
 using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
 using TwoStu.Logic.Models;
+using TwoStuWeb.Controllers.Base;
+using System.Linq;
 
 namespace TwoStuWeb.Controllers
 {
     [Authorize]
-    public class DivisionChildsController : Controller
+    public class DivisionChildsController : BaseController
     {
-        #region Fields
+        #region Поля
         private MyDbContext db = new MyDbContext();
         #endregion
 
@@ -21,8 +23,13 @@ namespace TwoStuWeb.Controllers
         // GET: DivisionChilds
         public async Task<ActionResult> Index()
         {
-            var subjectDivisionChilds = db.SubjectDivisionChilds.Include(s => s.SubjectDivisionParent);
-            return View(await subjectDivisionChilds.ToListAsync());
+            var subjectDivisionChilds = (db.SubjectDivisionChilds.Include(s => s.SubjectDivisionParent.FromSubjectSection.FromSubject));
+
+            return View(
+                (await subjectDivisionChilds.ToListAsync())
+                .OrderBy(x => x.SubjectDivisionParent.FromSubjectSection.FromSubject)
+                .OrderBy(x => x.SubjectDivisionParent.FromSubjectSection)
+                );
         }
 
         
@@ -166,19 +173,8 @@ namespace TwoStuWeb.Controllers
 
         #endregion
 
-        #region Help methods
-        WorkerResult UserHasRightsToBeThere()
-        {
-            if (!User.IsInRole("Admin"))
-            {
-                return new WorkerResult("У вас недостаточно прав!");
-            }
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
+        #region Вспомогальные методы
+        
 
         async Task<WorkerResult> UserHasRightsForThatSubjectDivisionChildAsync(int subjectDivisionChildId)
         {

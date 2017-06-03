@@ -8,7 +8,6 @@ using TwoStu.Logic.Workers;
 using System.Linq;
 using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
-using TwoStu.Logic;
 using TwoStu.Logic.Models.TaskSolutions;
 using System;
 using TwoStuWeb.Controllers.Base;

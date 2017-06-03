@@ -246,6 +246,7 @@
     <Compile Include="Controllers\SubjectSectionsController.cs" />
     <Compile Include="Controllers\TaskSolutionsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\VersionsController.cs" />
     <Compile Include="Controllers\WorkTypesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -389,6 +390,11 @@
     <Content Include="Views\Home\SearchAnyTask.cshtml" />
     <Content Include="Views\Home\TasksSearch.cshtml" />
     <Content Include="Views\Home\SearchTaskByDescPartial.cshtml" />
+    <Content Include="Views\Versions\Create.cshtml" />
+    <Content Include="Views\Versions\Delete.cshtml" />
+    <Content Include="Views\Versions\Details.cshtml" />
+    <Content Include="Views\Versions\Edit.cshtml" />
+    <Content Include="Views\Versions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

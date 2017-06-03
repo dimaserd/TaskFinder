@@ -137,6 +137,7 @@
     <Compile Include="Models\TaskSolutions\MakeTaskSolutionVersionModel.cs" />
     <Compile Include="Models\TaskSolutions\SearchSolutionsModel.cs" />
     <Compile Include="Models\TaskSolutions\TaskSolutionModels.cs" />
+    <Compile Include="Models\TaskSolutionVersions\AddVersionToSolutionModel.cs" />
     <Compile Include="Models\UserModels\CreateUserModel.cs" />
     <Compile Include="Models\WorkerResults\WorkerResult.cs" />
     <Compile Include="MyDbContext.cs" />
