@@ -1,7 +1,8 @@
 ﻿@using TwoStu.Logic.Models.TaskSolutions.Base
+@using TwoStuWeb.HtmlExtensions
 @model CreateSolutionModelBase
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Создать решение";
     List<SelectListItem> subjectsList = ViewData["subjectsSelectList"] as List<SelectListItem>;
 
 }
@@ -12,6 +13,8 @@
 
 @using (Html.BeginForm("Create", "TaskSolutions", FormMethod.Post, htmlAttributes: new { id = "myForm", enctype = "multipart/form-data", @class = "form-horizontal" }))
 {
+    @Html.ValidationErrorsToAlerts()
+
     <div class="form-group">
         @Html.Label("Предмет", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">

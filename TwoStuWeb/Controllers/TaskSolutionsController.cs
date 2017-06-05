@@ -8,7 +8,6 @@ using TwoStu.Logic.Workers;
 using System.Linq;
 using TwoStu.Logic.Models.WorkerResults;
 using System.Collections.Generic;
-using TwoStu.Logic.Models.TaskSolutions;
 using System;
 using TwoStuWeb.Controllers.Base;
 using TwoStu.Logic.Models.TaskSolutions.Base;
@@ -18,13 +17,13 @@ namespace TwoStuWeb.Controllers
     [Authorize]
     public class TaskSolutionsController : BaseController
     {
-        #region Fields
+        #region Поля
         
 
         TaskSolutionsWorker _worker;
         #endregion
 
-        #region Properties
+        #region Свойства
         
 
         TaskSolutionsWorker Worker
@@ -108,6 +107,7 @@ namespace TwoStuWeb.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateSolutionModelBase model)
         {
+            
             WorkerResult hasRights = await UserHasRightsForThatSubjectAsync(model.SubjectId);
             if(!hasRights.Succeeded)
             {
@@ -116,18 +116,22 @@ namespace TwoStuWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                WorkerResult result = await Worker.CreateSolutionBase(model);
+                WorkerResult result = await Worker.CreateSolutionAsync(model, checkDesc: false);
+
                 if(result.Succeeded)
                 {
                     return RedirectToAction("Index");
                 }
+
+                AddErrors(result);
             }
 
             ViewBag.WorkTypeId = new SelectList(Db.WorkTypes, "Id", "Name");
 
             ViewBag.SubjectId = new SelectList(Db.Subjects, "Id", "Name");
 
-            return View();
+            
+            return View(model);
         }
 
         #endregion

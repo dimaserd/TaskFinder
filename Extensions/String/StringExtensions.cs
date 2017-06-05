@@ -17,6 +17,13 @@ namespace Extensions.String
             return Text;
         }
 
+        public static string ToId(this string s)
+        {
+            string first = s.Substring(0, 1).ToLowerInvariant();
+
+            return first + s.Substring(1);
+        }
+
         public static string MarkManyText(this string Text, string toMarkMany)
         {
             string[] words = toMarkMany.Split(separator: new string[] { "," }, options: StringSplitOptions.RemoveEmptyEntries);

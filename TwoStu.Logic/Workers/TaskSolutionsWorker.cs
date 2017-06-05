@@ -51,12 +51,12 @@ namespace TwoStu.Logic.Workers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<WorkerResult> CreateSolutionAsync(CreateSolutionModelBase model)
+        public async Task<WorkerResult> CreateSolutionAsync(CreateSolutionModelBase model, bool checkDesc = true)
         {
             int wordsCount = model.TaskDesc.GetWordsFromText().Count;
 
             //проверяем на кол-во слов в решении с настройкой
-            if (wordsCount < SolutionSettings.NeededWordsCount)
+            if (checkDesc && wordsCount < SolutionSettings.NeededWordsCount)
             {
                 return new WorkerResult
                     ("Слишком мало слов в условии!" +
@@ -74,9 +74,7 @@ namespace TwoStu.Logic.Workers
                 return new WorkerResult(errorText);
             }
 
-            //получаю Id физики
-            int physicsId = (await Db.Subjects.FirstOrDefaultAsync(x => x.Name == "Физика")).Id;
-
+            
             //если программе не удалось найти текст 
             //из файла то мы должны
             //просто записать имеющиеся результаты
@@ -109,45 +107,7 @@ namespace TwoStu.Logic.Workers
         }
         #endregion
 
-        /// <summary>
-        /// Здесь нужно проверять утонения на принадлежность к разделу
-        /// предмета а разделы предмета на принадлежность к самому предмету
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<WorkerResult> CreateSolutionBase(CreateSolutionModelBase model)
-        {
-            List<SubjectDivisionChild> solutionDivisionChilds = model.GetSubjectDivisions(await Db.SubjectDivisionChilds.ToListAsync());
-
-            //сохраняем файл на сервер и получаем путь куда он был сохранен
-            //так же при возможности класс получает текст из файла
-            string textFromFile = string.Empty;
-            string filePath = new FileWorker().SaveFileToSolution(model.File, out textFromFile);
-
-            TaskSolution solution = model.ToTaskSolution(textFromFile);
-            TaskSolutionVersion firstVersion = model.ToTaskSolutionVersion(textFromFile);
-
-            //добавляем в базу решение
-            Db.TaskSolutions.Add(solution);
-            //добавяляем версию и делаем ее активной
-            Db.TaskSolutionVersions.Add(model.ToTaskSolutionVersion(textFromFile));
-
-            try
-            {
-                //пишем изменения в базу
-                await Db.SaveChangesAsync();
-            }
-            catch(Exception ex)
-            {
-                
-            }
-            
-
-            return new WorkerResult
-            {
-                Succeeded = true
-            };
-        }
+        
         #endregion
 
         #region Удаление 

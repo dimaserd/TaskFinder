@@ -87,6 +87,7 @@
     <Compile Include="HttpPostedFileBase\HttpPostedFileBaseExtensions.cs" />
     <Compile Include="Int\IntExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reflection\ReflectionExtensionMethods.cs" />
     <Compile Include="String\StringExtensions.cs" />
     <Compile Include="String\WordEndingStringExtensions.cs" />
   </ItemGroup>
